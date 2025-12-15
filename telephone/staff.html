@@ -48,47 +48,74 @@
             color: #777; font-size: 20px; text-align: center; pointer-events: none;
         }
         
-        /* THANH ĐIỀU KHIỂN (CONTROL BAR) */
+        /* THANH ĐIỀU KHIỂN */
         .control-bar {
             position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 15px; z-index: 100;
             background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 50px;
             backdrop-filter: blur(5px);
         }
-
         .ctrl-btn {
             width: 50px; height: 50px; border-radius: 50%; border: none;
             font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
             transition: 0.2s; color: #fff;
         }
-        
-        /* Trạng thái nút Bật (Mặc định) */
         .ctrl-btn.on { background: #444; }
         .ctrl-btn.on:hover { background: #666; }
-
-        /* Trạng thái nút Tắt (Màu đỏ) */
         .ctrl-btn.off { background: #cc0000; position: relative; }
-        .ctrl-btn.off::after { content: '/'; position: absolute; font-size: 30px; font-weight: bold; }
-
-        /* Nút kết thúc */
         .btn-end { background: #cc0000; padding: 0 30px; border-radius: 30px; width: auto; font-weight: bold; display: none; }
         .btn-end:hover { background: #ff0000; }
 
-        /* Thông báo lỗi không Camera */
-        .no-cam-alert {
-            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 165, 0, 0.8); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 13px;
-            display: none; z-index: 50;
+        /* MÀN HÌNH CUỘC GỌI ĐẾN (INCOMING CALL) */
+        .incoming-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 999;
+            display: none; /* Mặc định ẩn */
+            flex-direction: column; align-items: center; justify-content: center;
+            animation: fadeIn 0.3s;
         }
+        .incoming-box {
+            background: #222; padding: 40px; border-radius: 20px; text-align: center;
+            border: 2px solid #cc0000; box-shadow: 0 0 50px rgba(204, 0, 0, 0.5);
+        }
+        .avatar-call {
+            width: 100px; height: 100px; background: #444; border-radius: 50%;
+            margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;
+            animation: pulse 1.5s infinite;
+        }
+        .action-buttons { margin-top: 30px; display: flex; gap: 20px; justify-content: center; }
+        .btn-accept { background: #28a745; color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 18px; cursor: pointer; font-weight: bold; }
+        .btn-reject { background: #dc3545; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 18px; cursor: pointer; font-weight: bold; }
+        .btn-accept:hover { background: #218838; }
+        .btn-reject:hover { background: #c82333; }
+
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(204, 0, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     </style>
 </head>
 <body>
 
+    <audio id="ringtone" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2021/08/09/audio_88447e769f.mp3?filename=phone-calling-1-14311.mp3" type="audio/mpeg">
+    </audio>
+
     <div id="mobileBlock">
         <i class="fas fa-desktop"></i>
         <h2>CHỈ DÀNH CHO PC</h2>
         <p>Hệ thống Staff chỉ hoạt động trên máy tính để bàn hoặc laptop.</p>
+    </div>
+
+    <div class="incoming-modal" id="incomingModal">
+        <div class="incoming-box">
+            <div class="avatar-call"><i class="fas fa-user" style="font-size: 40px;"></i></div>
+            <h2>KHÁCH HÀNG ĐANG GỌI...</h2>
+            <p>Yêu cầu hỗ trợ trực tuyến</p>
+            <div class="action-buttons">
+                <button class="btn-reject" id="btnReject"><i class="fas fa-times"></i> Từ chối</button>
+                <button class="btn-accept" id="btnAnswer"><i class="fas fa-phone"></i> NGHE MÁY</button>
+            </div>
+        </div>
     </div>
 
     <div class="sidebar">
@@ -110,7 +137,7 @@
     </div>
 
     <div class="main-stage">
-        <div class="no-cam-alert" id="noCamAlert"><i class="fas fa-exclamation-triangle"></i> Không tìm thấy Camera (Chỉ dùng Mic)</div>
+        <div class="no-cam-alert" id="noCamAlert" style="display:none; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: orange; padding: 5px 15px; border-radius: 20px; font-size: 13px;">⚠️ Chỉ dùng Mic</div>
         
         <div class="video-wrapper">
             <div class="overlay-wait" id="videoPlaceholder">
@@ -131,89 +158,126 @@
         const STAFF_PEER_ID = "kbtech-hotline-vip-1";
         
         let peer = null;
-        let activeConn = null;
+        let pendingConn = null; // Kết nối đang chờ nghe máy
+        let activeConn = null;  // Kết nối đang hoạt động
         let activeCall = null;
         let localStream = null;
-        let isVideoAvailable = false; // Biến kiểm tra có cam hay không
+        let isVideoAvailable = false;
 
-        // 1. KIỂM TRA THIẾT BỊ
+        const ringtone = document.getElementById('ringtone');
+        const incomingModal = document.getElementById('incomingModal');
+
+        // 1. KIỂM TRA HỆ THỐNG
         function checkSystem() {
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 document.getElementById('mobileBlock').style.display = 'flex';
-                throw new Error("Mobile Device Blocked");
+                return false;
             }
             return true;
         }
 
-        // 2. KHỞI TẠO HỆ THỐNG
         async function initStaff() {
             if (!checkSystem()) return;
 
-            // Xử lý thông minh: Thử lấy cả Cam+Mic, nếu lỗi thì chỉ lấy Mic
+            logSystem("... Đang quét thiết bị ...");
+
             try {
-                // Thử lấy Video + Audio
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 isVideoAvailable = true;
                 document.getElementById('videoPlaceholder').style.display = 'none';
+                logSystem("✅ Đã tìm thấy Camera & Mic.");
             } catch (err) {
-                console.warn("Không thể lấy Camera, thử lại với chỉ Audio...", err);
+                console.warn("Lỗi Camera:", err);
                 try {
-                    // Fallback: Chỉ lấy Audio
                     localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
                     isVideoAvailable = false;
-                    
-                    // Cập nhật giao diện báo lỗi Cam
                     document.getElementById('noCamAlert').style.display = 'block';
-                    document.getElementById('btnToggleCam').classList.add('off'); // Tắt nút cam
-                    document.getElementById('btnToggleCam').disabled = true; // Khóa nút cam
-                    document.getElementById('videoPlaceholder').innerHTML = '<i class="fas fa-microphone"></i><br>Đang dùng chế độ Audio';
-                    
-                    logSystem("Cảnh báo: Không tìm thấy Camera. Đang chạy chế độ chỉ Âm thanh.");
+                    document.getElementById('btnToggleCam').classList.add('off'); 
+                    document.getElementById('btnToggleCam').disabled = true;
+                    document.getElementById('videoPlaceholder').innerHTML = '<i class="fas fa-microphone"></i><br>Chế độ chỉ Âm thanh';
+                    logSystem("✅ Đã kết nối Mic (Audio Only).");
                 } catch (err2) {
-                    logSystem("LỖI NGHIÊM TRỌNG: Không tìm thấy Mic! Vui lòng cắm Mic và F5 lại.");
+                    alert("LỖI: Không tìm thấy Mic! Vui lòng kiểm tra lại.");
                     return;
                 }
             }
 
-            // Gắn stream vào thẻ video (để mình tự soi gương)
             if (isVideoAvailable) {
-                const videoEl = document.getElementById('localVideo');
-                videoEl.srcObject = localStream;
+                document.getElementById('localVideo').srcObject = localStream;
             }
 
-            // Kết nối PeerJS
+            // KẾT NỐI PEERJS
             peer = new Peer(STAFF_PEER_ID);
 
             peer.on('open', (id) => {
                 document.getElementById('myIdDisplay').innerText = id;
                 setStatus('online');
-                logSystem("Hệ thống sẵn sàng. Đang chờ khách...");
+                logSystem("🚀 Hệ thống SẴN SÀNG.");
             });
 
             peer.on('error', (err) => {
-                if (err.type === 'unavailable-id') {
-                    alert("ID này đang được sử dụng ở tab khác! Đóng tab cũ đi nhé.");
-                } else {
-                    logSystem("Lỗi mạng: " + err.type);
-                }
+                if (err.type === 'unavailable-id') alert("ID đang chạy ở tab khác!");
+                else logSystem("Lỗi mạng: " + err.type);
             });
 
-            // Xử lý cuộc gọi đến
-            peer.on('connection', handleConnection);
+            // KHI CÓ CUỘC GỌI ĐẾN (CONNECTION)
+            peer.on('connection', (conn) => {
+                // Nếu đang bận -> Từ chối ngay
+                if (activeConn) {
+                    setTimeout(() => { conn.send("BUSY_NOW"); conn.close(); }, 500);
+                    return;
+                }
+
+                // Nếu đang rảnh -> Reng chuông
+                pendingConn = conn;
+                showIncomingCall();
+            });
         }
 
-        function handleConnection(conn) {
-            if (activeConn) {
-                setTimeout(() => { conn.send("BUSY_NOW"); conn.close(); }, 500);
-                return;
-            }
+        // --- XỬ LÝ CUỘC GỌI ĐẾN ---
+        function showIncomingCall() {
+            // 1. Bật nhạc chuông
+            try {
+                ringtone.currentTime = 0;
+                ringtone.play().catch(e => console.log("Cần tương tác để phát nhạc"));
+            } catch(e) {}
 
+            // 2. Hiện Modal
+            incomingModal.style.display = 'flex';
+        }
+
+        // Nút NGHE MÁY
+        document.getElementById('btnAnswer').addEventListener('click', () => {
+            ringtone.pause();
+            incomingModal.style.display = 'none';
+            
+            if (pendingConn) {
+                acceptCall(pendingConn);
+            }
+        });
+
+        // Nút TỪ CHỐI
+        document.getElementById('btnReject').addEventListener('click', () => {
+            ringtone.pause();
+            incomingModal.style.display = 'none';
+            
+            if (pendingConn) {
+                pendingConn.send("BUSY_NOW"); // Hoặc gửi tin nhắn từ chối
+                setTimeout(() => pendingConn.close(), 500);
+                pendingConn = null;
+            }
+        });
+
+        // HÀM CHẤP NHẬN KẾT NỐI
+        function acceptCall(conn) {
             activeConn = conn;
+            pendingConn = null;
+            
             setStatus('busy');
             document.getElementById('endCallBtn').style.display = 'flex';
-            logSystem(">>> KHÁCH HÀNG ĐANG KẾT NỐI... <<<");
+            logSystem("📞 ĐÃ KẾT NỐI VỚI KHÁCH HÀNG!");
 
-            // Tự động gọi Video lại cho khách
+            // Gọi video lại cho khách
             const call = peer.call(conn.peer, localStream);
             activeCall = call;
 
@@ -225,38 +289,31 @@
             conn.on('close', endSession);
         }
 
-        // 3. CHỨC NĂNG BẬT/TẮT MIC & CAM (MỚI)
+        // --- CÁC NÚT ĐIỀU KHIỂN KHÁC ---
         document.getElementById('btnToggleMic').addEventListener('click', function() {
             if (!localStream) return;
             const audioTrack = localStream.getAudioTracks()[0];
             if (audioTrack) {
-                audioTrack.enabled = !audioTrack.enabled; // Đảo trạng thái
-                this.classList.toggle('on');
-                this.classList.toggle('off');
-                // Đổi icon
+                audioTrack.enabled = !audioTrack.enabled;
+                this.classList.toggle('on'); this.classList.toggle('off');
                 this.innerHTML = audioTrack.enabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash"></i>';
             }
         });
 
         document.getElementById('btnToggleCam').addEventListener('click', function() {
-            if (!localStream || !isVideoAvailable) return; // Không có cam thì ko bấm được
+            if (!localStream || !isVideoAvailable) return; 
             const videoTrack = localStream.getVideoTracks()[0];
             if (videoTrack) {
                 videoTrack.enabled = !videoTrack.enabled;
-                this.classList.toggle('on');
-                this.classList.toggle('off');
+                this.classList.toggle('on'); this.classList.toggle('off');
                 this.innerHTML = videoTrack.enabled ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash"></i>';
-                
-                // Ẩn hiện màn hình chờ
                 document.getElementById('videoPlaceholder').style.display = videoTrack.enabled ? 'none' : 'block';
             }
         });
 
-        // 4. CÁC HÀM TIỆN ÍCH KHÁC
         const msgInput = document.getElementById('msgInput');
         const sendBtn = document.getElementById('sendBtn');
-        const msgList = document.getElementById('msgList');
-
+        
         function sendMessage() {
             const text = msgInput.value.trim();
             if (text && activeConn) {
@@ -265,7 +322,6 @@
                 msgInput.value = '';
             }
         }
-
         sendBtn.addEventListener('click', sendMessage);
         msgInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
 
@@ -279,7 +335,7 @@
             if (activeCall) { activeCall.close(); activeCall = null; }
             setStatus('online');
             document.getElementById('endCallBtn').style.display = 'none';
-            logSystem(">>> ĐÃ KẾT THÚC <<<");
+            logSystem("⏹️ ĐÃ KẾT THÚC CUỘC GỌI.");
         }
 
         function setStatus(state) {
@@ -292,20 +348,17 @@
             const div = document.createElement('div');
             div.className = 'msg system';
             div.innerText = text;
-            msgList.appendChild(div);
-            msgList.scrollTop = msgList.scrollHeight;
+            document.getElementById('msgList').appendChild(div);
         }
 
         function addMessage(msg, type) {
             const div = document.createElement('div');
             div.className = 'msg ' + type;
-            if(msg.includes('http')) {
-                div.innerHTML = msg.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:yellow;">$1</a>');
-            } else {
-                div.innerText = msg;
-            }
-            msgList.appendChild(div);
-            msgList.scrollTop = msgList.scrollHeight;
+            if(msg.includes('http')) div.innerHTML = msg.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:yellow;">$1</a>');
+            else div.innerText = msg;
+            const list = document.getElementById('msgList');
+            list.appendChild(div);
+            list.scrollTop = list.scrollHeight;
         }
 
         initStaff();
