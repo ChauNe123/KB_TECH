@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff KB Tech - Tổng đài viên</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #111; color: #fff; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Cảnh báo Mobile */
+        #mobileBlock { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        #mobileBlock i { font-size: 50px; color: #cc0000; margin-bottom: 20px; }
+        
+        /* Layout chính */
+        .sidebar { width: 350px; background: #1e1e1e; display: flex; flex-direction: column; border-right: 1px solid #333; }
+        .main-stage { flex: 1; position: relative; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* Header Sidebar */
+        .staff-info { padding: 20px; border-bottom: 1px solid #333; background: #252525; }
+        .staff-info h2 { margin: 0; font-size: 18px; color: #cc0000; }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-top: 5px; font-weight: bold; }
+        .st-online { background: #28a745; color: #fff; }
+        .st-busy { background: #ffc107; color: #000; }
+        .st-offline { background: #6c757d; color: #fff; }
+
+        /* Chat Area */
+        .chat-container { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .messages-list { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg { padding: 10px 15px; border-radius: 10px; max-width: 90%; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .msg.client { background: #333; align-self: flex-start; border-bottom-left-radius: 0; }
+        .msg.me { background: #cc0000; align-self: flex-end; border-bottom-right-radius: 0; }
+        .msg.system { background: transparent; color: #888; font-size: 12px; text-align: center; align-self: center; width: 100%; }
+        
+        .chat-input { padding: 15px; background: #252525; display: flex; gap: 10px; border-top: 1px solid #333; }
+        .chat-input input { flex: 1; padding: 10px; border-radius: 20px; border: none; background: #333; color: #fff; outline: none; }
+        .chat-input button { background: #cc0000; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+
+        /* Video Area */
+        .video-wrapper { position: relative; width: 100%; height: 100%; overflow: hidden; }
+        video#localVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        
+        .overlay-wait { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #777; font-size: 20px; text-align: center; pointer-events: none;
+        }
+        
+        /* THANH ĐIỀU KHIỂN (CONTROL BAR) */
+        .control-bar {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px; z-index: 100;
+            background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+
+        .ctrl-btn {
+            width: 50px; height: 50px; border-radius: 50%; border: none;
+            font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s; color: #fff;
+        }
+        
+        /* Trạng thái nút Bật (Mặc định) */
+        .ctrl-btn.on { background: #444; }
+        .ctrl-btn.on:hover { background: #666; }
+
+        /* Trạng thái nút Tắt (Màu đỏ) */
+        .ctrl-btn.off { background: #cc0000; position: relative; }
+        .ctrl-btn.off::after { content: '/'; position: absolute; font-size: 30px; font-weight: bold; }
+
+        /* Nút kết thúc */
+        .btn-end { background: #cc0000; padding: 0 30px; border-radius: 30px; width: auto; font-weight: bold; display: none; }
+        .btn-end:hover { background: #ff0000; }
+
+        /* Thông báo lỗi không Camera */
+        .no-cam-alert {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 165, 0, 0.8); color: #fff; padding: 5px 15px; border-radius: 20px; font-size: 13px;
+            display: none; z-index: 50;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="mobileBlock">
+        <i class="fas fa-desktop"></i>
+        <h2>CHỈ DÀNH CHO PC</h2>
+        <p>Hệ thống Staff chỉ hoạt động trên máy tính để bàn hoặc laptop.</p>
+    </div>
+
+    <div class="sidebar">
+        <div class="staff-info">
+            <h2><i class="fas fa-headset"></i> STAFF CONSOLE</h2>
+            <div id="connectionStatus"><span class="status-badge st-offline">Đang khởi tạo...</span></div>
+            <div style="font-size: 12px; color: #aaa; margin-top: 5px;">ID: <span id="myIdDisplay">...</span></div>
+        </div>
+
+        <div class="chat-container">
+            <div class="messages-list" id="msgList">
+                <div class="msg system">Chào Staff! Đang kiểm tra thiết bị...</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="msgInput" placeholder="Nhập tin nhắn...">
+                <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-stage">
+        <div class="no-cam-alert" id="noCamAlert"><i class="fas fa-exclamation-triangle"></i> Không tìm thấy Camera (Chỉ dùng Mic)</div>
+        
+        <div class="video-wrapper">
+            <div class="overlay-wait" id="videoPlaceholder">
+                <i class="fas fa-camera-slash" style="font-size: 40px; margin-bottom: 10px;"></i><br>
+                Camera đang tắt
+            </div>
+            <video id="localVideo" autoplay muted playsinline></video>
+        </div>
+
+        <div class="control-bar">
+            <button class="ctrl-btn on" id="btnToggleMic" title="Bật/Tắt Mic"><i class="fas fa-microphone"></i></button>
+            <button class="ctrl-btn on" id="btnToggleCam" title="Bật/Tắt Camera"><i class="fas fa-video"></i></button>
+            <button class="ctrl-btn btn-end" id="endCallBtn"><i class="fas fa-phone-slash"></i> &nbsp;KẾT THÚC</button>
+        </div>
+    </div>
+
+    <script>
+        const STAFF_PEER_ID = "kbtech-hotline-vip-1";
+        
+        let peer = null;
+        let activeConn = null;
+        let activeCall = null;
+        let localStream = null;
+        let isVideoAvailable = false; // Biến kiểm tra có cam hay không
+
+        // 1. KIỂM TRA THIẾT BỊ
+        function checkSystem() {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                document.getElementById('mobileBlock').style.display = 'flex';
+                throw new Error("Mobile Device Blocked");
+            }
+            return true;
+        }
+
+        // 2. KHỞI TẠO HỆ THỐNG
+        async function initStaff() {
+            if (!checkSystem()) return;
+
+            // Xử lý thông minh: Thử lấy cả Cam+Mic, nếu lỗi thì chỉ lấy Mic
+            try {
+                // Thử lấy Video + Audio
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                isVideoAvailable = true;
+                document.getElementById('videoPlaceholder').style.display = 'none';
+            } catch (err) {
+                console.warn("Không thể lấy Camera, thử lại với chỉ Audio...", err);
+                try {
+                    // Fallback: Chỉ lấy Audio
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+                    isVideoAvailable = false;
+                    
+                    // Cập nhật giao diện báo lỗi Cam
+                    document.getElementById('noCamAlert').style.display = 'block';
+                    document.getElementById('btnToggleCam').classList.add('off'); // Tắt nút cam
+                    document.getElementById('btnToggleCam').disabled = true; // Khóa nút cam
+                    document.getElementById('videoPlaceholder').innerHTML = '<i class="fas fa-microphone"></i><br>Đang dùng chế độ Audio';
+                    
+                    logSystem("Cảnh báo: Không tìm thấy Camera. Đang chạy chế độ chỉ Âm thanh.");
+                } catch (err2) {
+                    logSystem("LỖI NGHIÊM TRỌNG: Không tìm thấy Mic! Vui lòng cắm Mic và F5 lại.");
+                    return;
+                }
+            }
+
+            // Gắn stream vào thẻ video (để mình tự soi gương)
+            if (isVideoAvailable) {
+                const videoEl = document.getElementById('localVideo');
+                videoEl.srcObject = localStream;
+            }
+
+            // Kết nối PeerJS
+            peer = new Peer(STAFF_PEER_ID);
+
+            peer.on('open', (id) => {
+                document.getElementById('myIdDisplay').innerText = id;
+                setStatus('online');
+                logSystem("Hệ thống sẵn sàng. Đang chờ khách...");
+            });
+
+            peer.on('error', (err) => {
+                if (err.type === 'unavailable-id') {
+                    alert("ID này đang được sử dụng ở tab khác! Đóng tab cũ đi nhé.");
+                } else {
+                    logSystem("Lỗi mạng: " + err.type);
+                }
+            });
+
+            // Xử lý cuộc gọi đến
+            peer.on('connection', handleConnection);
+        }
+
+        function handleConnection(conn) {
+            if (activeConn) {
+                setTimeout(() => { conn.send("BUSY_NOW"); conn.close(); }, 500);
+                return;
+            }
+
+            activeConn = conn;
+            setStatus('busy');
+            document.getElementById('endCallBtn').style.display = 'flex';
+            logSystem(">>> KHÁCH HÀNG ĐANG KẾT NỐI... <<<");
+
+            // Tự động gọi Video lại cho khách
+            const call = peer.call(conn.peer, localStream);
+            activeCall = call;
+
+            conn.on('data', (data) => {
+                if(data === 'USER_DISCONNECT') endSession();
+                else addMessage(data, 'client');
+            });
+
+            conn.on('close', endSession);
+        }
+
+        // 3. CHỨC NĂNG BẬT/TẮT MIC & CAM (MỚI)
+        document.getElementById('btnToggleMic').addEventListener('click', function() {
+            if (!localStream) return;
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack) {
+                audioTrack.enabled = !audioTrack.enabled; // Đảo trạng thái
+                this.classList.toggle('on');
+                this.classList.toggle('off');
+                // Đổi icon
+                this.innerHTML = audioTrack.enabled ? '<i class="fas fa-microphone"></i>' : '<i class="fas fa-microphone-slash"></i>';
+            }
+        });
+
+        document.getElementById('btnToggleCam').addEventListener('click', function() {
+            if (!localStream || !isVideoAvailable) return; // Không có cam thì ko bấm được
+            const videoTrack = localStream.getVideoTracks()[0];
+            if (videoTrack) {
+                videoTrack.enabled = !videoTrack.enabled;
+                this.classList.toggle('on');
+                this.classList.toggle('off');
+                this.innerHTML = videoTrack.enabled ? '<i class="fas fa-video"></i>' : '<i class="fas fa-video-slash"></i>';
+                
+                // Ẩn hiện màn hình chờ
+                document.getElementById('videoPlaceholder').style.display = videoTrack.enabled ? 'none' : 'block';
+            }
+        });
+
+        // 4. CÁC HÀM TIỆN ÍCH KHÁC
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const msgList = document.getElementById('msgList');
+
+        function sendMessage() {
+            const text = msgInput.value.trim();
+            if (text && activeConn) {
+                activeConn.send(text);
+                addMessage(text, 'me');
+                msgInput.value = '';
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        msgInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage() });
+
+        document.getElementById('endCallBtn').addEventListener('click', () => {
+            if(activeConn) activeConn.send("STAFF_END");
+            endSession();
+        });
+
+        function endSession() {
+            if (activeConn) { activeConn.close(); activeConn = null; }
+            if (activeCall) { activeCall.close(); activeCall = null; }
+            setStatus('online');
+            document.getElementById('endCallBtn').style.display = 'none';
+            logSystem(">>> ĐÃ KẾT THÚC <<<");
+        }
+
+        function setStatus(state) {
+            const el = document.getElementById('connectionStatus');
+            if (state === 'online') el.innerHTML = '<span class="status-badge st-online">Sẵn sàng</span>';
+            if (state === 'busy') el.innerHTML = '<span class="status-badge st-busy">Đang bận</span>';
+        }
+
+        function logSystem(text) {
+            const div = document.createElement('div');
+            div.className = 'msg system';
+            div.innerText = text;
+            msgList.appendChild(div);
+            msgList.scrollTop = msgList.scrollHeight;
+        }
+
+        function addMessage(msg, type) {
+            const div = document.createElement('div');
+            div.className = 'msg ' + type;
+            if(msg.includes('http')) {
+                div.innerHTML = msg.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:yellow;">$1</a>');
+            } else {
+                div.innerText = msg;
+            }
+            msgList.appendChild(div);
+            msgList.scrollTop = msgList.scrollHeight;
+        }
+
+        initStaff();
+    </script>
+</body>
+</html>

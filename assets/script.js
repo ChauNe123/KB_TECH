@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 7. VIDEO CALL SUPPORT (ĐÃ FIX LỖI CRASH)
+    // 7. HỆ THỐNG GỌI HỖ TRỢ TRỰC TUYẾN (KHÁCH HÀNG)
     // ====================================================
     const btnCallSupport = document.getElementById('btnCallSupport');
     const videoModal = document.getElementById('videoModal');
@@ -214,52 +214,154 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSendChat = document.getElementById('btnSendChat');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
+    const agentVideo = document.getElementById('agentVideo');
+    
+    // Cấu hình
+    const STAFF_ID = "kbtech-hotline-vip-1"; // Phải trùng với bên staff.html
+    let peer = null;
+    let conn = null; 
 
-    // Chỉ chạy khi có nút Gọi và Modal
-    if (btnCallSupport && videoModal) {
+    // Hàm tiện ích: Thêm tin nhắn vào khung chat
+    function addLog(text, type) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message ' + (type === 'me' ? 'user-msg' : 'agent-msg');
         
+        // Link clickable
+        if(text.includes('http')) {
+            msgDiv.innerHTML = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color:#00e676;text-decoration:underline;">$1</a>');
+        } else {
+            msgDiv.innerText = text;
+        }
+        
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    if (btnCallSupport && videoModal) {
         btnCallSupport.addEventListener('click', () => {
+            // Kiểm tra giờ làm việc (Optional: Check ở client cho nhanh)
+            const now = new Date();
+            const h = now.getHours();
+            // Nếu muốn chặn khách gọi ngoài giờ thì mở comment dòng dưới:
+            // if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
+
             videoModal.style.display = 'flex';
-            const vid = document.getElementById('agentVideo');
-            if(vid) { 
-                vid.muted = false; 
-                vid.play().catch(e => console.log("User chưa tương tác, video muted")); 
+            
+            // Nếu chưa có Peer ID thì tạo mới (Mỗi lần F5 là 1 ID khác nhau -> Khách khác nhau)
+            if(!peer) {
+                peer = new Peer(); // ID ngẫu nhiên
+                
+                peer.on('open', (id) => {
+                    console.log('My ID:', id);
+                    addLog("Đang kết nối tới nhân viên...", 'agent');
+                    connectToStaff();
+                });
+
+                peer.on('call', (call) => {
+                    // Khi Staff gọi video tới -> Trả lời (Answer)
+                    // Quan trọng: Trả lời nhưng KHÔNG gửi stream của mình (null) 
+                    // => Khách không bật mic/cam
+                    call.answer(null); 
+                    
+                    call.on('stream', (remoteStream) => {
+                        // Nhận hình ảnh/âm thanh từ Staff
+                        agentVideo.srcObject = remoteStream;
+                        
+                        // --- FIX LỖI MẤT TIẾNG ---
+                        agentVideo.muted = false; // <--- Dòng quan trọng: Ép mở tiếng
+                        // --------------------------
+
+                        // Chạy video
+                        agentVideo.play().catch(e => {
+                            console.log("Trình duyệt chặn Autoplay âm thanh, cần tương tác.");
+                            // Nếu vẫn bị chặn, hiện nút cho khách bấm để nghe
+                            addLog("⚠️ Nếu không nghe thấy tiếng, hãy chạm vào màn hình video.", 'agent');
+                        });
+                        
+                        // Ẩn lớp phủ, hiện video
+                        const overlay = document.querySelector('.video-overlay');
+                        if(overlay) overlay.style.display = 'none';
+                        
+                        addLog("Nhân viên đã tham gia. Bạn có thể nghe và xem nhân viên hỗ trợ.", 'agent');
+                    });
+                });
+                
+                peer.on('error', (err) => {
+                    console.error(err);
+                    if(err.type === 'peer-unavailable') {
+                        addLog("Hiện Staff đang offline. Vui lòng thử lại sau.", 'agent');
+                    }
+                });
+            } else if (!conn || !conn.open) {
+                // Nếu peer đã có nhưng mất kết nối chat -> kết nối lại
+                addLog("Đang kết nối lại...", 'agent');
+                connectToStaff();
             }
         });
 
-        if (btnCloseVideo) {
-            btnCloseVideo.addEventListener('click', () => {
-                videoModal.style.display = 'none';
-                const vid = document.getElementById('agentVideo');
-                if(vid) vid.pause();
+        function connectToStaff() {
+            if(conn) { conn.close(); }
+            
+            conn = peer.connect(STAFF_ID);
+
+            conn.on('open', () => {
+                addLog("Đã kết nối máy chủ! Đang chờ xếp hàng...", 'agent');
+            });
+
+            conn.on('data', (data) => {
+                // Xử lý các tín hiệu đặc biệt từ Staff
+                if (data === 'BUSY_NOW') {
+                    addLog("⚠️ Staff đang hỗ trợ khách hàng khác. Vui lòng đợi trong giây lát...", 'agent');
+                    conn.close(); // Ngắt để không spam
+                } 
+                else if (data === 'STAFF_END') {
+                    addLog("Staff đã kết thúc phiên hỗ trợ. Cảm ơn bạn!", 'agent');
+                    agentVideo.srcObject = null;
+                    conn.close();
+                }
+                else {
+                    addLog(data, 'agent'); // Tin nhắn thường
+                }
+            });
+            
+            conn.on('close', () => {
+                console.log("Connection closed");
             });
         }
 
-        videoModal.addEventListener('click', (e) => {
-            if (e.target === videoModal) videoModal.style.display = 'none';
-        });
+        // Nút Đóng Modal
+        if (btnCloseVideo) {
+            btnCloseVideo.addEventListener('click', () => {
+                videoModal.style.display = 'none';
+                if(conn) { 
+                    conn.send("USER_DISCONNECT"); 
+                    setTimeout(() => conn.close(), 100);
+                }
+                agentVideo.srcObject = null; // Tắt video
+                chatMessages.innerHTML = ''; // Xóa log chat cũ cho sạch
+            });
+        }
     }
 
-    // Logic Chat (Tách riêng để không gây lỗi nếu thiếu nút Chat)
-    if (btnSendChat && chatInput && chatMessages) {
-        function sendMessage() {
+    // Gửi tin nhắn (Khách -> Staff)
+    if (btnSendChat && chatInput) {
+        function sendUserMessage() {
             const text = chatInput.value.trim();
             if (text !== "") {
-                const msgDiv = document.createElement('div');
-                msgDiv.classList.add('message', 'user-msg');
-                msgDiv.innerText = text;
-                chatMessages.appendChild(msgDiv);
+                addLog(text, 'me'); // Hiện bên mình
+                if(conn && conn.open) {
+                    conn.send(text); // Gửi sang Staff
+                } else {
+                    addLog("(Chưa kết nối được Staff, tin nhắn chưa gửi đi)", 'agent');
+                }
                 chatInput.value = "";
-                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         }
-
-        btnSendChat.addEventListener('click', sendMessage);
+        btnSendChat.addEventListener('click', sendUserMessage);
         chatInput.addEventListener('keypress', (e) => { 
-            if (e.key === 'Enter') sendMessage(); 
+            if (e.key === 'Enter') sendUserMessage(); 
         });
     }
-
 
     // ====================================================
     // 8. LOGIC NÚT LIÊN HỆ THÔNG MINH (SMART DOCK - FIX SMOOTH)
