@@ -1172,3 +1172,73 @@ body {
     font-family: "Font Awesome 6 Brands" !important;
     font-weight: 400 !important;
 }
+/* ======================================================
+   FIX LỖI HÌNH NỀN BỊ BỂ TRÊN ĐIỆN THOẠI (COUNTERS & COMMUNICATE)
+====================================================== */
+@media (max-width: 1024px) {
+    .counters, 
+    .communicate {
+        /* Tắt chế độ Fixed (nguyên nhân gây bể hình trên mobile) */
+        background-attachment: scroll !important;
+        
+        /* Căn giữa hình để luôn lấy trọng tâm đẹp nhất */
+        background-position: center center !important;
+        
+        /* Đảm bảo hình luôn phủ kín khung */
+        background-size: cover !important;
+    }
+}
+
+/* ======================================================
+   FIX LỖI GIAO DIỆN TRÊN ĐIỆN THOẠI (RESPONSIVE)
+====================================================== */
+
+@media (max-width: 1024px) { /* Áp dụng cho Tablet và Mobile */
+    
+    /* 1. Chuyển bố cục từ Ngang sang Dọc */
+    .services-modern-layout {
+        flex-direction: column; /* Xếp chồng lên nhau */
+        height: auto; /* Bỏ chiều cao cố định */
+        gap: 30px;
+    }
+
+    /* 2. Cột danh sách dịch vụ */
+    .svc-list-col {
+        padding-right: 0; /* Bỏ khoảng cách thừa */
+        flex: auto;
+    }
+
+    /* Trên điện thoại thì để 1 cột thôi cho chữ to rõ */
+    .svc-grid {
+        grid-template-columns: 1fr; 
+        row-gap: 20px;
+        
+    }
+
+    /* 3. Cột hình ảnh (Slider) */
+    .svc-image-col {
+        width: 100%;
+        /* Giảm chiều cao xuống còn 300px cho vừa màn hình đt */
+        height: 300px; 
+        margin-top: 20px;
+    }
+
+    /* 4. Chỉnh lại kích thước ảnh trong Slider */
+    .marquee-track img {
+        /* Chiều cao ăn theo khung cha (300px) */
+        height: 300px; 
+        
+        /* Chiều rộng giảm xuống còn 250px cho cân đối */
+        width: 250px; 
+        
+        /* Giảm khoảng cách giữa các ảnh */
+        margin-right: 15px; 
+    }
+    
+    /* Canh giữa tiêu đề cho đẹp */
+    .center-header h2 {
+        font-size: 2rem; /* Giảm size chữ tiêu đề chút */
+        
+    }
+
+}
