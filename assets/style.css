@@ -1243,4 +1243,33 @@ body {
 
 }
 
+/* ======================================================
+   FIX LỖI TRẮNG MÀN HÌNH TRÊN ĐIỆN THOẠI (QUAN TRỌNG)
+====================================================== */
+@media (max-width: 1024px) {
+    /* Tắt ép xung GPU để tránh tràn bộ nhớ gây trắng trang */
+    .marquee-track, 
+    .owl-carousel-clients-carousel,
+    .hero-slider img {
+        will-change: auto !important;
+    }
+
+    /* Đảm bảo nội dung không bị ẩn do lỗi tính toán chiều cao */
+    .svc-image-col, .clients {
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    /* Fix lỗi ảnh slider dịch vụ bị dẹt hoặc mất hình */
+    .marquee-track img {
+        height: 250px !important; /* Cố định chiều cao nhỏ hơn cho mobile */
+        width: auto !important;   /* Chiều rộng tự động theo tỉ lệ */
+        max-width: none !important; /* Cho phép ảnh to hơn khung */
+    }
+    
+    /* Fix khung chứa slider */
+    .svc-image-col {
+        height: 250px !important;
+    }
+}
 
