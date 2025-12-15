@@ -135,8 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroTimer = setInterval(() => showSlide((heroIdx + 1) % heroImgs.length, 1), 3500);
             }
             autoSlide();
-            heroSlider.addEventListener('mouseenter', () => clearInterval(heroTimer));
-            heroSlider.addEventListener('mouseleave', autoSlide);
+            
         }
     }
 
@@ -295,6 +294,109 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Chưa thấy ID trong HTML footer.");
     }
 });
+
+// ====================================================
+    // 9. CHỨC NĂNG TÌM KIẾM THÔNG MINH (SMART SEARCH)
+    // ====================================================
+    
+    // Danh sách từ khóa và địa chỉ đích đến
+    const searchData = [
+        {
+            keys: ["máy chủ", "server", "vps", "phần cứng", "ảo hóa"],
+            link: "service.html#svc-server"
+        },
+        {
+            keys: ["email", "mail", "thư điện tử", "outlook"],
+            link: "service.html#svc-email"
+        },
+        {
+            keys: ["bảo mật", "security", "virus", "ransomware", "hacker", "tường lửa", "firewall"],
+            link: "service.html#svc-security"
+        },
+        {
+            keys: ["sửa chữa", "máy tính", "laptop", "pc", "cài win", "vệ sinh"],
+            link: "service.html#svc-repair"
+        },
+        {
+            keys: ["nas", "lưu trữ", "backup", "dữ liệu", "synology"],
+            link: "service.html#svc-nas"
+        },
+        {
+            keys: ["helpdesk", "it", "hỗ trợ", "kỹ thuật", "sự cố"],
+            link: "service.html#svc-helpdesk"
+        },
+        {
+            keys: ["camera", "quan sát", "an ninh", "giám sát", "ai"],
+            link: "service.html#svc-camera"
+        },
+        {
+            keys: ["web", "website", "thiết kế", "seo", "giao diện"],
+            link: "service.html#svc-web"
+        },
+        {
+            keys: ["liên hệ", "sđt", "điện thoại", "địa chỉ", "map", "văn phòng"],
+            link: "#contactDock" // Nhảy xuống chân trang hiện tại
+        },
+        {
+            keys: ["giới thiệu", "về kb", "tầm nhìn", "sứ mệnh"],
+            link: "about.html"
+        },
+        {
+            keys: ["khách hàng", "đối tác"],
+            link: "clients.html"
+        }
+    ];
+
+    const searchInput = document.querySelector('.top-bar-search input');
+    const searchBtn = document.querySelector('.top-bar-search button');
+
+    function executeSearch() {
+        // Lấy từ khóa, chuyển về chữ thường và xóa khoảng trắng thừa
+        const query = searchInput.value.toLowerCase().trim();
+        
+        if (!query) {
+            alert("Vui lòng nhập từ khóa để tìm kiếm!");
+            return;
+        }
+
+        let foundLink = null;
+
+        // Vòng lặp tìm kiếm: Duyệt qua từng nhóm dữ liệu
+        for (let item of searchData) {
+            // Kiểm tra xem từ khóa nhập vào có chứa bất kỳ từ khóa nào trong danh sách không
+            const isMatch = item.keys.some(key => query.includes(key));
+            
+            if (isMatch) {
+                foundLink = item.link;
+                break; // Tìm thấy thì dừng ngay
+            }
+        }
+
+        if (foundLink) {
+            // Chuyển hướng
+            window.location.href = foundLink;
+        } else {
+            alert("Không tìm thấy nội dung phù hợp! Bạn hãy thử từ khóa khác (ví dụ: server, camera, email...)");
+        }
+    }
+
+    // Sự kiện Click nút kính lúp
+    if (searchBtn) {
+        searchBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Chặn load lại trang nếu nằm trong form
+            executeSearch();
+        });
+    }
+
+    // Sự kiện Nhấn phím Enter trong ô nhập liệu
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeSearch();
+            }
+        });
+    }
 
 // ====================================================
     // SLIDER ẢNH DỊCH VỤ (Cột phải - Fix Loop)

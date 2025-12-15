@@ -355,3 +355,48 @@ body {
     }
     .svc-features li { justify-content: flex-start; }
 }
+
+/* --- NÚT ĐIỀU HƯỚNG GIỮA CÁC DỊCH VỤ --- */
+.svc-nav-btn {
+    display: block;
+    margin-top: 25px;
+    text-align: center; /* Căn giữa */
+    width: 100%;
+}
+
+.svc-nav-btn a {
+    display: inline-block;
+    width: 40px; height: 40px;
+    line-height: 40px;
+    background: #fff;
+    color: #cc0000; /* Màu đỏ chủ đạo */
+    border: 1px solid #cc0000;
+    border-radius: 50%;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    animation: bounceArrow 2s infinite; /* Hiệu ứng nhún nhảy */
+}
+
+.svc-nav-btn a:hover {
+    background: #cc0000;
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+/* Nút lên đầu trang (Service cuối cùng) */
+.svc-nav-btn.up-top a {
+    background: #333;
+    color: #fff;
+    border-color: #333;
+}
+.svc-nav-btn.up-top a:hover {
+    background: #000;
+}
+
+/* Hiệu ứng nhún nhảy */
+@keyframes bounceArrow {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
