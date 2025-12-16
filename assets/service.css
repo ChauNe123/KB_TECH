@@ -400,3 +400,113 @@ body {
     40% { transform: translateY(-10px); }
     60% { transform: translateY(-5px); }
 }
+
+/* =========================================
+   CSS CHO POPUP TƯ VẤN (CONSULT MODAL)
+========================================= */
+.consult-modal {
+    display: none; /* Ẩn mặc định */
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8); /* Nền tối mờ */
+    backdrop-filter: blur(5px);
+    z-index: 10000; /* Cao hơn tất cả */
+    align-items: center; justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.consult-box {
+    background: #fff;
+    width: 900px;
+    max-width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    animation: zoomInModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.close-consult {
+    position: absolute; top: 15px; right: 15px;
+    background: rgba(0,0,0,0.1); border: none;
+    width: 35px; height: 35px; border-radius: 50%;
+    font-size: 18px; cursor: pointer; color: #555;
+    z-index: 10; transition: 0.2s;
+}
+.close-consult:hover { background: #cc0000; color: #fff; transform: rotate(90deg); }
+
+.consult-grid {
+    display: flex;
+    min-height: 500px;
+}
+
+/* --- CỘT TRÁI (INFO) --- */
+.consult-info-col {
+    flex: 1;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    position: relative;
+    padding: 40px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+
+.consult-info-col img {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.2; z-index: 0;
+}
+
+.consult-info-col .info-content { position: relative; z-index: 1; }
+
+.consult-info-col h3 {
+    font-size: 2rem; font-weight: 800; margin-bottom: 20px;
+    color: #fff; text-transform: uppercase;
+    border-bottom: 3px solid #cc0000; display: inline-block; padding-bottom: 10px;
+}
+
+.benefit-list { list-style: none; padding: 0; margin-top: 30px; }
+.benefit-list li { margin-bottom: 15px; font-size: 16px; display: flex; gap: 10px; align-items: center; }
+.benefit-list li i { color: #28a745; font-size: 18px; }
+
+/* --- CỘT PHẢI (FORM) --- */
+.consult-form-col {
+    flex: 1.2;
+    padding: 40px;
+    background: #fff;
+}
+
+.form-header h4 { font-size: 1.5rem; color: #cc0000; margin: 0; font-weight: 800; }
+.form-header p { color: #666; margin-bottom: 25px; font-size: 14px; }
+
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #333; }
+
+.form-control {
+    width: 100%; padding: 12px 15px;
+    border: 1px solid #ddd; border-radius: 10px;
+    font-size: 14px; outline: none; transition: 0.3s;
+    background: #f9f9f9;
+}
+.form-control:focus { border-color: #cc0000; background: #fff; box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1); }
+
+.btn-submit-consult {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #EF233C, #D90429);
+    color: #fff; font-weight: 700; font-size: 16px;
+    border: none; border-radius: 50px;
+    cursor: pointer; transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(217, 4, 41, 0.3);
+}
+.btn-submit-consult:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(217, 4, 41, 0.5); }
+
+@keyframes zoomInModal { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .consult-grid { flex-direction: column; }
+    .consult-info-col { padding: 30px; min-height: 200px; text-align: center; }
+    .consult-info-col h3 { font-size: 1.5rem; }
+    .consult-form-col { padding: 25px; }
+}

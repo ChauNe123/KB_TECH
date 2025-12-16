@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ====================================================
     const heroSlider = document.querySelector('.hero-slider');
     if (heroSlider) {
-        const heroImgs = heroSlider.querySelectorAll('img');
+        const heroImgs = heroSlider.querySelectorAll('video');
         const leftBtn = heroSlider.querySelector('.hero-arrow.left');
         const rightBtn = heroSlider.querySelector('.hero-arrow.right');
         
@@ -543,5 +543,96 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
+        });
+    }
+
+    // ====================================================
+    // 12. LOGIC MODAL TƯ VẤN SẢN PHẨM (MỚI)
+    // ====================================================
+    const consultModal = document.getElementById('consultModal');
+    const closeConsultBtn = document.getElementById('closeConsult');
+    const consultForm = document.getElementById('consultForm');
+    
+    // Nút mở modal (Áp dụng cho tất cả nút có class .btn-consult)
+    const consultBtns = document.querySelectorAll('.btn-consult');
+
+    // Dữ liệu mẫu cho từng dịch vụ (Sau này mở rộng thêm)
+    const serviceData = {
+        'server': {
+            title: 'DỊCH VỤ MÁY CHỦ (SERVER)',
+            img: 'thumb/sever.jpg',
+            options: [
+                'Mua máy chủ vật lý',
+                'Thuê Cloud Server / VPS',
+                'Thuê chỗ đặt (Colocation)',
+                'Cài đặt hệ thống',
+                'Sửa chữa / Nâng cấp',
+                'Khác'
+            ]
+        },
+        // Bạn có thể thêm 'camera', 'web' vào đây sau này
+    };
+
+    if (consultModal && consultBtns.length > 0) {
+        
+        // 1. Click nút mở Modal
+        consultBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const type = btn.getAttribute('data-service'); // Lấy loại dịch vụ (vd: server)
+                const data = serviceData[type];
+
+                if (data) {
+                    // Cập nhật nội dung Modal theo dịch vụ
+                    document.getElementById('modalTitle').innerText = data.title;
+                    document.getElementById('modalImg').src = data.img;
+                    document.getElementById('serviceType').value = type;
+
+                    // Cập nhật Dropdown nhu cầu
+                    const select = document.getElementById('needOption');
+                    select.innerHTML = ''; // Xóa cũ
+                    data.options.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt;
+                        option.innerText = opt;
+                        select.appendChild(option);
+                    });
+
+                    // Hiện Modal
+                    consultModal.style.display = 'flex';
+                }
+            });
+        });
+
+        // 2. Đóng Modal
+        const closeModal = () => {
+            consultModal.style.display = 'none';
+        };
+        
+        closeConsultBtn.addEventListener('click', closeModal);
+        
+        // Click ra ngoài vùng đen cũng đóng
+        consultModal.addEventListener('click', (e) => {
+            if (e.target === consultModal) closeModal();
+        });
+
+        // 3. Xử lý Gửi Form (Demo)
+        consultForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Giả lập gửi dữ liệu
+            const btnSubmit = consultForm.querySelector('.btn-submit-consult');
+            const originalText = btnSubmit.innerHTML;
+            
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+            btnSubmit.disabled = true;
+
+            setTimeout(() => {
+                alert("✅ Đã gửi yêu cầu thành công!\nNhân viên KB Tech sẽ liên hệ bạn trong ít phút nữa.");
+                consultForm.reset();
+                closeModal();
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+            }, 1500);
         });
     }

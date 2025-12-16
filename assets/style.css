@@ -273,6 +273,27 @@ body {
 .hero-slider img.slide-in-left { left: -100%; }
 .hero-slider img.slide-in-right { left: 100%; }
 
+/* Hiệu ứng Slider - Áp dụng cho cả img và video */
+.hero-slider img,
+.hero-slider video { 
+    position: absolute;
+    top: 0; left: 100%; /* Mặc định ẩn bên phải */
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: left 0.7s ease;
+    z-index: 1;
+    /* Thêm thuộc tính này cho video để nó tương tác tốt hơn với CSS positioning */
+    display: block; 
+}
+.hero-slider img.active,
+.hero-slider video.active { left: 0; z-index: 2; }
+
+/* Thêm các lớp transition cho video */
+.hero-slider video.slide-out-left { left: -100%; z-index: 1; }
+.hero-slider video.slide-out-right { left: 100%; z-index: 1; }
+.hero-slider video.slide-in-left { left: -100%; }
+.hero-slider video.slide-in-right { left: 100%; }
+
 /* Chỉnh vị trí ảnh đặc biệt */
 .hero-slider img.special-slide1.active { object-position: 80% 54% !important; }
 .hero-slider img.special-slide2.active { object-position: 45% 35% !important; }
@@ -298,6 +319,7 @@ body {
 @media (max-width: 900px) {
     .hero-slider { height: 440px; }
 }
+
 
 /* =========================================
    5. LÝ DO CHỌN KB (Projects Class)
