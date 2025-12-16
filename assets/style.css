@@ -878,58 +878,145 @@ body {
 }
 
 /* =========================================
-   CSS CHO VIDEO MODAL (SUPPORT)
+   CSS CHO VIDEO MODAL (BẢN FIX LỖI TRÀN KHUNG)
 ========================================= */
 .video-modal {
-    display: none; position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); z-index: 99999;
-    align-items: center; justify-content: center;
-    animation: fadeIn 0.3s;
+    display: none;
+    position: fixed;
+    bottom: 20px; 
+    right: 20px; 
+    width: 360px;
+    height: 600px; /* Tăng chiều cao xíu cho thoải mái */
+    z-index: 99999;
+    background: transparent;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+    animation: slideUpWidget 0.4s ease-out;
 }
+
 .video-box {
-    width: 380px; height: 600px;
-    background: #fff; border-radius: 15px;
-    overflow: hidden; display: flex; flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 100%; 
+    height: 100%;
+    background: #fff; 
+    border-radius: 20px;
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; /* Xếp dọc từ trên xuống */
+    border: 1px solid rgba(0,0,0,0.1);
 }
+
+/* 1. HEADER (KHÓA CỨNG KHÔNG CHO CO LẠI) */
 .video-header {
-    background: #cc0000; padding: 15px;
-    display: flex; justify-content: space-between; align-items: center; color: #fff;
+    background: linear-gradient(135deg, #EF233C, #D90429);
+    padding: 12px 15px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    color: #fff;
+    flex-shrink: 0; /* <--- QUAN TRỌNG: Không bao giờ bị ép nhỏ */
+    height: 60px; /* Cố định chiều cao */
 }
+
 .agent-info { display: flex; align-items: center; gap: 10px; }
 .agent-avatar {
     width: 35px; height: 35px; background: rgba(255,255,255,0.2);
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
 }
-.agent-info h4 { margin: 0; font-size: 14px; }
-.status-dot { display: inline-block; width: 8px; height: 8px; background: #00ff00; border-radius: 50%; }
-.close-video { background: none; border: none; color: #fff; font-size: 18px; cursor: pointer; }
-.video-screen { flex: 1.5; background: #000; position: relative; overflow: hidden; }
-.video-screen video { width: 100%; height: 100%; object-fit: cover; }
-.video-overlay {
-    position: absolute; bottom: 10px; left: 10px;
-    background: rgba(0,0,0,0.6); color: #fff;
-    padding: 5px 10px; border-radius: 20px; font-size: 12px;
+.agent-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
+.status-dot { display: inline-block; width: 8px; height: 8px; background: #00ff00; border-radius: 50%; border: 1px solid #fff; }
+
+.close-video { 
+    background: rgba(0,0,0,0.1); border: none; color: #fff; 
+    width: 30px; height: 30px; border-radius: 50%;
+    font-size: 16px; cursor: pointer; 
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
 }
-.chat-area { flex: 1; background: #f1f1f1; display: flex; flex-direction: column; border-top: 1px solid #ddd; }
-.chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.close-video:hover { background: rgba(0,0,0,0.3); transform: rotate(90deg); }
+
+/* 2. MÀN HÌNH VIDEO (KHÓA CỨNG) */
+.video-screen { 
+    flex: 0 0 220px; /* <--- QUAN TRỌNG: Cố định chiều cao 220px */
+    background: #000; 
+    position: relative; 
+    overflow: hidden; 
+}
+.video-screen video { width: 100%; height: 100%; object-fit: cover; }
+
+.video-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px;
+}
+.video-overlay p { font-size: 13px; margin-top: 10px; color: #ccc; }
+
+/* 3. KHUNG CHAT (TỰ ĐỘNG GIÃN NHƯNG CÓ GIỚI HẠN) */
+.chat-area { 
+    flex: 1; /* Chiếm hết phần còn lại */
+    background: #f8f9fa; 
+    display: flex; 
+    flex-direction: column; 
+    border-top: 1px solid #eee; 
+    min-height: 0; /* <--- QUAN TRỌNG: Giúp scroll hoạt động đúng trong Flexbox */
+    overflow: hidden; /* Chặn tràn ra ngoài */
+}
+
+/* Vùng hiển thị tin nhắn (Scroll ở đây) */
+.chat-messages { 
+    flex: 1; 
+    padding: 15px; 
+    overflow-y: auto; /* Chỉ cuộn riêng vùng này */
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    font-size: 13px;
+    scroll-behavior: smooth;
+}
+
+.message { padding: 10px 14px; max-width: 85%; line-height: 1.4; word-wrap: break-word; font-size: 14px; }
 .message.agent-msg {
-    align-self: flex-start; background: #fff; padding: 8px 12px;
-    border-radius: 12px 12px 12px 0; font-size: 13px; max-width: 85%;
+    align-self: flex-start; background: #fff; 
+    border: 1px solid #e5e5e5; border-radius: 12px 12px 12px 0; 
+    color: #333;
 }
 .message.user-msg {
-    align-self: flex-end; background: #cc0000; color: #fff; padding: 8px 12px;
-    border-radius: 12px 12px 0 12px; font-size: 13px; max-width: 85%;
+    align-self: flex-end; 
+    background: linear-gradient(135deg, #EF233C, #D90429);
+    color: #fff; border-radius: 12px 12px 0 12px; 
+    box-shadow: 0 2px 5px rgba(217, 4, 41, 0.2);
 }
-.chat-input-box { padding: 10px; background: #fff; display: flex; gap: 10px; border-top: 1px solid #eee; }
-.chat-input-box input { flex: 1; border: 1px solid #ddd; padding: 8px 15px; border-radius: 20px; outline: none; }
+
+/* 4. Ô NHẬP LIỆU (KHÓA CỨNG DƯỚI CÙNG) */
+.chat-input-box { 
+    padding: 12px; 
+    background: #fff; 
+    display: flex; gap: 8px; 
+    border-top: 1px solid #eee; 
+    flex-shrink: 0; /* <--- QUAN TRỌNG: Không bị ép nhỏ */
+}
+.chat-input-box input { 
+    flex: 1; border: 1px solid #ddd; padding: 10px 15px; 
+    border-radius: 25px; outline: none; font-size: 14px;
+}
+.chat-input-box input:focus { border-color: #D90429; }
 .chat-input-box button {
-    background: #cc0000; color: #fff; border: none;
-    width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+    background: #D90429; color: #fff; border: none;
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 10px rgba(217, 4, 41, 0.3);
 }
-@media (max-width: 480px) { .video-box { width: 100%; height: 100%; border-radius: 0; } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.chat-input-box button:hover { transform: scale(1.1); }
+
+@keyframes slideUpWidget { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 480px) { 
+    .video-modal {
+        bottom: 0; right: 0; width: 100%; height: 80vh; /* Cao hơn xíu trên mobile */
+        border-radius: 20px 20px 0 0;
+    }
+    .video-box { border-radius: 20px 20px 0 0; }
+}
 
 /* ======================================================
    FIX LỖI HÌNH NỀN BỊ BỂ TRÊN ĐIỆN THOẠI (COUNTERS & COMMUNICATE)
