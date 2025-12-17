@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
             const h = now.getHours();
             // Nếu muốn chặn khách gọi ngoài giờ thì mở comment dòng dưới:
-            // if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
+            if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
 
             videoModal.style.display = 'flex';
             
@@ -343,14 +343,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Gửi tin nhắn (Khách -> Staff)
+    // --- BẢO MẬT: CHỐNG SPAM CHAT ---
+    let lastMsgTime = 0;
+    const SPAM_DELAY = 1500; // Phải đợi 1.5 giây giữa các lần chat
+
+    // Hàm lọc mã độc XSS (Biến các ký tự nguy hiểm thành text thường)
+    function sanitizeInput(str) {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    }
+
     if (btnSendChat && chatInput) {
         function sendUserMessage() {
-            const text = chatInput.value.trim();
+            const now = Date.now();
+            if (now - lastMsgTime < SPAM_DELAY) {
+                alert("Bạn đang thao tác quá nhanh! Vui lòng đợi vài giây.");
+                return;
+            }
+
+            let text = chatInput.value.trim();
+            
+            // Lọc mã độc
+            text = sanitizeInput(text);
+
             if (text !== "") {
-                addLog(text, 'me'); // Hiện bên mình
+                lastMsgTime = now; // Cập nhật thời gian gửi
+                addLog(text, 'me'); 
                 if(conn && conn.open) {
-                    conn.send(text); // Gửi sang Staff
+                    conn.send(text); 
                 } else {
                     addLog("(Chưa kết nối được Staff, tin nhắn chưa gửi đi)", 'agent');
                 }
@@ -362,6 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'Enter') sendUserMessage(); 
         });
     }
+    
 
     // ====================================================
     // 8. LOGIC NÚT LIÊN HỆ THÔNG MINH (SMART DOCK - FIX SMOOTH)
@@ -616,14 +638,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === consultModal) closeModal();
         });
 
-        // 3. Xử lý Gửi Form (Demo)
+        // 3. Xử lý Gửi Form với Rate Limit
+        let isSubmitting = false;
+
         consultForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            // Giả lập gửi dữ liệu
+            if (isSubmitting) return; // Chặn click liên tục
+            isSubmitting = true;
+
             const btnSubmit = consultForm.querySelector('.btn-submit-consult');
             const originalText = btnSubmit.innerHTML;
             
+            // Lấy dữ liệu và lọc XSS
+            const nameInput = consultForm.querySelector('input[type="text"]');
+            const phoneInput = consultForm.querySelector('input[type="tel"]');
+            
+            // Validate cơ bản phía Client
+            if(phoneInput.value.length < 10 || isNaN(phoneInput.value)) {
+                alert("Số điện thoại không hợp lệ!");
+                isSubmitting = false;
+                return;
+            }
+
             btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
             btnSubmit.disabled = true;
 
@@ -633,6 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal();
                 btnSubmit.innerHTML = originalText;
                 btnSubmit.disabled = false;
+                isSubmitting = false; // Mở lại khóa
             }, 1500);
         });
     }
