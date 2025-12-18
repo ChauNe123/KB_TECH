@@ -264,22 +264,27 @@ body {
 
 
 /* =========================================
-   4. HERO SECTION (SLIDER LỚN)
+   4. HERO SECTION (FIX VỠ HÌNH & MỜ)
 ========================================= */
 .hero-section {
     width: 100%;
     background: var(--color-light);
-    padding: 120px 0 0; /* Khoảng trống cho Header + Topbar */
+    /* Padding-top bằng chiều cao header để không bị che */
+    padding: 120px 0 0; 
 }
 
 .hero-slider {
-    width: 100vw;
-    height: 800px;
+    /* Đổi 100vw thành 100% để không bị tràn màn hình */
+    width: 100%; 
+    
+    /* GIẢM CHIỀU CAO: 800px là quá cao, giảm xuống 600px - 700px là đẹp và nét */
+    height: 650px; 
+    
     position: relative;
     overflow: hidden;
-    object-fit: contain;
-    left: 50%;
-    transform: translateX(-50%);
+    
+    /* Xóa các thuộc tính left/transform cũ gây lệch */
+    margin: 0 auto; 
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
@@ -287,53 +292,75 @@ body {
 .hero-slider img, 
 .hero-slider video {
     position: absolute;
-    top: 0; left: 100%; /* Mặc định ẩn bên phải */
+    top: 0; left: 0; /* Fix cứng ở góc trái trên */
     width: 100%; 
     height: 100%;
-    object-fit: cover; /* Quan trọng: Giúp video phủ kín khung không bị méo */
-    transition: left 0.7s ease;
+    
+    /* QUAN TRỌNG: Giúp ảnh không bị méo nhưng sẽ bị cắt bớt viền để lấp đầy khung */
+    object-fit: cover; 
+    
+    /* Căn giữa ảnh để không bị mất các chi tiết quan trọng ở giữa */
+    object-position: center center; 
+    
+    transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+    opacity: 0; /* Mặc định ẩn */
     z-index: 1;
-    display: block; /* Thêm cái này để fix lỗi khoảng trắng */
 }
 
-/* Class active cho cả 2 loại */
+/* Class active: Hiện ảnh */
 .hero-slider img.active,
 .hero-slider video.active {
-    left: 0; 
+    opacity: 1;
     z-index: 2;
 }
 
-/* Các class hiệu ứng chuyển động */
-.hero-slider video.slide-out-left { left: -100%; z-index: 1; }
-.hero-slider video.slide-out-right { left: 100%; z-index: 1; }
-.hero-slider video.slide-in-left { left: -100%; }
-.hero-slider video.slide-in-right { left: 100%; }
+/* --- XỬ LÝ RIÊNG CHO MÀN HÌNH LỚN (PC) --- */
+/* Nếu màn hình to > 1600px (Ultra wide), giới hạn chiều cao để không bị zoom quá đà */
+@media (min-width: 1600px) {
+    .hero-slider {
+        height: 750px; 
+        max-width: 1920px; /* Giới hạn chiều rộng tối đa */
+        margin: 0 auto;    /* Căn giữa slider */
+    }
+}
 
-/* Chỉnh vị trí ảnh đặc biệt */
-.hero-slider img.special-slide1.active { object-position: 80% 54% !important; }
-.hero-slider img.special-slide2.active { object-position: 45% 35% !important; }
+/* --- XỬ LÝ RIÊNG CHO MOBILE --- */
+@media (max-width: 900px) {
+    .hero-slider {
+        /* Mobile chỉ cần cao tầm 400-500px là vừa đẹp */
+        height: 450px; 
+    }
+    
+    /* Trên mobile, ưu tiên hiển thị phần trung tâm */
+    .hero-slider img, 
+    .hero-slider video {
+        object-position: center;
+    }
+}
 
-/* Nút bấm Slider */
+/* Nút bấm Slider (Giữ nguyên style cũ của bạn nhưng tinh chỉnh lại vị trí) */
 .hero-arrow {
     position: absolute; top: 50%;
     transform: translateY(-50%);
-    width: 40px; height: 40px;
-    background: rgba(255,255,255,0.8);
+    width: 45px; height: 45px;
+    background: rgba(255,255,255,0.4); /* Mờ hơn cho sang */
+    backdrop-filter: blur(5px);
     color: #a81c3a;
-    border: none; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 50%;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
     z-index: 10;
-    opacity: 0; transition: opacity 0.3s;
+    transition: all 0.3s;
 }
-.hero-slider:hover .hero-arrow { opacity: 1; }
-.hero-arrow:hover { background: #ffe5eb; }
-.hero-arrow.left { left: 12px; }
-.hero-arrow.right { right: 12px; }
 
-@media (max-width: 900px) {
-    .hero-slider { height: 440px; }
+.hero-arrow:hover {
+    background: #fff;
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
 }
+
+.hero-arrow.left { left: 20px; }
+.hero-arrow.right { right: 20px; }
 
 
 /* =========================================
