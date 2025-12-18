@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Script đã tải thành công!");
 
     // ====================================================
-    // 1. TOP BAR (THANH TRÊN CÙNG)
+    // 1. TOP BAR (DROPDOWN & TÌM KIẾM THÔNG MINH)
     // ====================================================
 
     // --- 1.1. DROPDOWN LOGIC ---
@@ -197,14 +197,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 4. LOGIC MODAL TƯ VẤN SẢN PHẨM (FULL 8 DỊCH VỤ)
+    // 4. SERVICES SECTION (DỊCH VỤ)
     // ====================================================
+
+    // --- 4.1. SLIDER ẢNH DỊCH VỤ (MARQUEE) ---
+    const marqueeTrack = document.querySelector('.marquee-track');
+    if (marqueeTrack) {
+        const images = Array.from(marqueeTrack.children);
+        images.forEach(img => {
+            const clone = img.cloneNode(true);
+            marqueeTrack.appendChild(clone);
+        });
+    }
+
+    // --- 4.2. MODAL TƯ VẤN SẢN PHẨM (FULL 8 DỊCH VỤ) ---
     const consultModal = document.getElementById('consultModal');
     const closeConsultBtn = document.getElementById('closeConsult');
     const consultForm = document.getElementById('consultForm');
     
     // Nút mở modal (Lấy tất cả nút có class .btn-consult)
-    // Lưu ý: Bạn cần thêm class này vào file HTML theo hướng dẫn Bước 2
     const consultBtns = document.querySelectorAll('.btn-consult');
 
     // Dữ liệu chi tiết cho từng dịch vụ
@@ -295,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         'web': {
             title: 'THIẾT KẾ WEBSITE & APP',
-            img: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&auto=format&fit=crop',
+            img: 'thumb/website.jpg',
             options: [
                 'Thiết kế Website Doanh nghiệp',
                 'Thiết kế Web Bán hàng (E-commerce)',
@@ -309,17 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (consultModal) {
         // 1. Click nút mở Modal
-        // Sử dụng Event Delegation để bắt sự kiện cho cả các nút được sinh ra sau này (nếu có)
         document.body.addEventListener('click', (e) => {
-            // Kiểm tra xem cái được click có phải là nút tư vấn không
             if (e.target.closest('.btn-consult')) {
                 e.preventDefault();
                 const btn = e.target.closest('.btn-consult');
-                const type = btn.getAttribute('data-service'); // Lấy loại dịch vụ (vd: email, server)
+                const type = btn.getAttribute('data-service');
                 const data = serviceData[type];
 
                 if (data) {
-                    // Cập nhật nội dung Modal
                     document.getElementById('modalTitle').innerText = data.title;
                     const imgElem = document.getElementById('modalImg');
                     if(imgElem) imgElem.src = data.img;
@@ -327,10 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const inputType = document.getElementById('serviceType');
                     if(inputType) inputType.value = type;
 
-                    // Cập nhật Dropdown nhu cầu
                     const select = document.getElementById('needOption');
                     if (select) {
-                        select.innerHTML = ''; // Xóa cũ
+                        select.innerHTML = '';
                         data.options.forEach(opt => {
                             const option = document.createElement('option');
                             option.value = opt;
@@ -338,42 +345,28 @@ document.addEventListener('DOMContentLoaded', () => {
                             select.appendChild(option);
                         });
                     }
-
-                    // Hiện Modal
                     consultModal.style.display = 'flex';
-                } else {
-                    console.warn("Chưa có dữ liệu cho dịch vụ: " + type);
                 }
             }
         });
 
         // 2. Đóng Modal
-        const closeModal = () => {
-            consultModal.style.display = 'none';
-        };
-        
+        const closeModal = () => { consultModal.style.display = 'none'; };
         if(closeConsultBtn) closeConsultBtn.addEventListener('click', closeModal);
-        
-        consultModal.addEventListener('click', (e) => {
-            if (e.target === consultModal) closeModal();
-        });
+        consultModal.addEventListener('click', (e) => { if (e.target === consultModal) closeModal(); });
 
-        // 3. Xử lý Gửi Form (Kèm Rate Limit & Validation)
+        // 3. Xử lý Gửi Form (Tích hợp FormSubmit.co)
         let isSubmitting = false;
-
         if(consultForm) {
             consultForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                
-                if (isSubmitting) return; // Chặn spam click
+                if (isSubmitting) return; 
                 isSubmitting = true;
 
                 const btnSubmit = consultForm.querySelector('.btn-submit-consult');
                 const originalText = btnSubmit.innerHTML;
-                
                 const phoneInput = consultForm.querySelector('input[type="tel"]');
                 
-                // Validate SĐT cơ bản
                 if(phoneInput.value.length < 10 || isNaN(phoneInput.value)) {
                     alert("Vui lòng nhập số điện thoại hợp lệ!");
                     isSubmitting = false;
@@ -383,18 +376,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
                 btnSubmit.disabled = true;
 
-                // Giả lập gửi (Sau này có Backend thì gọi API ở đây)
-                setTimeout(() => {
-                    alert("✅ Yêu cầu của bạn đã được gửi thành công!\nChuyên gia KB Tech sẽ liên hệ lại trong vòng 15 phút.");
+                // Thay EMAIL_CUA_BAN bằng email thực tế nhận tin
+                const EMAIL_NHAN_TIN = "chounguyen308@gmail.com"; 
+                const formData = new FormData(consultForm);
+
+                fetch(`https://formsubmit.co/ajax/${EMAIL_NHAN_TIN}`, {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("✅ Đã gửi thành công!\nCảm ơn bạn, KB Tech sẽ liên hệ lại ngay.");
                     consultForm.reset();
                     closeModal();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("❌ Có lỗi xảy ra. Vui lòng gọi hotline trực tiếp!");
+                })
+                .finally(() => {
                     btnSubmit.innerHTML = originalText;
                     btnSubmit.disabled = false;
                     isSubmitting = false; 
-                }, 1500);
+                });
             });
         }
     }
+
 
     // ====================================================
     // 5. COUNTERS SECTION (SỐ LIỆU)
@@ -441,7 +449,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (customerTrack) {
         const slides = Array.from(customerTrack.children);
-        // Nhân bản logo
         slides.forEach(slide => {
             const clone = slide.cloneNode(true);
             clone.setAttribute('aria-hidden', true);
@@ -458,29 +465,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 7. GALLERY SECTION (KHO DỰ ÁN)
+    // 7. GALLERY SECTION (KHO DỰ ÁN & LOAD MORE)
     // ====================================================
     const filterBtns = document.querySelectorAll('.filter-btn');
     const galleryItems = document.querySelectorAll('.gallery-item');
+    const btnLoadMore = document.getElementById('btnLoadMore');
+    const viewMoreWrap = document.getElementById('viewMoreWrap');
+    
+    const ITEMS_PER_PAGE = 8; // Mặc định hiện 8 cái
 
-    if (filterBtns.length > 0 && galleryItems.length > 0) {
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+    function renderGallery(filter, isExpanded = false) {
+        let count = 0;
+        let hasHiddenItems = false;
 
-                const filterValue = btn.getAttribute('data-filter');
+        galleryItems.forEach(item => {
+            const match = filter === 'all' || item.classList.contains(filter);
+            
+            if (match) {
+                if (filter !== 'all' || isExpanded || count < ITEMS_PER_PAGE) {
+                    item.classList.remove('hide', 'hidden-item');
+                    item.classList.add('show');
+                    count++;
+                } else {
+                    item.classList.remove('show');
+                    item.classList.add('hide', 'hidden-item');
+                    hasHiddenItems = true;
+                }
+            } else {
+                item.classList.remove('show');
+                item.classList.add('hide');
+            }
+        });
 
-                galleryItems.forEach(item => {
-                    if (filterValue === 'all' || item.classList.contains(filterValue)) {
-                        item.classList.remove('hide');
-                        item.classList.add('show');
-                    } else {
-                        item.classList.remove('show');
-                        item.classList.add('hide');
-                    }
-                });
-            });
+        // Xử lý nút "Xem thêm"
+        if (viewMoreWrap) {
+            if (filter === 'all' && !isExpanded && hasHiddenItems) {
+                viewMoreWrap.classList.remove('hidden-btn');
+                viewMoreWrap.style.display = 'block';
+            } else {
+                viewMoreWrap.classList.add('hidden-btn');
+                viewMoreWrap.style.display = 'none';
+            }
+        }
+    }
+
+    if (galleryItems.length > 0) renderGallery('all');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGallery(btn.getAttribute('data-filter'), false);
+        });
+    });
+
+    if (btnLoadMore) {
+        btnLoadMore.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderGallery('all', true);
         });
     }
 
@@ -495,11 +537,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Khi thấy chân trang -> Hạ cánh
                     floatingGroup.classList.remove('is-floating');
                     floatingGroup.classList.add('is-docked');
                 } else {
-                    // Khi cuộn lên -> Bay nổi
                     floatingGroup.classList.add('is-floating');
                     floatingGroup.classList.remove('is-docked');
                 }
@@ -517,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ====================================================
     const btnCallSupport = document.getElementById('btnCallSupport');
     
-    // Các Element của Video Call
+    // Elements Video Modal
     const videoModal = document.getElementById('videoModal');
     const btnCloseVideo = document.getElementById('btnCloseVideo');
     const agentVideo = document.getElementById('agentVideo');
@@ -525,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
 
-    // Các Element của Bảng Xác Nhận (Mới thêm)
+    // Elements Popup Xác Nhận
     const confirmModal = document.getElementById('confirmModal');
     const btnConfirmYes = document.getElementById('btnConfirmYes');
     const btnConfirmNo = document.getElementById('btnConfirmNo');
@@ -538,47 +578,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LOGIC XỬ LÝ XÁC NHẬN ---
     if (btnCallSupport && confirmModal) {
-        // 1. Khi bấm nút gọi ở Footer -> Hiện bảng xác nhận trước
         btnCallSupport.addEventListener('click', () => {
-            const now = new Date();
-            const h = now.getHours();
-            // Nếu muốn chặn giờ hành chính thì mở dòng dưới:
-            // if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
-            
             confirmModal.style.display = 'flex';
         });
 
-        // 2. Nếu chọn "Chat qua Zalo" (Không)
-        btnConfirmNo.addEventListener('click', () => {
+        if(btnConfirmNo) btnConfirmNo.addEventListener('click', () => {
             confirmModal.style.display = 'none';
-            // Mở link Zalo trong tab mới
             window.open('https://zalo.me/0933129155', '_blank');
         });
 
-        // 3. Nếu chọn "Gọi ngay" (Có) -> Bắt đầu chạy Video Call
-        btnConfirmYes.addEventListener('click', () => {
-            confirmModal.style.display = 'none'; // Tắt bảng xác nhận
-            videoModal.style.display = 'flex';   // Mở bảng Video
-            startVideoCall(); // Chạy hàm kết nối
+        if(btnConfirmYes) btnConfirmYes.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+            videoModal.style.display = 'flex';
+            startVideoCall();
         });
 
-        // Nút tắt bảng xác nhận
-        if(closeConfirm) {
-            closeConfirm.addEventListener('click', () => {
-                confirmModal.style.display = 'none';
-            });
-        }
-        // Bấm ra ngoài cũng tắt
-        confirmModal.addEventListener('click', (e) => {
-            if (e.target === confirmModal) confirmModal.style.display = 'none';
-        });
+        const closeConfirmFunc = () => { confirmModal.style.display = 'none'; };
+        if(closeConfirm) closeConfirm.addEventListener('click', closeConfirmFunc);
+        confirmModal.addEventListener('click', (e) => { if (e.target === confirmModal) closeConfirmFunc(); });
     }
 
-    // --- HÀM KẾT NỐI VIDEO (Được tách riêng để gọi khi bấm YES) ---
+    // --- HÀM KẾT NỐI VIDEO ---
     function startVideoCall() {
         if(!peer) {
             peer = new Peer(); 
-            
             peer.on('open', (id) => {
                 console.log('My ID:', id);
                 addLog("Đang kết nối tới tổng đài viên...", 'agent');
@@ -590,11 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 call.on('stream', (remoteStream) => {
                     agentVideo.srcObject = remoteStream;
                     agentVideo.muted = false; 
-                    
-                    agentVideo.play().catch(e => {
-                        console.log("Autoplay bị chặn.");
-                        addLog("⚠️ Hãy chạm vào màn hình video để bật tiếng.", 'agent');
-                    });
+                    agentVideo.play().catch(e => addLog("⚠️ Hãy chạm vào màn hình video để bật tiếng.", 'agent'));
                     
                     const overlay = document.querySelector('.video-overlay');
                     if(overlay) overlay.style.display = 'none';
@@ -604,9 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             peer.on('error', (err) => {
                 console.error(err);
-                if(err.type === 'peer-unavailable') {
-                    addLog("Hiện Staff đang offline hoặc bận máy.", 'agent');
-                }
+                if(err.type === 'peer-unavailable') addLog("Hiện Staff đang offline hoặc bận máy.", 'agent');
             });
         } else if (!conn || !conn.open) {
             addLog("Đang kết nối lại...", 'agent');
@@ -637,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
         conn.on('close', () => { console.log("Connection closed"); });
     }
 
-    // Hàm thêm log chat (Utility)
+    // Hàm thêm log chat
     function addLog(text, type) {
         if (!chatMessages) return;
         const msgDiv = document.createElement('div');
@@ -660,9 +677,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => conn.close(), 100);
             }
             agentVideo.srcObject = null;
-            if(chatMessages) chatMessages.innerHTML = '';
+            chatMessages.innerHTML = '';
         });
     }
+
+    // --- BẢO MẬT CHAT ---
+    let lastMsgTime = 0;
+    const SPAM_DELAY = 1500; 
 
     function sanitizeInput(str) {
         const temp = document.createElement('div');
@@ -674,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function sendUserMessage() {
             const now = Date.now();
             if (now - lastMsgTime < SPAM_DELAY) {
-                alert("Bạn đang thao tác quá nhanh!");
+                alert("Bạn đang thao tác quá nhanh! Vui lòng đợi vài giây.");
                 return;
             }
 
@@ -698,100 +719,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 10. Xử lý Gửi Form (Tích hợp FormSubmit.co)
-        let isSubmitting = false;
-
-        if(consultForm) {
-            consultForm.addEventListener('submit', (e) => {
-                e.preventDefault(); // Chặn load lại trang
-                
-                if (isSubmitting) return; 
-                isSubmitting = true;
-
-                const btnSubmit = consultForm.querySelector('.btn-submit-consult');
-                const originalText = btnSubmit.innerHTML;
-                const phoneInput = consultForm.querySelector('input[type="tel"]');
-                
-                // Validate SĐT
-                if(phoneInput.value.length < 10 || isNaN(phoneInput.value)) {
-                    alert("Vui lòng nhập số điện thoại hợp lệ!");
-                    isSubmitting = false;
-                    return;
-                }
-
-                // Hiệu ứng đang gửi
-                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
-                btnSubmit.disabled = true;
-
-                // --- GỬI DỮ LIỆU ĐI ---
-                // Thay EMAIL_CUA_BAN@GMAIL.COM bằng email thực tế nhận tin
-                const EMAIL_NHAN_TIN = "chounguyen308@gmail.com"; // Ví dụ, hãy đổi lại email của bạn
-                
-                const formData = new FormData(consultForm);
-
-                fetch(`https://formsubmit.co/ajax/${EMAIL_NHAN_TIN}`, {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Gửi thành công
-                    alert("✅ Đã gửi thành công!\nCảm ơn bạn, KB Tech sẽ liên hệ lại ngay.");
-                    consultForm.reset(); // Xóa trắng form
-                    closeModal();        // Đóng modal
-                })
-                .catch(error => {
-                    // Gửi thất bại
-                    console.error('Error:', error);
-                    alert("❌ Có lỗi xảy ra. Vui lòng thử lại hoặc gọi hotline trực tiếp!");
-                })
-                .finally(() => {
-                    // Dù thành công hay thất bại cũng trả lại trạng thái nút
-                    btnSubmit.innerHTML = originalText;
-                    btnSubmit.disabled = false;
-                    isSubmitting = false; 
-                });
-            });
-        }
-        
-    // --- BẢO MẬT: CHỐNG SPAM CHAT & XSS ---
-    let lastMsgTime = 0;
-    const SPAM_DELAY = 1500; // 1.5 giây giữa các lần chat
-
-    // Hàm lọc mã độc XSS
-    function sanitizeInput(str) {
-        const temp = document.createElement('div');
-        temp.textContent = str;
-        return temp.innerHTML;
-    }
-
-    if (btnSendChat && chatInput) {
-        function sendUserMessage() {
-            const now = Date.now();
-            if (now - lastMsgTime < SPAM_DELAY) {
-                alert("Bạn đang thao tác quá nhanh! Vui lòng đợi vài giây.");
-                return;
-            }
-
-            let text = chatInput.value.trim();
-            text = sanitizeInput(text); // Lọc XSS
-
-            if (text !== "") {
-                lastMsgTime = now;
-                addLog(text, 'me'); 
-                if(conn && conn.open) {
-                    conn.send(text); 
-                } else {
-                    addLog("(Chưa kết nối được Staff)", 'agent');
-                }
-                chatInput.value = "";
-            }
-        }
-        btnSendChat.addEventListener('click', sendUserMessage);
-        chatInput.addEventListener('keypress', (e) => { 
-            if (e.key === 'Enter') sendUserMessage(); 
-        });
-    }
-
 });
-

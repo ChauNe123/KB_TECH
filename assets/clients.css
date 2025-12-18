@@ -1,22 +1,20 @@
 /* =================================================================
-   FILE: assets/clients.css
+   FILE: assets/clients.css (FINAL OPTIMIZED)
    GIAO DIỆN KHÁCH HÀNG: CLEAN WHITE (TRẮNG SẠCH & HIỆN ĐẠI)
 ================================================================= */
 
 /* 1. NỀN TRẮNG ĐỒNG BỘ */
 body.client-page {
     background-color: #ffffff;
-    color: #333333;
+    color: #333;
     font-family: 'Montserrat', sans-serif;
-    /* Họa tiết chấm bi mờ cực nhẹ */
     background-image: radial-gradient(#e5e5e5 1px, transparent 1px);
     background-size: 20px 20px;
 }
 
 /* 2. HEADER GIỚI THIỆU */
 .clients-hero {
-    /* Padding-top 160px để tránh bị Header (fixed) che mất nội dung */
-    padding: 160px 20px 60px; 
+    padding: 160px 20px 60px; /* Padding chuẩn cho fixed header */
     text-align: center;
     background: linear-gradient(to bottom, #fff, #f9f9f9);
     border-bottom: 1px solid #eee;
@@ -32,12 +30,11 @@ body.client-page {
 }
 
 .clients-hero h1 span.highlight {
-    color: #cc0000; /* Màu đỏ thương hiệu */
+    color: #cc0000;
     position: relative;
     display: inline-block;
 }
 
-/* Gạch chân đỏ trang trí */
 .clients-hero h1 span.highlight::after {
     content: '';
     position: absolute;
@@ -48,7 +45,7 @@ body.client-page {
 }
 
 .clients-hero p {
-    color: #666;
+    color: #555; /* Đậm hơn chút cho dễ đọc */
     font-size: 1.1rem;
     max-width: 700px;
     margin: 0 auto;
@@ -63,21 +60,19 @@ body.client-page {
 
 .clients-grid {
     display: grid;
-    /* Tự động chia cột: PC 4-5 cột */
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-    gap: 30px;
+    /* Tự động chia cột thông minh */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+    gap: 25px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* 4. Ô CHỨA LOGO (STYLE CHÍNH) */
+/* 4. Ô CHỨA LOGO (TECH CARD) */
 .tech-card {
     height: 160px;
     background: #ffffff;
-    /* Viền xám siêu nhạt */
     border: 1px solid #f0f0f0; 
     border-radius: 16px;
-    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -88,34 +83,32 @@ body.client-page {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    will-change: transform, box-shadow; /* Tối ưu hiệu năng render */
 }
 
 /* Logo bên trong */
 .tech-card img {
-    max-width: 80%;
+    max-width: 85%;
     max-height: 90px;
     object-fit: contain;
-    
-    /* Mặc định màu xám nhẹ (Sang trọng) */
     filter: grayscale(100%) opacity(0.6);
     transition: all 0.4s ease;
     transform: scale(0.95);
 }
 
-/* --- HIỆU ỨNG KHI RÊ CHUỘT (HOVER) --- */
+/* Hiệu ứng Hover */
 .tech-card:hover {
-    transform: translateY(-10px); /* Nổi lên */
-    /* Đổ bóng 3D tạo chiều sâu */
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08); 
-    border-color: #ffe5e5; /* Viền ửng đỏ nhẹ */
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08); 
+    border-color: #ffe5e5;
 }
 
 .tech-card:hover img {
-    filter: grayscale(0%) opacity(1); /* Hiện màu gốc */
-    transform: scale(1.1); /* Phóng to logo */
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.05);
 }
 
-/* Vạch đỏ chạy dưới đáy thẻ */
+/* Vạch đỏ trang trí đáy */
 .tech-card::after {
     content: '';
     position: absolute;
@@ -139,7 +132,7 @@ body.client-page {
 }
 
 .btn-glow {
-    display: inline-block; padding: 16px 45px;
+    display: inline-block; padding: 15px 40px;
     background: #cc0000; color: #fff;
     font-weight: 700; text-transform: uppercase; text-decoration: none;
     border-radius: 50px; transition: 0.3s;
@@ -147,58 +140,35 @@ body.client-page {
 }
 
 .btn-glow:hover {
-    background: #a80000; transform: translateY(-2px);
+    background: #b30000; transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(204, 0, 0, 0.4);
 }
 
 /* =========================================================
-   6. MOBILE RESPONSIVE FIX (ĐÃ TỐI ƯU CHO CẤU TRÚC MỚI)
+   6. MOBILE RESPONSIVE (ĐÃ TỐI ƯU)
 ========================================================= */
 @media (max-width: 768px) {
-    /* Chỉnh lại padding top vì Header trên Mobile nhỏ hơn Header PC */
-    .clients-hero { 
-        padding-top: 130px; 
-        padding-bottom: 40px;
-    }
-    
-    .clients-hero h1 { 
-        font-size: 1.8rem; /* Giảm size chữ tiêu đề */
-    }
-    
-    .clients-hero p {
-        font-size: 0.95rem;
-        padding: 0 15px;
-    }
+    .clients-hero { padding-top: 130px; padding-bottom: 40px; }
+    .clients-hero h1 { font-size: 1.8rem; }
+    .clients-hero p { font-size: 0.95rem; padding: 0 15px; }
     
     .clients-grid { 
-        /* Mobile chia 2 cột */
-        grid-template-columns: repeat(2, 1fr); 
-        gap: 12px; /* Gap nhỏ lại để logo to hơn */
+        grid-template-columns: repeat(2, 1fr); /* 2 Cột trên điện thoại */
+        gap: 15px; 
     }
     
     .tech-card { 
-        height: 110px; /* Giảm chiều cao card */
+        height: 120px; 
         padding: 15px; 
         border-radius: 12px;
     }
     
-    .tech-card img {
-        max-height: 50px; /* Giới hạn chiều cao logo để không bị tràn */
-    }
-
-    .client-cta {
-        margin-top: 50px;
-    }
-    
-    .client-cta h3 {
-        font-size: 1.2rem;
-        padding: 0 10px;
-    }
+    .tech-card img { max-height: 60px; }
+    .client-cta { margin-top: 50px; }
+    .client-cta h3 { font-size: 1.2rem; padding: 0 10px; }
 }
 
-/* Fix cho màn hình điện thoại siêu nhỏ (iPhone 5/SE cũ) */
 @media (max-width: 360px) {
-    .clients-grid {
-        grid-template-columns: 1fr; /* Về 1 cột cho dễ nhìn */
-    }
+    /* Với màn hình siêu nhỏ thì về 1 cột cho thoáng */
+    .clients-grid { grid-template-columns: 1fr; }
 }

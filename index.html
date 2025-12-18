@@ -9,27 +9,34 @@
     img-src 'self' data: https:; 
     media-src 'self' https:; 
     connect-src 'self' https://*.peerjs.com wss://*.peerjs.com;">
+    
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script type="text/javascript">
+       if (self === top) {
+           var antiClickjack = document.getElementById("antiClickjack");
+           antiClickjack.parentNode.removeChild(antiClickjack);
+       } else {
+           top.location = self.location;
+       }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Công Ty TNHH - KB Tech</title>
+    <title>Công Ty TNHH - KB | Giải Pháp Công Nghệ Toàn Diện</title>
+    
+    <meta name="description" content="KB chuyên cung cấp giải pháp Server, Bảo mật mạng, Email doanh nghiệp, Camera AI và Thiết kế Website chuyên nghiệp.">
+    <meta property="og:title" content="KB - Đối Tác Công Nghệ Tin Cậy">
+    <meta property="og:image" content="img/logo.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-    
     <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="assets/about.css">
-    <style id="antiClickjack">body{display:none !important;}</style>
-<script type="text/javascript">
-   if (self === top) {
-       var antiClickjack = document.getElementById("antiClickjack");
-       antiClickjack.parentNode.removeChild(antiClickjack);
-   } else {
-       top.location = self.location;
-   }
-</script>
-
+    <link rel="stylesheet" href="assets/about.css"> 
 </head>
+
 <body>
  
     <div class="top-bar" id="topBar">
@@ -40,7 +47,7 @@
             </div>
             <div class="top-bar-links">
                 <span class="top-bar-item"><a href="index.html">Trang chủ</a></span>
-                <span class="top-bar-item"><a href="#">Liên hệ</a></span>
+                <span class="top-bar-item"><a href="https://zalo.me/0933129155">Liên hệ</a></span>
                 <span class="top-bar-item"><i class="fas fa-phone-alt"></i> 0933 129 155</span>
             </div>
         </div>
@@ -48,61 +55,52 @@
 
     <header class="main-header">
         <div class="navbar container">   
-            <button class="menu-toggle" aria-label="Mở menu" style="display:none;">
+            <button class="menu-toggle" aria-label="Mở menu">
                 <span></span><span></span><span></span>
             </button>
             <a href="index.html" class="logo"><img src="img/logo.png" alt="KB Logo"></a>
             <nav class="main-nav">
-    <ul>
-        <li><a href="index.html" class="active">TRANG CHỦ</a></li>
-        
-        <li><a href="about.html">GIỚI THIỆU</a></li>
-        
-        <li><a href="service.html">DỊCH VỤ</a></li>
-        
-        <li><a href="clients.html">KHÁCH HÀNG</a></li>
-    </ul>
-</nav>
+                <ul>
+                    <li><a href="index.html" class="active">TRANG CHỦ</a></li>
+                    <li><a href="about.html">GIỚI THIỆU</a></li>
+                    <li><a href="service.html">DỊCH VỤ</a></li>
+                    <li><a href="clients.html">KHÁCH HÀNG</a></li>
+                </ul>
+            </nav>
             <div></div>
         </div>
     </header>
 
-<section class="hero-section">
+    <section class="hero-section">
         <div class="hero-slider">
             <button class="hero-arrow left" aria-label="Trước"><i class="fas fa-chevron-left"></i></button>
-            <!--<img src="thumb/17.jpg" alt="slide 1" class="special-slide1 active">
-            <img src="thumb/18.jpg" alt="slide 2">
-            <img src="thumb/11.jpg" alt="slide 3" class="special-slide2">
-            <img src="thumb/15.jpg" alt="slide 4">
-            <img src="thumb/14.jpg" alt="slide 5">
-            <img src="thumb/16.jpg" alt="slide 6">-->
+            
             <video src="thumb/AI.mp4" autoplay muted loop playsinline webkit-playsinline class="active"></video>
             <video src="thumb/demo2.mp4" autoplay muted loop playsinline webkit-playsinline></video>
             <video src="thumb/demo3.mp4" autoplay muted loop playsinline webkit-playsinline></video>
 
             <button class="hero-arrow right" aria-label="Sau"><i class="fas fa-chevron-right"></i></button>
         </div>
-</section>
-
+    </section>
 
     <section class="projects">
         <div class="container">
             <h2>LÝ DO CHỌN KB</h2>
             <div class="projects-grid">
-                <div class="project-item">
+                <div class="project-item" data-aos="fade-up">
                     <i class="fas fa-chart-line"></i>
                     <h6>CHẤT LƯỢNG</h6>
                     <p>Chất lượng dịch vụ là ưu tiên hàng đầu của KB. Chúng tôi cam kết đáp ứng đúng tiêu chuẩn mà khách hàng yêu cầu.</p>
                 </div>
-                <div class="project-item">
+                <div class="project-item" data-aos="fade-up" data-aos-delay="100">
                     <i class="fas fa-clock"></i>
                     <h6>THỜI GIAN</h6>
-                    <p>Chúng tôi có hiểu rằng việc hoàn thành các dự án và dịch vụ đúng thời hạn là vô cùng quan trọng. Chúng tôi tự hào về khả năng thực hiện công việc theo đúng tiến độ cam kết của mình.</p>
+                    <p>Chúng tôi tự hào về khả năng thực hiện công việc theo đúng tiến độ cam kết của mình.</p>
                 </div>
-                <div class="project-item">
+                <div class="project-item" data-aos="fade-up" data-aos-delay="200">
                     <i class="fas fa-money-bill-wave"></i>
                     <h6>CHI PHÍ</h6>
-                    <p>Cam kết đảm bảo chất lượng dịch vụ và sản phẩm tốt với chi phí hợp lý.</p>
+                    <p>Cam kết đảm bảo chất lượng dịch vụ và sản phẩm tốt với chi phí hợp lý nhất thị trường.</p>
                 </div>
             </div>
         </div>
@@ -117,59 +115,58 @@
             </div>
 
             <div class="services-modern-layout">
-                
                 <div class="svc-list-col">
                     <div class="svc-grid">
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right">
                             <div class="icon"><i class="fas fa-server"></i></div>
                             <div class="info">
                                 <h4>DỊCH VỤ SERVER</h4>
                                 <p>Cho thuê, cài đặt, xử lý sự cố máy chủ tận nơi.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="100">
                             <div class="icon"><i class="fas fa-envelope-open-text"></i></div>
                             <div class="info">
                                 <h4>EMAIL DOANH NGHIỆP</h4>
                                 <p>Email tên miền riêng uy tín, bảo mật cao.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="200">
                             <div class="icon"><i class="fas fa-user-shield"></i></div>
                             <div class="info">
                                 <h4>BẢO MẬT (SECURITY)</h4>
                                 <p>Firewall ngăn chặn Virus, Ransomware, tấn công mạng.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="300">
                             <div class="icon"><i class="fas fa-laptop-medical"></i></div>
                             <div class="info">
                                 <h4>SỬA CHỮA MÁY TÍNH</h4>
                                 <p>Bảo trì, nâng cấp phần cứng/phần mềm PC & Laptop.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="400">
                             <div class="icon"><i class="fas fa-hdd"></i></div>
                             <div class="info">
                                 <h4>LƯU TRỮ & BACKUP</h4>
                                 <p>Giải pháp NAS Synology, backup dữ liệu an toàn.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="500">
                             <div class="icon"><i class="fas fa-headset"></i></div>
                             <div class="info">
                                 <h4>IT HELPDESK 24/7</h4>
                                 <p>Hỗ trợ kỹ thuật Remote/Tận nơi không giới hạn.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="600">
                             <div class="icon"><i class="fas fa-video"></i></div>
                             <div class="info">
                                 <h4>DỊCH VỤ CAMERA</h4>
                                 <p>Lắp đặt Camera AI & IP giám sát an ninh 24/7.</p>
                             </div>
                         </div>
-                        <div class="svc-item">
+                        <div class="svc-item" data-aos="fade-right" data-aos-delay="700">
                             <div class="icon"><i class="fas fa-code"></i></div>
                             <div class="info">
                                 <h4>THIẾT KẾ WEBSITE</h4>
@@ -179,7 +176,7 @@
                     </div>
                 </div>
 
-                <div class="svc-image-col">
+                <div class="svc-image-col" data-aos="fade-left">
                     <div class="marquee-wrapper">
                         <div class="marquee-track">
                             <img src="thumb/sever.jpg" alt="Server">
@@ -191,7 +188,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -201,22 +197,22 @@
             <div>
                 <i class="far fa-clock fa-4x"></i>
                 <div class="counter" data-target="13500">0</div>
-                <h3>Working Hours</h3>
+                <h3>Giờ làm việc</h3>
             </div>
             <div>
                 <i class="fas fa-gift fa-4x"></i>
                 <div class="counter" data-target="720">0</div>
-                <h3>Completed Projects</h3>
+                <h3>Dự án hoàn thành</h3>
             </div>
             <div>
                 <i class="fas fa-users fa-4x"></i>
                 <div class="counter" data-target="480">0</div>
-                <h3>Happy Clients</h3>
+                <h3>Khách hàng hài lòng</h3>
             </div>
             <div>
                 <i class="fas fa-award fa-4x"></i>
                 <div class="counter" data-target="120">0</div>
-                <h3>Awards Received</h3>
+                <h3>Giải thưởng</h3>
             </div>
         </div>
     </section>
@@ -227,7 +223,7 @@
                 <h2>ĐỐI TÁC CỦA KB</h2>
             </div>
             <div class="customer-slider">
-                <button class="customer-arrow left">&#10094;</button>
+                <button class="customer-arrow left" style="display:none">&#10094;</button>
                 <div class="owl-carousel-clients-carousel">
                     <div class="customer-slide"><img src="logoclient/cl1.jpg" alt="Client Logo"></div>
                     <div class="customer-slide"><img src="logoclient/cl2.jpg" alt="Client Logo"></div>
@@ -249,117 +245,124 @@
                     <div class="customer-slide"><img src="logoclient/cl22.jpg" alt="Client Logo"></div>
                     <div class="customer-slide"><img src="logoclient/cl23.jpg" alt="Client Logo"></div>
                     <div class="customer-slide"><img src="logoclient/cl24.jpg" alt="Client Logo"></div>
-                    <div class="customer-slide"><img src="logoclient/cl25.jpg" alt="Client Logo"></div>
                 </div>
-                <button class="customer-arrow right">&#10095;</button>
+                <button class="customer-arrow right" style="display:none">&#10095;</button>
             </div>
         </div>
     </div>
 
- <section class="gallery-section"> 
-    <div class="container">
-        <div class="section-header center-header">
-            <h2>DỰ ÁN TIÊU BIỂU</h2>
-            <div class="title-line"></div>
-            <p class="subtitle">Các Dự án đã được KB Tech triển khai thành công</p>
+    <section class="gallery-section"> 
+        <div class="container">
+            <div class="section-header center-header">
+                <h2>DỰ ÁN TIÊU BIỂU</h2>
+                <div class="title-line"></div>
+                <p class="subtitle">Các Dự án đã được KB triển khai thành công</p>
+            </div>
+
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">Tất cả</button>
+                <button class="filter-btn" data-filter="camera">Camera AI</button>
+                <button class="filter-btn" data-filter="web">Website & App</button>
+                <button class="filter-btn" data-filter="it">Hạ tầng IT</button>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="gallery-item camera">
+                    <div class="gallery-wrap">
+                        <img src="thumb/camera AI.jpg" alt="Dự án Camera">
+                        <div class="gallery-info">
+                            <h4><!--Hệ thống Camera AI Biệt Thự--></h4>
+                            <span>Giám sát an ninh</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item web">
+                    <div class="gallery-wrap">
+                        <img src="thumb/website.jpg" alt="Dự án Web">
+                        <div class="gallery-info">
+                            <h4><!--Web Bán Hàng Mỹ Phẩm--></h4>
+                            <span>Thiết kế Website</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item it">
+                    <div class="gallery-wrap">
+                        <img src="thumb/sever.jpg" alt="Dự án Server">
+                        <div class="gallery-info">
+                            <h4><!--Hệ thống Server Doanh nghiệp--></h4>
+                            <span>Giải pháp Server</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item camera">
+                    <div class="gallery-wrap">
+                        <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600" alt="Dự án">
+                        <div class="gallery-info">
+                            <h4><!--Camera Nhà Xưởng--></h4>
+                            <span>Giám sát an ninh</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item web">
+                    <div class="gallery-wrap">
+                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=600" alt="Dự án">
+                        <div class="gallery-info">
+                            <h4><!--Web Giới Thiệu Công Ty--></h4>
+                            <span>Web Design</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item it">
+                    <div class="gallery-wrap">
+                        <img src="thumb/24-7.jpg" alt="Dự án">
+                        <div class="gallery-info">
+                            <h4><!--Bảo trì hệ thống 24/7--></h4>
+                            <span>IT Helpdesk</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item camera">
+                    <div class="gallery-wrap">
+                        <img src="thumb/thicong.jpg" alt="Dự án">
+                        <div class="gallery-info">
+                            <h4><!--Thi công mạng LAN văn phòng--></h4>
+                            <span>Dự án thi công</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item web">
+                    <div class="gallery-wrap">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600" alt="Dự án">
+                        <div class="gallery-info">
+                            <h4><!--Landing Page Bất Động Sản--></h4>
+                            <span>Thiết kế Website</span>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            <div class="view-more-wrap" id="viewMoreWrap">
+                <a href="#" class="btn-outline-red" id="btnLoadMore">XEM TẤT CẢ DỰ ÁN <i class="fas fa-arrow-down"></i></a>
+            </div>
         </div>
+    </section>
 
-        <div class="gallery-filters">
-            <button class="filter-btn active" data-filter="all">Tất cả</button>
-            <button class="filter-btn" data-filter="camera">Camera AI</button>
-            <button class="filter-btn" data-filter="web">Website & App</button>
-            <button class="filter-btn" data-filter="it">Hạ tầng IT</button>
+    <section class="slogan-section">
+        <div class="container">
+            <div class="slogan-text">
+                <span>"TẠO DỰNG XU HƯỚNG - ĐỊNH HÌNH TƯƠNG LAI"</span>
+            </div>
         </div>
+    </section>
 
-        <div class="gallery-grid">
-            
-            <div class="gallery-item camera">
-                <div class="gallery-wrap">
-                    <img src="thumb/camera AI.jpg" alt="Dự án Camera">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Hệ thống Camera AI</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item web">
-                <div class="gallery-wrap">
-                    <img src="thumb/website.jpg" alt="Dự án Web">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Thiết kế Website</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item it">
-                <div class="gallery-wrap">
-                    <img src="thumb/sever.jpg" alt="Dự án Server">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Giải pháp Server</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item camera">
-                <div class="gallery-wrap">
-                    <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600" alt="Dự án">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Giám sát an ninh</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item web">
-                <div class="gallery-wrap">
-                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=600" alt="Dự án">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Web Design</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item it">
-                <div class="gallery-wrap">
-                    <img src="thumb/24-7.jpg" alt="Dự án">
-                    <div class="gallery-info">
-                        <h4>Bảo trì hệ thống 24/7</h4>
-                        <span>IT Helpdesk</span>
-                    </div>
-                </div>
-            </div>
-            
-             <div class="gallery-item camera">
-                <div class="gallery-wrap">
-                    <img src="thumb/thicong.jpg" alt="Dự án">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Dự án thi công</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="gallery-item web">
-                <div class="gallery-wrap">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600" alt="Dự án">
-                    <div class="gallery-info">
-                        <h4><!----></h4>
-                        <span>Thiết kế Website</span>
-                    </div>
-                </div>
-            </div>
-
+    <section class="communicate">
+        <div class="overlay"></div>
+        <div class="content-box">
+            <h3>BẠN CẦN TƯ VẤN GIẢI PHÁP?</h3>
+            <p>Đội ngũ chuyên gia của KB luôn sẵn sàng hỗ trợ bạn 24/7. Hãy kết nối với chúng tôi để nhận giải pháp tối ưu nhất.</p>
+            <a href="https://zalo.me/0933129155" class="btn-contact">LIÊN HỆ NGAY</a>
         </div>
-
-        <!--<div class="view-more-wrap">
-            <a href="#" class="btn-outline-red">XEM TẤT CẢ DỰ ÁN <i class="fas fa-arrow-right"></i></a>
-        </div>-->
-    </div>
-</section>
+    </section>
 
     <section class="commitment-section">
         <div class="container">
@@ -384,29 +387,11 @@
         </div>
     </section>
 
-    <section class="slogan-section">
-        <div class="container">
-            <div class="slogan-text">
-                <span>"TẠO DỰNG XU HƯỚNG - ĐỊNH HÌNH TƯƠNG LAI"</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="communicate">
-        <div class="overlay"></div>
-        <div class="content-box">
-            <h3>BẠN CẦN TƯ VẤN GIẢI PHÁP?</h3>
-            <p>Đội ngũ chuyên gia của KB luôn sẵn sàng hỗ trợ bạn 24/7. Hãy kết nối với chúng tôi để nhận giải pháp tối ưu nhất.</p>
-            <a href="https://zalo.me/0933129155" class="btn-contact">LIÊN HỆ NGAY</a>
-        </div>
-    </section>
-
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
-                
                 <div class="footer-col brand-col">
-                    <h2 class="footer-logo">KB </h2> 
+                    <h2 class="footer-logo">KB</h2> 
                     <p class="slogan-footer">"Tạo dựng xu hướng - định hình tương lai."</p>
                     
                     <div id="contactDock" class="contact-dock-area">
@@ -436,49 +421,28 @@
                 <div class="footer-col contact-col">
                     <h4>VĂN PHÒNG</h4>
                     <div class="contact-info">
-                        <div class="item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>341/25 S - 341/26 S Lạc Long Quân, Phường Hoà Bình, TP.HCM</span>
-                        </div>
-                        <div class="item">
-                            <i class="fas fa-phone-alt"></i>
-                            <span>0933 129 155</span>
-                        </div>
-                        <div class="item">
-                            <i class="fas fa-envelope"></i>
-                            <span>info@kbtech.vn</span>
-                        </div>
+                        <div class="item"><i class="fas fa-map-marker-alt"></i> <span>341/25 S - 341/26 S Lạc Long Quân, P.Hoà Bình, TP.HCM</span></div>
+                        <div class="item"><i class="fas fa-phone-alt"></i> <span>0933 129 155</span></div>
+                        <div class="item"><i class="fas fa-envelope"></i> <span>info@kbtech.vn</span></div>
                     </div>
                 </div>
 
                 <div class="footer-col contact-col">
                     <h4>KỸ THUẬT</h4>
                     <div class="contact-info">
-                        <div class="item">
-                            <i class="fas fa-wrench"></i>
-                            <span>21 đường số 7, Phường Bình Thới, Cư xá Bình Thới</span>
-                        </div>
-                        <div class="item">
-                            <i class="fas fa-phone-alt"></i>
-                            <span>0909 340 014</span>
-                        </div>
-                        <div class="item">
-                            <i class="fas fa-envelope"></i>
-                            <span>technical@kbtech.vn</span>
-                        </div>
+                        <div class="item"><i class="fas fa-wrench"></i> <span>21 đường số 7, P.Bình Thới, Cư xá Bình Thới</span></div>
+                        <div class="item"><i class="fas fa-phone-alt"></i> <span>0909 340 014</span></div>
+                        <div class="item"><i class="fas fa-envelope"></i> <span>technical@kbtech.vn</span></div>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <div class="copyright-bar">
             <div class="container">
-                <p>&copy; 2025 <strong>KB </strong>. All Rights Reserved.</p>
+                <p>&copy; 2025 <strong>KB</strong>. All Rights Reserved.</p>
             </div>
         </div>
-    </footer>
-
     </footer>
 
     <div class="confirm-modal" id="confirmModal">
@@ -487,7 +451,7 @@
                 <i class="fas fa-headset pulse-icon"></i>
             </div>
             <h3>KẾT NỐI TỔNG ĐÀI VIÊN</h3>
-            <p>Bạn có muốn thực hiện cuộc gọi trực tiếp miễn phí tới chuyên gia kỹ thuật của KB Tech không?</p>
+            <p>Bạn có muốn thực hiện cuộc gọi trực tiếp miễn phí tới chuyên gia kỹ thuật của KB không?</p>
             <div class="confirm-actions">
                 <button id="btnConfirmNo" class="btn-action btn-zalo">
                     <i class="fas fa-comment-dots"></i> Chat qua Zalo
@@ -529,8 +493,16 @@
             </div>
         </div>
     </div>
+
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800, // Thời gian hiệu ứng (ms)
+        offset: 100,   // Khoảng cách kích hoạt
+        once: true     // Chỉ chạy 1 lần khi cuộn xuống
+      });
+    </script>
     <script src="assets/script.js"></script>
 </body>
 </html>
-

@@ -1,5 +1,5 @@
 /* ======================================================
-   ASSETS/ABOUT.CSS - GIAO DIỆN TRANG GIỚI THIỆU
+   ASSETS/ABOUT.CSS - GIAO DIỆN TRANG GIỚI THIỆU (OPTIMIZED)
 ====================================================== */
 
 /* --- 1. KHUNG CHỨA CHÍNH (HERO) --- */
@@ -7,7 +7,7 @@
     padding: 160px 0 80px 0;
     background: #f8f9fa;
     color: #333;
-    overflow-x: hidden; /* Ngăn lỗi tràn màn hình ngang trên mobile */
+    overflow-x: hidden; /* Ngăn lỗi tràn màn hình ngang */
 }
 
 /* --- 2. TIÊU ĐỀ TRANG --- */
@@ -41,7 +41,7 @@
     color: #444;
     text-align: justify; 
     text-align-last: center; 
-    padding: 0 15px; /* Thêm đệm cho mobile khỏi sát lề */
+    padding: 0 20px; /* Thêm đệm cho mobile khỏi sát lề */
 }
 
 .about-intro-text p { margin-bottom: 20px; }
@@ -53,14 +53,14 @@
     display: flex; 
     gap: 30px; 
     justify-content: center; 
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Tự động xuống dòng khi màn hình nhỏ */
     margin-bottom: 60px;
     padding: 0 15px;
 }
 
 .about-card { 
     flex: 1; 
-    min-width: 300px; 
+    min-width: 300px; /* Đảm bảo không bị co quá nhỏ */
     max-width: 550px; 
     background: #fff;
     padding: 40px;
@@ -121,7 +121,7 @@
     text-align: center;
     position: relative;
     border-left: 5px solid #cc0000;
-    width: 95%; /* Responsive */
+    width: 95%; /* Responsive: Chỉ chiếm 95% màn hình trên mobile */
 }
 
 .core-values-section h3 {
@@ -189,11 +189,9 @@
     margin-bottom: 30px;
 }
 
-.video-title .brand-kb { font-size: 1em; }
-
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
+    padding-bottom: 56.25%; /* Tỷ lệ 16:9 chuẩn Youtube */
     height: 0;
     overflow: hidden;
     border-radius: 10px;
@@ -218,7 +216,12 @@
         text-align-last: left; /* Mobile căn giữa dòng cuối nhìn kỳ lắm nên trả về trái */
     }
     
-    .about-card, .core-values-section { 
+    .about-card {
+        padding: 30px 20px;
+        min-width: 100%; /* Trên mobile thẻ chiếm hết chiều ngang */
+    }
+
+    .core-values-section { 
         padding: 30px 20px; 
         width: 95%;
         margin: 0 auto 30px;
@@ -231,5 +234,5 @@
     
     .video-title { font-size: 18px; line-height: 1.4; }
     
-    .about-header .section-title { font-size: 2.5rem; }
+    .about-header .section-title { font-size: 2.2rem; }
 }

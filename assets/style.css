@@ -17,6 +17,10 @@
     --slider-speed: 15s;
 }
 
+html {
+    scroll-behavior: smooth; /* Thêm cuộn mượt */
+}
+
 html, body {
     width: 100%;
     max-width: 100%;
@@ -67,7 +71,6 @@ body {
 
 /* =========================================
    2. TOP BAR (THANH TRÊN CÙNG)
-   (Tương ứng: <div class="top-bar">)
 ========================================= */
 .top-bar {
     background: #fff;
@@ -184,7 +187,6 @@ body {
 
 /* =========================================
    3. HEADER & NAVIGATION (MENU CHÍNH)
-   (Tương ứng: <header class="main-header">)
 ========================================= */
 .main-header {
     width: 100%;
@@ -263,7 +265,6 @@ body {
 
 /* =========================================
    4. HERO SECTION (SLIDER LỚN)
-   (Tương ứng: <section class="hero-section">)
 ========================================= */
 .hero-section {
     width: 100%;
@@ -292,6 +293,7 @@ body {
     object-fit: cover; /* Quan trọng: Giúp video phủ kín khung không bị méo */
     transition: left 0.7s ease;
     z-index: 1;
+    display: block; /* Thêm cái này để fix lỗi khoảng trắng */
 }
 
 /* Class active cho cả 2 loại */
@@ -302,26 +304,6 @@ body {
 }
 
 /* Các class hiệu ứng chuyển động */
-.hero-slider video.slide-out-left { left: -100%; z-index: 1; }
-.hero-slider video.slide-out-right { left: 100%; z-index: 1; }
-.hero-slider video.slide-in-left { left: -100%; }
-.hero-slider video.slide-in-right { left: 100%; }
-
-/* Hiệu ứng Slider - Áp dụng cho cả img và video */
-.hero-slider img,
-.hero-slider video { 
-    position: absolute;
-    top: 0; left: 100%;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    transition: left 0.7s ease;
-    z-index: 1;
-    display: block; 
-}
-.hero-slider img.active,
-.hero-slider video.active { left: 0; z-index: 2; }
-
-/* Transition video */
 .hero-slider video.slide-out-left { left: -100%; z-index: 1; }
 .hero-slider video.slide-out-right { left: 100%; z-index: 1; }
 .hero-slider video.slide-in-left { left: -100%; }
@@ -356,7 +338,6 @@ body {
 
 /* =========================================
    5. LÝ DO CHỌN KB (PROJECTS CLASS)
-   (Tương ứng: <section class="projects">)
 ========================================= */
 .projects {
     padding: 60px 20px;
@@ -399,7 +380,6 @@ body {
 
 /* =========================================
    6. DỊCH VỤ (LĨNH VỰC HOẠT ĐỘNG)
-   (Tương ứng: <section class="services-preview-section">)
 ========================================= */
 .services-preview-section {
     padding: 80px 0;
@@ -548,7 +528,6 @@ body {
 
 /* =========================================
    7. SỐ LIỆU THỐNG KÊ (COUNTERS)
-   (Tương ứng: <section class="counters">)
 ========================================= */
 .counters {
     background-image: url(../thumb/3.jpg);
@@ -602,7 +581,6 @@ body {
 
 /* =========================================
    8. ĐỐI TÁC (CLIENTS SLIDER)
-   (Tương ứng: <div class="clients mt-100">)
 ========================================= */
 .clients {
     position: relative;
@@ -675,7 +653,6 @@ body {
 
 /* =========================================
    9. GALLERY PROJECT SECTION (DỰ ÁN TIÊU BIỂU)
-   (Tương ứng: <section class="gallery-section">)
 ========================================= */
 .gallery-section {
     padding: 80px 0;
@@ -729,11 +706,14 @@ body {
     animation: fadeIn 0.5s ease;
 }
 
-/* Class để ẩn hiện khi lọc */
+/* Class để ẩn hiện khi lọc (Load More Logic) */
 .gallery-item.hide { display: none; }
 .gallery-item.show {
     display: block;
     animation: zoomIn 0.4s ease;
+}
+.gallery-item.hidden-item {
+    display: none !important; /* Dùng cho Load More */
 }
 
 .gallery-wrap {
@@ -783,6 +763,10 @@ body {
     text-align: center;
     margin-top: 50px;
 }
+.view-more-wrap.hidden-btn {
+    display: none; /* Ẩn khi đã load hết */
+}
+
 .btn-outline-red {
     display: inline-block;
     padding: 12px 30px;
@@ -817,7 +801,6 @@ body {
 
 /* =========================================
    10. CAM KẾT (COMMITMENT)
-   (Tương ứng: <section class="commitment-section">)
 ========================================= */
 .commitment-section {
     padding: 80px 0;
@@ -866,7 +849,6 @@ body {
 
 /* =========================================
    11. SLOGAN 
-   (Tương ứng: <section class="slogan-section">)
 ========================================= */
 .slogan-section {
     padding: 60px 0 80px 0;
@@ -885,7 +867,6 @@ body {
 
 /* =========================================
    12. CTA (COMMUNICATE - BẠN CẦN TƯ VẤN)
-   (Tương ứng: <section class="communicate">)
 ========================================= */
 .communicate {
     position: relative;
@@ -942,7 +923,6 @@ body {
 
 /* =========================================
    13. FOOTER LAYOUT
-   (Tương ứng: <footer class="footer">)
 ========================================= */
 .footer {
     background-color: #e60000;
@@ -1007,7 +987,6 @@ body {
 
 /* =========================================
    14. FLOATING CONTACT (NÚT LIÊN HỆ DOCK)
-   (Tương ứng: <div id="contactDock"> và floating group)
 ========================================= */
 .contact-dock-area {
     width: 100%;
@@ -1092,7 +1071,6 @@ body {
 
 /* =========================================
    15. VIDEO MODAL (CHAT SUPPORT)
-   (Tương ứng: <div class="video-modal" id="videoModal">)
 ========================================= */
 .video-modal {
     display: none;
@@ -1227,37 +1205,7 @@ body {
 
 
 /* =========================================
-   16. FIX LỖI TRẮNG MÀN HÌNH TRÊN ĐIỆN THOẠI
-   (Áp dụng toàn trang - Đặt cuối cùng để override)
-========================================= */
-@media (max-width: 1024px) {
-    /* Tắt ép xung GPU để tránh tràn bộ nhớ gây trắng trang */
-    .marquee-track, 
-    .owl-carousel-clients-carousel,
-    .hero-slider img {
-        will-change: auto !important;
-    }
-
-    /* Đảm bảo nội dung không bị ẩn do lỗi tính toán chiều cao */
-    .svc-image-col, .clients {
-        overflow: visible !important;
-        height: auto !important;
-    }
-    
-    /* Fix lỗi ảnh slider dịch vụ bị dẹt hoặc mất hình */
-    .marquee-track img {
-        height: 250px !important; 
-        width: auto !important; 
-        max-width: none !important; 
-    }
-    
-    .svc-image-col {
-        height: 250px !important;
-    }
-}
-
-/* =========================================
-   CSS CHO POPUP XÁC NHẬN GỌI
+   16. CSS CHO POPUP XÁC NHẬN GỌI (MỚI THÊM)
 ========================================= */
 .confirm-modal {
     display: none; /* Mặc định ẩn */
@@ -1325,3 +1273,34 @@ body {
 
 @keyframes scaleUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+/* =========================================
+   17. FIX LỖI TRẮNG MÀN HÌNH TRÊN ĐIỆN THOẠI
+   (Áp dụng toàn trang - Đặt cuối cùng để override)
+========================================= */
+@media (max-width: 1024px) {
+    /* Tắt ép xung GPU để tránh tràn bộ nhớ gây trắng trang */
+    .marquee-track, 
+    .owl-carousel-clients-carousel,
+    .hero-slider img {
+        will-change: auto !important;
+    }
+
+    /* Đảm bảo nội dung không bị ẩn do lỗi tính toán chiều cao */
+    .svc-image-col, .clients {
+        overflow: visible !important;
+        height: auto !important;
+    }
+    
+    /* Fix lỗi ảnh slider dịch vụ bị dẹt hoặc mất hình */
+    .marquee-track img {
+        height: 250px !important; 
+        width: auto !important; 
+        max-width: none !important; 
+    }
+    
+    .svc-image-col {
+        height: 250px !important;
+    }
+}
