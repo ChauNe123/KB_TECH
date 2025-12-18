@@ -140,7 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ====================================================
     const heroSlider = document.querySelector('.hero-slider');
     if (heroSlider) {
-        const heroImgs = heroSlider.querySelectorAll('video');
+        // Chọn tất cả các thẻ con trực tiếp (bao gồm cả img và video)
+        const heroImgs = heroSlider.querySelectorAll('img, video');
         const leftBtn = heroSlider.querySelector('.hero-arrow.left');
         const rightBtn = heroSlider.querySelector('.hero-arrow.right');
         
@@ -662,7 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if(chatMessages) chatMessages.innerHTML = '';
         });
     }
-    
+
     function sanitizeInput(str) {
         const temp = document.createElement('div');
         temp.textContent = str;

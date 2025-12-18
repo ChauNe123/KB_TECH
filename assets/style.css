@@ -282,20 +282,30 @@ body {
     box-shadow: 0 8px 32px rgba(0,0,0,0.12);
 }
 
-/* Hiệu ứng ảnh Slider */
-.hero-slider img {
+/* Áp dụng chung cho cả ẢNH và VIDEO */
+.hero-slider img, 
+.hero-slider video {
     position: absolute;
-    top: 0; left: 100%;
-    width: 100%; height: 100%;
-    object-fit: cover;
+    top: 0; left: 100%; /* Mặc định ẩn bên phải */
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; /* Quan trọng: Giúp video phủ kín khung không bị méo */
     transition: left 0.7s ease;
     z-index: 1;
 }
-.hero-slider img.active { left: 0; z-index: 2; }
-.hero-slider img.slide-out-left { left: -100%; z-index: 1; }
-.hero-slider img.slide-out-right { left: 100%; z-index: 1; }
-.hero-slider img.slide-in-left { left: -100%; }
-.hero-slider img.slide-in-right { left: 100%; }
+
+/* Class active cho cả 2 loại */
+.hero-slider img.active,
+.hero-slider video.active {
+    left: 0; 
+    z-index: 2;
+}
+
+/* Các class hiệu ứng chuyển động */
+.hero-slider video.slide-out-left { left: -100%; z-index: 1; }
+.hero-slider video.slide-out-right { left: 100%; z-index: 1; }
+.hero-slider video.slide-in-left { left: -100%; }
+.hero-slider video.slide-in-right { left: 100%; }
 
 /* Hiệu ứng Slider - Áp dụng cho cả img và video */
 .hero-slider img,
