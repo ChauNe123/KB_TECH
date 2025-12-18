@@ -1,5 +1,5 @@
 /* =========================================
-   1. CORE & VARIABLES
+   1. CORE & VARIABLES (CỐT LÕI)
 ========================================= */
 :root {
     --max-width: 2000px;
@@ -32,8 +32,8 @@ body {
     line-height: 1.6;
     background: #fff;
     color: #000;
-    box-sizing: border-box; /* Quan trọng: Padding không làm vỡ khung */
-    position: relative; /* Giúp định vị chuẩn hơn */
+    box-sizing: border-box;
+    position: relative;
 }
 
 *, *::before, *::after {
@@ -46,8 +46,28 @@ body {
     padding: 0 20px;
 }
 
+/* --- FIX LỖI MẤT HÌNH ICON (FONT AWESOME) --- */
+.fa, .fas, .far, .fal, .fab {
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+.fas, .fa-solid {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+.fab, .fa-brands {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+
 /* =========================================
-   2. TOP BAR (Thông tin & Tìm kiếm)
+   2. TOP BAR (THANH TRÊN CÙNG)
+   (Tương ứng: <div class="top-bar">)
 ========================================= */
 .top-bar {
     background: #fff;
@@ -161,8 +181,10 @@ body {
     background: #f5f5f5; color: #ff0000;
 }
 
+
 /* =========================================
-   3. HEADER & NAVIGATION (Menu chính)
+   3. HEADER & NAVIGATION (MENU CHÍNH)
+   (Tương ứng: <header class="main-header">)
 ========================================= */
 .main-header {
     width: 100%;
@@ -238,8 +260,10 @@ body {
     .menu-toggle { display: block; z-index: 1200; margin: 0 12px 0 0; }
 }
 
+
 /* =========================================
-   4. HERO SECTION (Slider lớn)
+   4. HERO SECTION (SLIDER LỚN)
+   (Tương ứng: <section class="hero-section">)
 ========================================= */
 .hero-section {
     width: 100%;
@@ -261,7 +285,7 @@ body {
 /* Hiệu ứng ảnh Slider */
 .hero-slider img {
     position: absolute;
-    top: 0; left: 100%; /* Mặc định ẩn bên phải */
+    top: 0; left: 100%;
     width: 100%; height: 100%;
     object-fit: cover;
     transition: left 0.7s ease;
@@ -277,18 +301,17 @@ body {
 .hero-slider img,
 .hero-slider video { 
     position: absolute;
-    top: 0; left: 100%; /* Mặc định ẩn bên phải */
+    top: 0; left: 100%;
     width: 100%; height: 100%;
     object-fit: cover;
     transition: left 0.7s ease;
     z-index: 1;
-    /* Thêm thuộc tính này cho video để nó tương tác tốt hơn với CSS positioning */
     display: block; 
 }
 .hero-slider img.active,
 .hero-slider video.active { left: 0; z-index: 2; }
 
-/* Thêm các lớp transition cho video */
+/* Transition video */
 .hero-slider video.slide-out-left { left: -100%; z-index: 1; }
 .hero-slider video.slide-out-right { left: 100%; z-index: 1; }
 .hero-slider video.slide-in-left { left: -100%; }
@@ -322,7 +345,8 @@ body {
 
 
 /* =========================================
-   5. LÝ DO CHỌN KB (Projects Class)
+   5. LÝ DO CHỌN KB (PROJECTS CLASS)
+   (Tương ứng: <section class="projects">)
 ========================================= */
 .projects {
     padding: 60px 20px;
@@ -362,13 +386,14 @@ body {
     font-size: 20px; color: #555;
 }
 
+
 /* =========================================
-   6. DỊCH VỤ (GIAO DIỆN 8 Ô ĐỀU + SLIDER ẢNH)
+   6. DỊCH VỤ (LĨNH VỰC HOẠT ĐỘNG)
+   (Tương ứng: <section class="services-preview-section">)
 ========================================= */
 .services-preview-section {
     padding: 80px 0;
     background: #f9f9f9;
-    
 }
 
 .center-header { 
@@ -383,29 +408,26 @@ body {
     width: 80px; height: 4px; background: #cc0000; margin: 20px auto;
 }
 
-/* --- Layout chia cột (Trái List - Phải Ảnh) --- */
+/* Layout chia cột (Trái List - Phải Ảnh) */
 .services-modern-layout {
     display: flex;
     gap: 40px;
     align-items: flex-start;
 }
 
-/* --- CỘT TRÁI: LIST DỊCH VỤ (Đã sửa thành chia đều) --- */
+/* CỘT TRÁI: LIST DỊCH VỤ */
 .svc-list-col {
-    /* CŨ: flex: 1.5; (Chiếm nhiều hơn) */
-    /* MỚI: Sửa thành 1 để bằng cột bên phải */
     flex: 1; 
 }
 
-/* Grid 2 cột: Chia đều 8 ô thành 4 hàng x 2 cột */
+/* Grid 2 cột: Chia đều 8 ô */
 .svc-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 cột bằng nhau */
+    grid-template-columns: 1fr 1fr;
     column-gap: 25px;
     row-gap: 62px;
 }
 
-/* Từng ô dịch vụ */
 .svc-item {
     display: flex;
     align-items: flex-start;
@@ -446,16 +468,14 @@ body {
 .svc-item p { font-size: 14px; color: #666; line-height: 1.5; margin: 0; }
 .svc-item:hover h4 { color: #cc0000; }
 
-
-/* --- CỘT PHẢI: SLIDER ẢNH (Đã sửa thành chia đều) --- */
+/* CỘT PHẢI: SLIDER ẢNH */
 .svc-image-col {
-    /* Vẫn giữ là 1 để bằng cột bên trái */
     flex: 1; 
     border-radius: 15px;
     overflow: hidden;
     position: relative;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    height: 600px; /* Chiều cao khớp với danh sách bên trái */
+    height: 600px;
     background: #000;
 }
 
@@ -470,12 +490,12 @@ body {
 
 .marquee-track img {
     height: 600px; 
-    width: 400px; /* Khóa chiều rộng ảnh cho đều */
+    width: 400px;
     object-fit: cover; 
     filter: brightness(0.9);
     transition: 0.5s;
     display: block;
-    margin-right: 0; /* Ảnh dính liền nhau cho đẹp kiểu dải phim */
+    margin-right: 0;
 }
 
 .svc-image-col:hover .marquee-track img { filter: brightness(1.05); }
@@ -485,8 +505,40 @@ body {
     100% { transform: translateX(-50%); }
 }
 
+/* FIX LỖI GIAO DIỆN SERVICES TRÊN MOBILE */
+@media (max-width: 1024px) { 
+    .services-modern-layout {
+        flex-direction: column;
+        height: auto;
+        gap: 30px;
+    }
+    .svc-list-col {
+        padding-right: 0;
+        flex: auto;
+    }
+    .svc-grid {
+        grid-template-columns: 1fr; 
+        row-gap: 20px;
+    }
+    .svc-image-col {
+        width: 100%;
+        height: 300px; 
+        margin-top: 20px;
+    }
+    .marquee-track img {
+        height: 300px; 
+        width: 250px; 
+        margin-right: 15px; 
+    }
+    .center-header h2 {
+        font-size: 2rem;
+    }
+}
+
+
 /* =========================================
-   7. SỐ LIỆU THỐNG KÊ (Counters)
+   7. SỐ LIỆU THỐNG KÊ (COUNTERS)
+   (Tương ứng: <section class="counters">)
 ========================================= */
 .counters {
     background-image: url(../thumb/3.jpg);
@@ -528,17 +580,27 @@ body {
     .counters .container { grid-template-columns: repeat(2, 1fr); }
     .counters .counter { font-size: 36px; }
 }
+/* Fix lỗi hình nền bị bể trên Mobile cho Counter */
+@media (max-width: 1024px) {
+    .counters {
+        background-attachment: scroll !important;
+        background-position: center center !important;
+        background-size: cover !important;
+    }
+}
+
 
 /* =========================================
-   8. ĐỐI TÁC (Clients Slider - FIX SIÊU MƯỢT)
+   8. ĐỐI TÁC (CLIENTS SLIDER)
+   (Tương ứng: <div class="clients mt-100">)
 ========================================= */
 .clients {
     position: relative;
-    padding: 20px 0; /* Tăng padding chút cho thoáng */
+    padding: 20px 0;
     text-align: center;
     background: #fff;
     font-family: 'Playfair Display', serif;
-    overflow: hidden; /* Cắt bỏ phần thừa 2 bên */
+    overflow: hidden;
 }
 
 .clients .section-header h2 {
@@ -551,31 +613,25 @@ body {
     overflow: hidden;
     position: relative;
     padding: 20px 0;
-    /* Lớp mask mờ 2 bên để hiệu ứng chạy nhìn ảo diệu hơn */
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .customer-arrow { display: none !important; }
 
-/* Setup thanh trượt */
 .owl-carousel-clients-carousel {
     display: flex;
-    /* BỎ GAP - Dùng margin để fix lỗi giật */
     width: max-content;
-    animation: marqueeRun 25s linear infinite; /* Chạy chậm lại xíu cho sang (25s) */
-    will-change: transform; /* Báo trước cho trình duyệt để tối ưu */
+    animation: marqueeRun 25s linear infinite;
+    will-change: transform;
 }
 
-/* Style từng ô logo */
 .customer-slide {
-    /* PC: Kích thước chuẩn */
     flex: 0 0 220px; 
     width: 220px;
-    margin-right: 32px; /* Dùng margin thay gap */
-    
-    background: #fff; /* Nên để nền trắng thay vì xám để logo nổi hơn */
-    border: 1px solid #eee; /* Viền nhẹ */
+    margin-right: 32px;
+    background: #fff;
+    border: 1px solid #eee;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
@@ -583,535 +639,33 @@ body {
 }
 
 .customer-slide img {
-    width: 80%; /* Logo nhỏ lại chút nằm lọt lòng cho đẹp */
+    width: 80%;
     height: 80%;
     object-fit: contain;
 }
 
-/* --- MOBILE & TABLET (Tối ưu riêng cho điện thoại) --- */
 @media (max-width: 900px) {
     .clients .section-header h2 { font-size: 1.8rem; }
     
     .customer-slide {
-        /* Mobile: Thu nhỏ logo và khoảng cách */
         flex: 0 0 140px;
         width: 140px;
-        height: 80px; /* Giảm chiều cao ô */
-        margin-right: 16px; /* Khoảng cách gần hơn cho đỡ rời rạc */
+        height: 80px;
+        margin-right: 16px;
     }
-    
-    .customer-slide img {
-        height: 60px;
-    }
-    
-    /* Trên điện thoại chạy nhanh hơn xíu cho đỡ chán vì màn hình ngắn */
-    .owl-carousel-clients-carousel {
-        animation-duration: 20s; 
-    }
+    .customer-slide img { height: 60px; }
+    .owl-carousel-clients-carousel { animation-duration: 20s; }
 }
 
-/* Animation chạy mượt dùng translate3d để kích hoạt phần cứng */
 @keyframes marqueeRun {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
 }
 
-/* =========================================
-   9. CAM KẾT (Commitment)
-========================================= */
-.commitment-section {
-    padding: 80px 0;
-    background: #fff;
-    text-align: center;
-}
-.commitment-section .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem; color: #000;
-    text-transform: uppercase; margin-bottom: 60px;
-    font-weight: 700;
-}
-.commitment-grid {
-    display: flex; justify-content: center;
-    gap: 40px; flex-wrap: wrap;
-}
-.commitment-item {
-    flex: 1; min-width: 280px; max-width: 350px;
-    display: flex; flex-direction: column; align-items: center;
-}
-.commitment-item .icon-box {
-    width: 80px; height: 80px;
-    border: 2px solid #cc0000;
-    border-radius: 15px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 25px; transition: 0.3s;
-}
-.commitment-item .icon-box i { font-size: 35px; color: #cc0000; }
-.commitment-item:hover .icon-box {
-    background: #cc0000; transform: translateY(-5px);
-}
-.commitment-item:hover .icon-box i { color: #fff; }
-.commitment-item h3 {
-    color: #000; font-size: 18px;
-    font-weight: 700; margin-bottom: 15px;
-    text-transform: uppercase;
-}
-.commitment-item p {
-    font-size: 17px; color: #333;
-    line-height: 1.6; max-width: 300px; margin: 0 auto;
-}
-@media (max-width: 768px) {
-    .commitment-grid { flex-direction: column; align-items: center; }
-}
 
 /* =========================================
-   10. SLOGAN & CTA
-========================================= */
-.slogan-section {
-    padding: 60px 0 80px 0;
-    background: #fff;
-    text-align: center;
-}
-.slogan-section .slogan-text {
-    font-family: 'UTM Trajan Pro', serif;
-    font-size: 3.25rem; font-weight: 700;
-    color: #000; line-height: 1.3;
-}
-
-.communicate {
-    position: relative;
-    background-image: url(../thumb/2.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    min-height: 450px;
-    display: flex; justify-content: center; align-items: center;
-    text-align: center; color: #fff; padding: 20px;
-}
-.communicate .overlay {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6); z-index: 1;
-}
-.communicate .content-box {
-    position: relative; z-index: 2; 
-    max-width: 100%; /* Mở rộng full chiều ngang */
-    padding: 0 15px; /* Thêm chút đệm để chữ không dính sát lề màn hình */
-}
-.communicate h3 {
-    font-size: 2.5rem; font-weight: 800;
-    text-transform: uppercase; margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    font-family: 'Playfair Display', serif
-}
-.btn-contact {
-    display: inline-block; padding: 15px 40px;
-    background-color: #cc0000; color: #fff;
-    font-size: 16px; font-weight: 700;
-    text-transform: uppercase; text-decoration: none;
-    border-radius: 50px; border: 2px solid #cc0000;
-    transition: all 0.3s ease;
-}
-.btn-contact:hover {
-    background-color: transparent;
-    border-color: #fff; color: #fff;
-    transform: translateY(-3px);
-}
-@media (max-width: 768px) {
-    .slogan-section .slogan-text { font-size: 2.2rem; }
-    .communicate h3 { font-size: 1.8rem; }
-}
-
-/* ==========================
-   FOOTER LAYOUT (QUAN TRỌNG)
-========================== */
-.footer {
-    background-color: #e60000;
-    color: #fff;
-    padding-top: 70px;
-    font-size: 15px;
-}
-
-/* Lưới 4 cột - Phần này giúp footer trải ngang */
-.footer-grid {
-    display: grid;
-    /* CŨ: grid-template-columns: 1.2fr 0.8fr 1fr 1fr; */
-    
-    /* MỚI: Tăng cột thứ 3 (Văn phòng) lên 1.4fr để đủ chỗ cho địa chỉ */
-    grid-template-columns: 1fr 0.6fr 1.1fr 1fr; 
-    
-    gap: 30px; /* Giảm gap chút xíu cho nó xích lại gần nhau hơn */
-    margin-bottom: 50px;
-}
-
-/* Responsive cho Mobile (Tự dồn cột khi màn hình nhỏ) */
-@media (max-width: 1024px) {
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-    .footer-grid { grid-template-columns: 1fr; }
-}
-
-/* --- Style các thành phần khác trong Footer --- */
-.footer-logo {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 32px; font-weight: 800; margin: 0 0 15px 0; letter-spacing: 2px;
-}
-.slogan-footer { font-style: italic; opacity: 0.9; margin-bottom: 25px; }
-
-.footer-col h4 {
-    font-size: 18px; font-weight: 700; margin-bottom: 25px;
-    position: relative; text-transform: uppercase;
-}
-.footer-col h4::after {
-    content: ""; position: absolute; left: 0; bottom: -10px;
-    width: 40px; height: 3px; background: #fff;
-}
-
-/* Links */
-.links-col ul { list-style: none; padding: 0; margin: 0; }
-.links-col ul li { margin-bottom: 12px; }
-.links-col ul li a {
-    color: rgba(255,255,255,0.85); text-decoration: none; transition: 0.3s;
-    display: flex; align-items: center; gap: 8px;
-}
-.links-col ul li a:hover { color: #fff; padding-left: 5px; }
-
-/* Contact Info */
-.contact-info .item {
-    display: flex; align-items: flex-start; gap: 15px;
-    margin-bottom: 18px; color: rgba(255,255,255,0.9);
-}
-.contact-info .item i { margin-top: 5px; font-size: 16px; min-width: 20px; }
-
-/* Copyright */
-.copyright-bar {
-    border-top: 1px solid rgba(255,255,255,0.15);
-    padding: 20px 0; text-align: center;
-    background: #cc0000; font-size: 14px;
-}
-
-/* =========================================
-   NÚT LIÊN HỆ THÔNG MINH (SMART DOCK - UPDATE SMOOTH)
-========================================= */
-
-/* 1. Vùng giữ chỗ trong Footer */
-.contact-dock-area {
-    width: 100%;
-    height: 70px; 
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-top: 20px;
-}
-
-/* 2. Nhóm nút (Trạng thái CƠ BẢN) */
-.floating-contact {
-    display: flex;
-    gap: 15px;
-    /* Chuẩn bị sẵn transition cho mọi thay đổi */
-    transition: transform 0.4s ease-out, opacity 0.4s ease; 
-}
-
-/* 3. Trạng thái BAY (Khi cuộn lên trên) */
-.floating-contact.is-floating {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    z-index: 99990;
-    /* Bay lên nhẹ nhàng */
-    animation: slideUpFloat 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* 4. [MỚI] Trạng thái HẠ CÁNH (Khi về Footer) */
-/* Class này giúp nút trượt nhẹ từ trên xuống vị trí cũ thay vì hiện ra cứng đơ */
-.floating-contact.is-docked {
-    position: static; /* Về vị trí cũ */
-    animation: softLanding 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-/* --- ANIMATION --- */
-
-/* Hiệu ứng bay lên (Có độ nảy nhẹ) */
-@keyframes slideUpFloat {
-    from { transform: translateY(60px) scale(0.8); opacity: 0; }
-    to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-/* Hiệu ứng hạ cánh (Từ từ trôi về) */
-@keyframes softLanding {
-    from { 
-        transform: translateY(-40px); /* Bắt đầu từ vị trí cao hơn chút */
-        opacity: 0; 
-    }
-    to { 
-        transform: translateY(0); /* Trôi về vị trí gốc */
-        opacity: 1; 
-    }
-}
-
-/* --- Style Nút Tròn (Giữ nguyên) --- */
-.circle-btn {
-    width: 55px; height: 55px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    font-size: 24px; color: #fff;
-    transition: transform 0.3s ease;
-    position: relative;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    text-decoration: none;
-}
-.circle-btn:hover { transform: scale(1.15) translateY(-5px); }
-.phone-btn { background: #cc0000; border: 2px solid #fff; }
-.zalo-btn { background: #0068ff; border: 2px solid #fff; }
-
-.pulse-ring {
-    position: absolute; top: -5px; left: -5px; width: 100%; height: 100%;
-    border-radius: 50%; border: 2px solid #cc0000; opacity: 0;
-    animation: pulse-ring 2s infinite; padding: 3px; box-sizing: content-box; z-index: -1;
-}
-@keyframes pulse-ring {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.6); opacity: 0; }
-}
-
-@media (max-width: 768px) {
-    .floating-contact.is-floating { bottom: 20px; left: 20px; }
-    .circle-btn { width: 45px; height: 45px; font-size: 20px; }
-    .contact-dock-area { justify-content: center; }
-}
-
-/* =========================================
-   FIX LỖI ẢNH ZALO TO (800x800) CHO ĐẸP
-========================================= */
-
-/* Chọn chính xác cái ảnh bên trong nút Zalo */
-.circle-btn.zalo-btn .btn-icon-img {
-    width: 32px;  /* Ép ảnh nhỏ lại còn 32px (vừa đẹp trong nút 55px) */
-    height: 32px; /* Đặt chiều cao bằng chiều rộng cho nó vuông */
-    
-    object-fit: contain; /* Đảm bảo nội dung ảnh không bị méo */
-    display: block; /* Giúp căn giữa chuẩn hơn */
-    
-    /* [QUAN TRỌNG NHẤT] Bo tròn chính cái ảnh lại */
-    /* Dù ảnh gốc là hình vuông thì vào đây cũng thành hình tròn để không bị lòi góc */
-    border-radius: 50%; 
-}
-
-/* =========================================
-   CSS CHO VIDEO MODAL (BẢN FIX LỖI TRÀN KHUNG)
-========================================= */
-.video-modal {
-    display: none;
-    position: fixed;
-    bottom: 20px; 
-    right: 20px; 
-    width: 360px;
-    height: 600px; /* Tăng chiều cao xíu cho thoải mái */
-    z-index: 99999;
-    background: transparent;
-    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
-    animation: slideUpWidget 0.4s ease-out;
-}
-
-.video-box {
-    width: 100%; 
-    height: 100%;
-    background: #fff; 
-    border-radius: 20px;
-    overflow: hidden; 
-    display: flex; 
-    flex-direction: column; /* Xếp dọc từ trên xuống */
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-/* 1. HEADER (KHÓA CỨNG KHÔNG CHO CO LẠI) */
-.video-header {
-    background: linear-gradient(135deg, #EF233C, #D90429);
-    padding: 12px 15px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    color: #fff;
-    flex-shrink: 0; /* <--- QUAN TRỌNG: Không bao giờ bị ép nhỏ */
-    height: 60px; /* Cố định chiều cao */
-}
-
-.agent-info { display: flex; align-items: center; gap: 10px; }
-.agent-avatar {
-    width: 35px; height: 35px; background: rgba(255,255,255,0.2);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-}
-.agent-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
-.status-dot { display: inline-block; width: 8px; height: 8px; background: #00ff00; border-radius: 50%; border: 1px solid #fff; }
-
-.close-video { 
-    background: rgba(0,0,0,0.1); border: none; color: #fff; 
-    width: 30px; height: 30px; border-radius: 50%;
-    font-size: 16px; cursor: pointer; 
-    display: flex; align-items: center; justify-content: center;
-    transition: 0.2s;
-}
-.close-video:hover { background: rgba(0,0,0,0.3); transform: rotate(90deg); }
-
-/* 2. MÀN HÌNH VIDEO (KHÓA CỨNG) */
-.video-screen { 
-    flex: 0 0 220px; /* <--- QUAN TRỌNG: Cố định chiều cao 220px */
-    background: #000; 
-    position: relative; 
-    overflow: hidden; 
-}
-.video-screen video { width: 100%; height: 100%; object-fit: cover; }
-
-.video-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); color: #fff;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 20px;
-}
-.video-overlay p { font-size: 13px; margin-top: 10px; color: #ccc; }
-
-/* 3. KHUNG CHAT (TỰ ĐỘNG GIÃN NHƯNG CÓ GIỚI HẠN) */
-.chat-area { 
-    flex: 1; /* Chiếm hết phần còn lại */
-    background: #f8f9fa; 
-    display: flex; 
-    flex-direction: column; 
-    border-top: 1px solid #eee; 
-    min-height: 0; /* <--- QUAN TRỌNG: Giúp scroll hoạt động đúng trong Flexbox */
-    overflow: hidden; /* Chặn tràn ra ngoài */
-}
-
-/* Vùng hiển thị tin nhắn (Scroll ở đây) */
-.chat-messages { 
-    flex: 1; 
-    padding: 15px; 
-    overflow-y: auto; /* Chỉ cuộn riêng vùng này */
-    display: flex; 
-    flex-direction: column; 
-    gap: 10px; 
-    font-size: 13px;
-    scroll-behavior: smooth;
-}
-
-.message { padding: 10px 14px; max-width: 85%; line-height: 1.4; word-wrap: break-word; font-size: 14px; }
-.message.agent-msg {
-    align-self: flex-start; background: #fff; 
-    border: 1px solid #e5e5e5; border-radius: 12px 12px 12px 0; 
-    color: #333;
-}
-.message.user-msg {
-    align-self: flex-end; 
-    background: linear-gradient(135deg, #EF233C, #D90429);
-    color: #fff; border-radius: 12px 12px 0 12px; 
-    box-shadow: 0 2px 5px rgba(217, 4, 41, 0.2);
-}
-
-/* 4. Ô NHẬP LIỆU (KHÓA CỨNG DƯỚI CÙNG) */
-.chat-input-box { 
-    padding: 12px; 
-    background: #fff; 
-    display: flex; gap: 8px; 
-    border-top: 1px solid #eee; 
-    flex-shrink: 0; /* <--- QUAN TRỌNG: Không bị ép nhỏ */
-}
-.chat-input-box input { 
-    flex: 1; border: 1px solid #ddd; padding: 10px 15px; 
-    border-radius: 25px; outline: none; font-size: 14px;
-}
-.chat-input-box input:focus { border-color: #D90429; }
-.chat-input-box button {
-    background: #D90429; color: #fff; border: none;
-    width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 3px 10px rgba(217, 4, 41, 0.3);
-}
-.chat-input-box button:hover { transform: scale(1.1); }
-
-@keyframes slideUpWidget { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-/* RESPONSIVE MOBILE */
-@media (max-width: 480px) { 
-    .video-modal {
-        bottom: 0; right: 0; width: 100%; height: 80vh; /* Cao hơn xíu trên mobile */
-        border-radius: 20px 20px 0 0;
-    }
-    .video-box { border-radius: 20px 20px 0 0; }
-}
-
-/* ======================================================
-   FIX LỖI HÌNH NỀN BỊ BỂ TRÊN ĐIỆN THOẠI (COUNTERS & COMMUNICATE)
-====================================================== */
-@media (max-width: 1024px) {
-    .counters, 
-    .communicate {
-        /* Tắt chế độ Fixed (nguyên nhân gây bể hình trên mobile) */
-        background-attachment: scroll !important;
-        
-        /* Căn giữa hình để luôn lấy trọng tâm đẹp nhất */
-        background-position: center center !important;
-        
-        /* Đảm bảo hình luôn phủ kín khung */
-        background-size: cover !important;
-    }
-}
-
-/* ======================================================
-   FIX LỖI GIAO DIỆN TRÊN ĐIỆN THOẠI (RESPONSIVE)
-====================================================== */
-
-@media (max-width: 1024px) { /* Áp dụng cho Tablet và Mobile */
-    
-    /* 1. Chuyển bố cục từ Ngang sang Dọc */
-    .services-modern-layout {
-        flex-direction: column; /* Xếp chồng lên nhau */
-        height: auto; /* Bỏ chiều cao cố định */
-        gap: 30px;
-    }
-
-    /* 2. Cột danh sách dịch vụ */
-    .svc-list-col {
-        padding-right: 0; /* Bỏ khoảng cách thừa */
-        flex: auto;
-    }
-
-    /* Trên điện thoại thì để 1 cột thôi cho chữ to rõ */
-    .svc-grid {
-        grid-template-columns: 1fr; 
-        row-gap: 20px;
-        
-    }
-
-    /* 3. Cột hình ảnh (Slider) */
-    .svc-image-col {
-        width: 100%;
-        /* Giảm chiều cao xuống còn 300px cho vừa màn hình đt */
-        height: 300px; 
-        margin-top: 20px;
-    }
-
-    /* 4. Chỉnh lại kích thước ảnh trong Slider */
-    .marquee-track img {
-        /* Chiều cao ăn theo khung cha (300px) */
-        height: 300px; 
-        
-        /* Chiều rộng giảm xuống còn 250px cho cân đối */
-        width: 250px; 
-        
-        /* Giảm khoảng cách giữa các ảnh */
-        margin-right: 15px; 
-    }
-    
-    /* Canh giữa tiêu đề cho đẹp */
-    .center-header h2 {
-        font-size: 2rem; /* Giảm size chữ tiêu đề chút */
-        
-    }
-}
-
-/* =========================================
-   GALLERY PROJECT SECTION (KHO DỰ ÁN)
+   9. GALLERY PROJECT SECTION (DỰ ÁN TIÊU BIỂU)
+   (Tương ứng: <section class="gallery-section">)
 ========================================= */
 .gallery-section {
     padding: 80px 0;
@@ -1152,7 +706,6 @@ body {
 /* Lưới ảnh */
 .gallery-grid {
     display: grid;
-    /* PC: 4 cột -> Chứa được nhiều ảnh */
     grid-template-columns: repeat(4, 1fr); 
     gap: 20px;
 }
@@ -1161,16 +714,13 @@ body {
     position: relative;
     border-radius: 10px;
     overflow: hidden;
-    /* Tỷ lệ khung hình 4:3 (Cho ảnh đều nhau) */
     aspect-ratio: 4/3; 
     cursor: pointer;
     animation: fadeIn 0.5s ease;
 }
 
 /* Class để ẩn hiện khi lọc */
-.gallery-item.hide {
-    display: none;
-}
+.gallery-item.hide { display: none; }
 .gallery-item.show {
     display: block;
     animation: zoomIn 0.4s ease;
@@ -1238,13 +788,11 @@ body {
     color: #fff;
 }
 
-/* Animation nhẹ */
 @keyframes zoomIn {
     from { transform: scale(0.9); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .gallery-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -1252,109 +800,426 @@ body {
     .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
 @media (max-width: 480px) {
-    .gallery-grid { grid-template-columns: 1fr; } /* Mobile 1 cột */
+    .gallery-grid { grid-template-columns: 1fr; } 
     .filter-btn { padding: 8px 15px; font-size: 12px; }
 }
 
+
 /* =========================================
-   FIX LỖI MẤT HÌNH ICON (BẮT BUỘC CÓ)
+   10. CAM KẾT (COMMITMENT)
+   (Tương ứng: <section class="commitment-section">)
 ========================================= */
-
-/* 1. Ép trình duyệt dùng đúng Font cho Icon */
-.fa, .fas, .far, .fal, .fab {
-    -webkit-font-smoothing: antialiased;
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    line-height: 1;
+.commitment-section {
+    padding: 80px 0;
+    background: #fff;
+    text-align: center;
+}
+.commitment-section .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; color: #000;
+    text-transform: uppercase; margin-bottom: 60px;
+    font-weight: 700;
+}
+.commitment-grid {
+    display: flex; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+}
+.commitment-item {
+    flex: 1; min-width: 280px; max-width: 350px;
+    display: flex; flex-direction: column; align-items: center;
+}
+.commitment-item .icon-box {
+    width: 80px; height: 80px;
+    border: 2px solid #cc0000;
+    border-radius: 15px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 25px; transition: 0.3s;
+}
+.commitment-item .icon-box i { font-size: 35px; color: #cc0000; }
+.commitment-item:hover .icon-box {
+    background: #cc0000; transform: translateY(-5px);
+}
+.commitment-item:hover .icon-box i { color: #fff; }
+.commitment-item h3 {
+    color: #000; font-size: 18px;
+    font-weight: 700; margin-bottom: 15px;
+    text-transform: uppercase;
+}
+.commitment-item p {
+    font-size: 17px; color: #333;
+    line-height: 1.6; max-width: 300px; margin: 0 auto;
+}
+@media (max-width: 768px) {
+    .commitment-grid { flex-direction: column; align-items: center; }
 }
 
-/* 2. Quan trọng nhất: Ép icon Solid (fas) dùng bộ mã Font Awesome 6 */
-.fas, .fa-solid {
-    font-family: "Font Awesome 6 Free" !important; /* Dùng !important để không thằng nào đè được */
-    font-weight: 900 !important;
+
+/* =========================================
+   11. SLOGAN 
+   (Tương ứng: <section class="slogan-section">)
+========================================= */
+.slogan-section {
+    padding: 60px 0 80px 0;
+    background: #fff;
+    text-align: center;
+}
+.slogan-section .slogan-text {
+    font-family: 'UTM Trajan Pro', serif;
+    font-size: 3.25rem; font-weight: 700;
+    color: #000; line-height: 1.3;
+}
+@media (max-width: 768px) {
+    .slogan-section .slogan-text { font-size: 2.2rem; }
 }
 
-/* 3. Ép icon Brands (fab - như Facebook, Zalo) */
-.fab, .fa-brands {
-    font-family: "Font Awesome 6 Brands" !important;
-    font-weight: 400 !important;
+
+/* =========================================
+   12. CTA (COMMUNICATE - BẠN CẦN TƯ VẤN)
+   (Tương ứng: <section class="communicate">)
+========================================= */
+.communicate {
+    position: relative;
+    background-image: url(../thumb/2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    min-height: 450px;
+    display: flex; justify-content: center; align-items: center;
+    text-align: center; color: #fff; padding: 20px;
 }
-/* ======================================================
-   FIX LỖI HÌNH NỀN BỊ BỂ TRÊN ĐIỆN THOẠI (COUNTERS & COMMUNICATE)
-====================================================== */
+.communicate .overlay {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); z-index: 1;
+}
+.communicate .content-box {
+    position: relative; z-index: 2; 
+    max-width: 100%;
+    padding: 0 15px;
+}
+.communicate h3 {
+    font-size: 2.5rem; font-weight: 800;
+    text-transform: uppercase; margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-family: 'Playfair Display', serif
+}
+.btn-contact {
+    display: inline-block; padding: 15px 40px;
+    background-color: #cc0000; color: #fff;
+    font-size: 16px; font-weight: 700;
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 50px; border: 2px solid #cc0000;
+    transition: all 0.3s ease;
+}
+.btn-contact:hover {
+    background-color: transparent;
+    border-color: #fff; color: #fff;
+    transform: translateY(-3px);
+}
+@media (max-width: 768px) {
+    .communicate h3 { font-size: 1.8rem; }
+}
+/* Fix lỗi hình nền bị bể trên Mobile cho Communicate */
 @media (max-width: 1024px) {
-    .counters, 
     .communicate {
-        /* Tắt chế độ Fixed (nguyên nhân gây bể hình trên mobile) */
         background-attachment: scroll !important;
-        
-        /* Căn giữa hình để luôn lấy trọng tâm đẹp nhất */
         background-position: center center !important;
-        
-        /* Đảm bảo hình luôn phủ kín khung */
         background-size: cover !important;
     }
 }
 
-/* ======================================================
-   FIX LỖI GIAO DIỆN TRÊN ĐIỆN THOẠI (RESPONSIVE)
-====================================================== */
 
-@media (max-width: 1024px) { /* Áp dụng cho Tablet và Mobile */
-    
-    /* 1. Chuyển bố cục từ Ngang sang Dọc */
-    .services-modern-layout {
-        flex-direction: column; /* Xếp chồng lên nhau */
-        height: auto; /* Bỏ chiều cao cố định */
-        gap: 30px;
-    }
-
-    /* 2. Cột danh sách dịch vụ */
-    .svc-list-col {
-        padding-right: 0; /* Bỏ khoảng cách thừa */
-        flex: auto;
-    }
-
-    /* Trên điện thoại thì để 1 cột thôi cho chữ to rõ */
-    .svc-grid {
-        grid-template-columns: 1fr; 
-        row-gap: 20px;
-        
-    }
-
-    /* 3. Cột hình ảnh (Slider) */
-    .svc-image-col {
-        width: 100%;
-        /* Giảm chiều cao xuống còn 300px cho vừa màn hình đt */
-        height: 300px; 
-        margin-top: 20px;
-    }
-
-    /* 4. Chỉnh lại kích thước ảnh trong Slider */
-    .marquee-track img {
-        /* Chiều cao ăn theo khung cha (300px) */
-        height: 300px; 
-        
-        /* Chiều rộng giảm xuống còn 250px cho cân đối */
-        width: 250px; 
-        
-        /* Giảm khoảng cách giữa các ảnh */
-        margin-right: 15px; 
-    }
-    
-    /* Canh giữa tiêu đề cho đẹp */
-    .center-header h2 {
-        font-size: 2rem; /* Giảm size chữ tiêu đề chút */
-        
-    }
-
+/* =========================================
+   13. FOOTER LAYOUT
+   (Tương ứng: <footer class="footer">)
+========================================= */
+.footer {
+    background-color: #e60000;
+    color: #fff;
+    padding-top: 70px;
+    font-size: 15px;
 }
 
-/* ======================================================
-   FIX LỖI TRẮNG MÀN HÌNH TRÊN ĐIỆN THOẠI (QUAN TRỌNG)
-====================================================== */
+/* Lưới 4 cột */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 0.6fr 1.1fr 1fr; 
+    gap: 30px; 
+    margin-bottom: 50px;
+}
+
+@media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+}
+
+.footer-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px; font-weight: 800; margin: 0 0 15px 0; letter-spacing: 2px;
+}
+.slogan-footer { font-style: italic; opacity: 0.9; margin-bottom: 25px; }
+
+.footer-col h4 {
+    font-size: 18px; font-weight: 700; margin-bottom: 25px;
+    position: relative; text-transform: uppercase;
+}
+.footer-col h4::after {
+    content: ""; position: absolute; left: 0; bottom: -10px;
+    width: 40px; height: 3px; background: #fff;
+}
+
+/* Links */
+.links-col ul { list-style: none; padding: 0; margin: 0; }
+.links-col ul li { margin-bottom: 12px; }
+.links-col ul li a {
+    color: rgba(255,255,255,0.85); text-decoration: none; transition: 0.3s;
+    display: flex; align-items: center; gap: 8px;
+}
+.links-col ul li a:hover { color: #fff; padding-left: 5px; }
+
+/* Contact Info */
+.contact-info .item {
+    display: flex; align-items: flex-start; gap: 15px;
+    margin-bottom: 18px; color: rgba(255,255,255,0.9);
+}
+.contact-info .item i { margin-top: 5px; font-size: 16px; min-width: 20px; }
+
+/* Copyright */
+.copyright-bar {
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding: 20px 0; text-align: center;
+    background: #cc0000; font-size: 14px;
+}
+
+
+/* =========================================
+   14. FLOATING CONTACT (NÚT LIÊN HỆ DOCK)
+   (Tương ứng: <div id="contactDock"> và floating group)
+========================================= */
+.contact-dock-area {
+    width: 100%;
+    height: 70px; 
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: 20px;
+}
+
+.floating-contact {
+    display: flex;
+    gap: 15px;
+    transition: transform 0.4s ease-out, opacity 0.4s ease; 
+}
+
+/* Trạng thái BAY */
+.floating-contact.is-floating {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 99990;
+    animation: slideUpFloat 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Trạng thái HẠ CÁNH */
+.floating-contact.is-docked {
+    position: static;
+    animation: softLanding 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slideUpFloat {
+    from { transform: translateY(60px) scale(0.8); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes softLanding {
+    from { transform: translateY(-40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Style Nút Tròn */
+.circle-btn {
+    width: 55px; height: 55px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 24px; color: #fff;
+    transition: transform 0.3s ease;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
+.circle-btn:hover { transform: scale(1.15) translateY(-5px); }
+.phone-btn { background: #cc0000; border: 2px solid #fff; }
+.zalo-btn { background: #0068ff; border: 2px solid #fff; }
+
+.pulse-ring {
+    position: absolute; top: -5px; left: -5px; width: 100%; height: 100%;
+    border-radius: 50%; border: 2px solid #cc0000; opacity: 0;
+    animation: pulse-ring 2s infinite; padding: 3px; box-sizing: content-box; z-index: -1;
+}
+@keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+@media (max-width: 768px) {
+    .floating-contact.is-floating { bottom: 20px; left: 20px; }
+    .circle-btn { width: 45px; height: 45px; font-size: 20px; }
+    .contact-dock-area { justify-content: center; }
+}
+
+/* FIX LỖI ẢNH ZALO TO */
+.circle-btn.zalo-btn .btn-icon-img {
+    width: 32px; height: 32px;
+    object-fit: contain;
+    display: block;
+    border-radius: 50%; 
+}
+
+
+/* =========================================
+   15. VIDEO MODAL (CHAT SUPPORT)
+   (Tương ứng: <div class="video-modal" id="videoModal">)
+========================================= */
+.video-modal {
+    display: none;
+    position: fixed;
+    bottom: 20px; 
+    right: 20px; 
+    width: 360px;
+    height: 600px;
+    z-index: 99999;
+    background: transparent;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+    animation: slideUpWidget 0.4s ease-out;
+}
+
+.video-box {
+    width: 100%; height: 100%;
+    background: #fff; 
+    border-radius: 20px;
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.video-header {
+    background: linear-gradient(135deg, #EF233C, #D90429);
+    padding: 12px 15px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    color: #fff;
+    flex-shrink: 0; 
+    height: 60px;
+}
+
+.agent-info { display: flex; align-items: center; gap: 10px; }
+.agent-avatar {
+    width: 35px; height: 35px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.agent-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
+.status-dot { display: inline-block; width: 8px; height: 8px; background: #00ff00; border-radius: 50%; border: 1px solid #fff; }
+
+.close-video { 
+    background: rgba(0,0,0,0.1); border: none; color: #fff; 
+    width: 30px; height: 30px; border-radius: 50%;
+    font-size: 16px; cursor: pointer; 
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
+}
+.close-video:hover { background: rgba(0,0,0,0.3); transform: rotate(90deg); }
+
+.video-screen { 
+    flex: 0 0 220px; 
+    background: #000; 
+    position: relative; 
+    overflow: hidden; 
+}
+.video-screen video { width: 100%; height: 100%; object-fit: cover; }
+
+.video-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 20px;
+}
+.video-overlay p { font-size: 13px; margin-top: 10px; color: #ccc; }
+
+.chat-area { 
+    flex: 1; 
+    background: #f8f9fa; 
+    display: flex; 
+    flex-direction: column; 
+    border-top: 1px solid #eee; 
+    min-height: 0; 
+    overflow: hidden; 
+}
+
+.chat-messages { 
+    flex: 1; 
+    padding: 15px; 
+    overflow-y: auto; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    font-size: 13px;
+    scroll-behavior: smooth;
+}
+
+.message { padding: 10px 14px; max-width: 85%; line-height: 1.4; word-wrap: break-word; font-size: 14px; }
+.message.agent-msg {
+    align-self: flex-start; background: #fff; 
+    border: 1px solid #e5e5e5; border-radius: 12px 12px 12px 0; 
+    color: #333;
+}
+.message.user-msg {
+    align-self: flex-end; 
+    background: linear-gradient(135deg, #EF233C, #D90429);
+    color: #fff; border-radius: 12px 12px 0 12px; 
+    box-shadow: 0 2px 5px rgba(217, 4, 41, 0.2);
+}
+
+.chat-input-box { 
+    padding: 12px; 
+    background: #fff; 
+    display: flex; gap: 8px; 
+    border-top: 1px solid #eee; 
+    flex-shrink: 0;
+}
+.chat-input-box input { 
+    flex: 1; border: 1px solid #ddd; padding: 10px 15px; 
+    border-radius: 25px; outline: none; font-size: 14px;
+}
+.chat-input-box input:focus { border-color: #D90429; }
+.chat-input-box button {
+    background: #D90429; color: #fff; border: none;
+    width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 3px 10px rgba(217, 4, 41, 0.3);
+}
+.chat-input-box button:hover { transform: scale(1.1); }
+
+@keyframes slideUpWidget { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+@media (max-width: 480px) { 
+    .video-modal {
+        bottom: 0; right: 0; width: 100%; height: 80vh;
+        border-radius: 20px 20px 0 0;
+    }
+    .video-box { border-radius: 20px 20px 0 0; }
+}
+
+
+/* =========================================
+   16. FIX LỖI TRẮNG MÀN HÌNH TRÊN ĐIỆN THOẠI
+   (Áp dụng toàn trang - Đặt cuối cùng để override)
+========================================= */
 @media (max-width: 1024px) {
     /* Tắt ép xung GPU để tránh tràn bộ nhớ gây trắng trang */
     .marquee-track, 
@@ -1371,14 +1236,12 @@ body {
     
     /* Fix lỗi ảnh slider dịch vụ bị dẹt hoặc mất hình */
     .marquee-track img {
-        height: 250px !important; /* Cố định chiều cao nhỏ hơn cho mobile */
-        width: auto !important;   /* Chiều rộng tự động theo tỉ lệ */
-        max-width: none !important; /* Cho phép ảnh to hơn khung */
+        height: 250px !important; 
+        width: auto !important; 
+        max-width: none !important; 
     }
     
-    /* Fix khung chứa slider */
     .svc-image-col {
         height: 250px !important;
     }
 }
-

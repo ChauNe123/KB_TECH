@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch Vụ - KB </title>
+    <title>Dịch Vụ - KB Tech</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
@@ -90,80 +90,12 @@
             </div>
         </section>
 
-        <div class="consult-modal" id="consultModal">
-        <div class="consult-box">
-            <button class="close-consult" id="closeConsult"><i class="fas fa-times"></i></button>
-            
-            <div class="consult-grid">
-                <div class="consult-info-col">
-                    <img src="thumb/sever.jpg" alt="Service" id="modalImg">
-                    <div class="info-content">
-                        <h3 id="modalTitle">DỊCH VỤ MÁY CHỦ</h3>
-                        <p>Để lại thông tin, chuyên gia KB Tech sẽ liên hệ tư vấn giải pháp tối ưu chi phí nhất cho doanh nghiệp của bạn trong vòng 15 phút.</p>
-                        <ul class="benefit-list">
-                            <li><i class="fas fa-check-circle"></i> Tư vấn cấu hình miễn phí</li>
-                            <li><i class="fas fa-check-circle"></i> Báo giá nhanh & cạnh tranh</li>
-                            <li><i class="fas fa-check-circle"></i> Hỗ trợ kỹ thuật 24/7</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="consult-form-col">
-                    <div class="form-header">
-                        <h4>ĐĂNG KÝ TƯ VẤN</h4>
-                        <p>Điền thông tin bên dưới</p>
-                    </div>
-                    
-                    <form id="consultForm">
-                        <input type="hidden" id="serviceType" name="serviceType">
-
-                        <div class="form-group">
-                            <label>Nhu cầu của bạn *</label>
-                            <select id="needOption" class="form-control">
-                                <option value="buy">Mua máy chủ vật lý (Physical Server)</option>
-                                <option value="rent">Thuê Cloud Server / VPS</option>
-                                <option value="colocation">Thuê chỗ đặt máy chủ (Colocation)</option>
-                                <option value="setup">Cài đặt & Cấu hình hệ thống</option>
-                                <option value="fix">Sửa chữa / Nâng cấp</option>
-                                <option value="other">Khác (Cần tư vấn thêm)</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Họ và tên *</label>
-                            <input type="text" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Số điện thoại (Zalo) *</label>
-                            <input type="tel" class="form-control" placeholder="Nhập SĐT của bạn..." required pattern="[0-9]{10}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ghi chú thêm (Không bắt buộc)</label>
-                            <textarea class="form-control" rows="2" placeholder="VD: Tôi cần server cho 50 nhân viên..."></textarea>
-                        </div>
-
-                        <div class="form-group" style="margin-top: 5px;">
-    <input type="checkbox" id="privacyConsent" required style="margin-right: 8px;">
-    <label for="privacyConsent" style="font-size: 13px; font-weight: 400; display: inline; color: #555;">
-        Tôi đã đọc và đồng ý với <a href="privacy-policy.html" target="_blank" style="color: #cc0000; text-decoration: none; font-weight: 600;">Chính sách Quyền riêng tư</a>.
-    </label>
-</div>
-
-
-<button type="submit" class="btn-submit-consult">GỬI YÊU CẦU <i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
         <section class="svc-block reverse" id="svc-email">
             <div class="container">
                 <div class="svc-row">
                     <div class="svc-img-col" data-aos="fade-left" data-aos-duration="1000">
                         <div class="img-3d-box">
-                            <img src="thumb/email.jpg" alt="Email">
+                            <img src="thumb/email.jpg" alt="Email"> 
                             <div class="floating-badge badge-blue"><i class="fas fa-envelope-open-text"></i></div>
                         </div>
                     </div>
@@ -177,7 +109,7 @@
                             <li><i class="fas fa-check"></i> Dung lượng lưu trữ lớn, tốc độ cao.</li>
                             <li><i class="fas fa-check"></i> Hỗ trợ migrate dữ liệu mail cũ an toàn.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Báo giá Email</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="email">Báo giá Email</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -205,7 +137,7 @@
                             <li><i class="fas fa-check"></i> Bảo mật luồng dữ liệu nội bộ.</li>
                             <li><i class="fas fa-check"></i> Rà soát lỗ hổng bảo mật định kỳ.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Giải pháp bảo mật</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="security">Giải pháp bảo mật</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -233,7 +165,7 @@
                             <li><i class="fas fa-check"></i> Vệ sinh máy tính, tra keo tản nhiệt.</li>
                             <li><i class="fas fa-check"></i> Khắc phục lỗi màn hình xanh, treo máy.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Gọi thợ ngay</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="repair">Gọi thợ ngay</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -261,7 +193,7 @@
                             <li><i class="fas fa-check"></i> Backup tự động theo lịch (Local & Cloud).</li>
                             <li><i class="fas fa-check"></i> Đồng bộ dữ liệu làm việc từ xa.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Tư vấn NAS</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="nas">Tư vấn NAS</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -289,7 +221,7 @@
                             <li><i class="fas fa-check"></i> Không giới hạn số lần hỗ trợ.</li>
                             <li><i class="fas fa-check"></i> Báo cáo tình trạng hệ thống định kỳ.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Thuê IT ngay</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="helpdesk">Thuê IT ngay</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -317,7 +249,7 @@
                             <li><i class="fas fa-check"></i> Xem lại dễ dàng trên điện thoại, máy tính.</li>
                             <li><i class="fas fa-check"></i> Bảo hành, bảo trì hệ thống 24 tháng.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Lắp Camera ngay</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="camera">Lắp Camera ngay</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn">
@@ -345,7 +277,7 @@
                             <li><i class="fas fa-check"></i> Tốc độ tải trang siêu nhanh.</li>
                             <li><i class="fas fa-check"></i> Bảo hành, bảo trì trọn đời.</li>
                         </ul>
-                        <a href="#" class="btn-svc-detail">Tư vấn Website</a>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="web">Tư vấn Website</a>
                     </div>
                 </div>
                 <div class="svc-nav-btn up-top">
@@ -353,16 +285,78 @@
                 </div>
             </div>
         </section>
+        
+        <div class="consult-modal" id="consultModal">
+            <div class="consult-box">
+                <button class="close-consult" id="closeConsult"><i class="fas fa-times"></i></button>
+                
+                <div class="consult-grid">
+                    <div class="consult-info-col">
+                        <img src="thumb/sever.jpg" alt="Service" id="modalImg">
+                        <div class="info-content">
+                            <h3 id="modalTitle">DỊCH VỤ MÁY CHỦ</h3>
+                            <p>Để lại thông tin, chuyên gia KB Tech sẽ liên hệ tư vấn giải pháp tối ưu chi phí nhất cho doanh nghiệp của bạn trong vòng 15 phút.</p>
+                            <ul class="benefit-list">
+                                <li><i class="fas fa-check-circle"></i> Tư vấn cấu hình miễn phí</li>
+                                <li><i class="fas fa-check-circle"></i> Báo giá nhanh & cạnh tranh</li>
+                                <li><i class="fas fa-check-circle"></i> Hỗ trợ kỹ thuật 24/7</li>
+                            </ul>
+                        </div>
+                    </div>
 
-    </div>
+                    <div class="consult-form-col">
+                        <div class="form-header">
+                            <h4>ĐĂNG KÝ TƯ VẤN</h4>
+                            <p>Điền thông tin bên dưới</p>
+                        </div>
+                        
+                        <form id="consultForm">
+                            <input type="hidden" name="_subject" value="🔔 KHÁCH HÀNG MỚI TỪ WEBSITE KB TECH">
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" id="serviceType" name="service_type">
 
+                            <div class="form-group">
+                                <label>Nhu cầu của bạn *</label>
+                                <select id="needOption" name="option" class="form-control">
+                                    </select>
+                            </div>
 
-    <footer class="footer">
+                            <div class="form-group">
+                                <label>Họ và tên *</label>
+                                <input type="text" name="fullname" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Số điện thoại (Zalo) *</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="Nhập SĐT của bạn..." required pattern="[0-9]{10}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Ghi chú thêm (Không bắt buộc)</label>
+                                <textarea name="message" class="form-control" rows="2" placeholder="VD: Tôi cần server cho 50 nhân viên..."></textarea>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 5px;">
+                                <input type="checkbox" id="privacyConsent" required style="margin-right: 8px;">
+                                <label for="privacyConsent" style="font-size: 13px; font-weight: 400; display: inline; color: #555;">
+                                    Tôi đã đọc và đồng ý với <a href="privacy-policy.html" target="_blank" style="color: #cc0000; text-decoration: none; font-weight: 600;">Chính sách Quyền riêng tư</a>.
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn-submit-consult">GỬI YÊU CẦU <i class="fas fa-paper-plane"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 
                 <div class="footer-col brand-col">
-                    <h2 class="footer-logo">KB </h2> 
+                    <h2 class="footer-logo">KB TECH</h2> 
                     <p class="slogan-footer">"Tạo dựng xu hướng - định hình tương lai."</p>
                     
                     <div id="contactDock" class="contact-dock-area">
@@ -379,7 +373,7 @@
                 </div>
 
                 <div class="footer-col links-col">
-                    <h4>VỀ KB</h4>
+                    <h4>VỀ KB TECH</h4>
                     <ul>
                         <li><a href="index.html"><i class="fas fa-angle-right"></i> Trang Chủ</a></li>
                         <li><a href="about.html"><i class="fas fa-angle-right"></i> Giới Thiệu</a></li>
@@ -430,7 +424,7 @@
 
         <div class="copyright-bar">
             <div class="container">
-                <p>&copy; 2025 <strong>KB </strong>. All Rights Reserved.</p>
+                <p>&copy; 2025 <strong>KB TECH</strong>. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -441,7 +435,7 @@
                 <div class="agent-info">
                     <div class="agent-avatar"><i class="fas fa-headset"></i></div>
                     <div>
-                        <h4>Hỗ trợ viên KB</h4>
+                        <h4>Hỗ trợ viên KB Tech</h4>
                         <span class="status-dot"></span> Đang trực tuyến
                     </div>
                 </div>
@@ -465,6 +459,7 @@
         </div>
     </div>
 
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init();
