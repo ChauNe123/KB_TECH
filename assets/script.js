@@ -512,23 +512,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 9. SUPPORT WIDGET (VIDEO/CHAT) & SECURITY
+    // 9. SUPPORT WIDGET (VIDEO/CHAT) & XÁC NHẬN GỌI
     // ====================================================
     const btnCallSupport = document.getElementById('btnCallSupport');
+    
+    // Các Element của Video Call
     const videoModal = document.getElementById('videoModal');
     const btnCloseVideo = document.getElementById('btnCloseVideo');
+    const agentVideo = document.getElementById('agentVideo');
     const btnSendChat = document.getElementById('btnSendChat');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
-    const agentVideo = document.getElementById('agentVideo');
+
+    // Các Element của Bảng Xác Nhận (Mới thêm)
+    const confirmModal = document.getElementById('confirmModal');
+    const btnConfirmYes = document.getElementById('btnConfirmYes');
+    const btnConfirmNo = document.getElementById('btnConfirmNo');
+    const closeConfirm = document.getElementById('closeConfirm');
     
     // Cấu hình PeerJS
     const STAFF_ID = "kbtech-hotline-vip-1"; 
     let peer = null;
     let conn = null; 
 
+    // --- LOGIC XỬ LÝ XÁC NHẬN ---
+    if (btnCallSupport && confirmModal) {
+        // 1. Khi bấm nút gọi ở Footer -> Hiện bảng xác nhận trước
+        btnCallSupport.addEventListener('click', () => {
+            const now = new Date();
+            const h = now.getHours();
+            // Nếu muốn chặn giờ hành chính thì mở dòng dưới:
+            // if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
+            
+            confirmModal.style.display = 'flex';
+        });
+
+        // 2. Nếu chọn "Chat qua Zalo" (Không)
+        btnConfirmNo.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+            // Mở link Zalo trong tab mới
+            window.open('https://zalo.me/0933129155', '_blank');
+        });
+
+        // 3. Nếu chọn "Gọi ngay" (Có) -> Bắt đầu chạy Video Call
+        btnConfirmYes.addEventListener('click', () => {
+            confirmModal.style.display = 'none'; // Tắt bảng xác nhận
+            videoModal.style.display = 'flex';   // Mở bảng Video
+            startVideoCall(); // Chạy hàm kết nối
+        });
+
+        // Nút tắt bảng xác nhận
+        if(closeConfirm) {
+            closeConfirm.addEventListener('click', () => {
+                confirmModal.style.display = 'none';
+            });
+        }
+        // Bấm ra ngoài cũng tắt
+        confirmModal.addEventListener('click', (e) => {
+            if (e.target === confirmModal) confirmModal.style.display = 'none';
+        });
+    }
+
+    // --- HÀM KẾT NỐI VIDEO (Được tách riêng để gọi khi bấm YES) ---
+    function startVideoCall() {
+        if(!peer) {
+            peer = new Peer(); 
+            
+            peer.on('open', (id) => {
+                console.log('My ID:', id);
+                addLog("Đang kết nối tới tổng đài viên...", 'agent');
+                connectToStaff();
+            });
+
+            peer.on('call', (call) => {
+                call.answer(null); 
+                call.on('stream', (remoteStream) => {
+                    agentVideo.srcObject = remoteStream;
+                    agentVideo.muted = false; 
+                    
+                    agentVideo.play().catch(e => {
+                        console.log("Autoplay bị chặn.");
+                        addLog("⚠️ Hãy chạm vào màn hình video để bật tiếng.", 'agent');
+                    });
+                    
+                    const overlay = document.querySelector('.video-overlay');
+                    if(overlay) overlay.style.display = 'none';
+                    addLog("Đã kết nối! Bạn có thể nghe và xem nhân viên hỗ trợ.", 'agent');
+                });
+            });
+            
+            peer.on('error', (err) => {
+                console.error(err);
+                if(err.type === 'peer-unavailable') {
+                    addLog("Hiện Staff đang offline hoặc bận máy.", 'agent');
+                }
+            });
+        } else if (!conn || !conn.open) {
+            addLog("Đang kết nối lại...", 'agent');
+            connectToStaff();
+        }
+    }
+
+    // Hàm kết nối Data (Chat)
+    function connectToStaff() {
+        if(conn) { conn.close(); }
+        conn = peer.connect(STAFF_ID);
+
+        conn.on('open', () => { addLog("Đã kết nối máy chủ! Vui lòng đợi nhân viên bắt máy...", 'agent'); });
+
+        conn.on('data', (data) => {
+            if (data === 'BUSY_NOW') {
+                addLog("⚠️ Staff đang bận. Vui lòng thử lại sau hoặc chat Zalo.", 'agent');
+                conn.close();
+            } else if (data === 'STAFF_END') {
+                addLog("Cuộc gọi đã kết thúc. Cảm ơn bạn!", 'agent');
+                agentVideo.srcObject = null;
+                conn.close();
+            } else {
+                addLog(data, 'agent');
+            }
+        });
+        
+        conn.on('close', () => { console.log("Connection closed"); });
+    }
+
     // Hàm thêm log chat (Utility)
     function addLog(text, type) {
+        if (!chatMessages) return;
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message ' + (type === 'me' ? 'user-msg' : 'agent-msg');
         if(text.includes('http')) {
@@ -540,85 +650,51 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    if (btnCallSupport && videoModal) {
-        btnCallSupport.addEventListener('click', () => {
-            const now = new Date();
-            const h = now.getHours();
-            // if(h < 8 || h >= 17) { alert("Tổng đài chỉ hoạt động từ 8h - 17h."); return; }
-
-            videoModal.style.display = 'flex';
-            
-            if(!peer) {
-                peer = new Peer(); 
-                peer.on('open', (id) => {
-                    console.log('My ID:', id);
-                    addLog("Đang kết nối tới nhân viên...", 'agent');
-                    connectToStaff();
-                });
-
-                peer.on('call', (call) => {
-                    call.answer(null); 
-                    call.on('stream', (remoteStream) => {
-                        agentVideo.srcObject = remoteStream;
-                        agentVideo.muted = false; // Mở tiếng
-                        
-                        agentVideo.play().catch(e => {
-                            console.log("Autoplay bị chặn.");
-                            addLog("⚠️ Nếu không nghe thấy tiếng, hãy chạm vào màn hình video.", 'agent');
-                        });
-                        
-                        const overlay = document.querySelector('.video-overlay');
-                        if(overlay) overlay.style.display = 'none';
-                        addLog("Nhân viên đã tham gia.", 'agent');
-                    });
-                });
-                
-                peer.on('error', (err) => {
-                    console.error(err);
-                    if(err.type === 'peer-unavailable') {
-                        addLog("Hiện Staff đang offline.", 'agent');
-                    }
-                });
-            } else if (!conn || !conn.open) {
-                addLog("Đang kết nối lại...", 'agent');
-                connectToStaff();
+    // Đóng Widget Video
+    if (btnCloseVideo) {
+        btnCloseVideo.addEventListener('click', () => {
+            videoModal.style.display = 'none';
+            if(conn) { 
+                conn.send("USER_DISCONNECT"); 
+                setTimeout(() => conn.close(), 100);
             }
+            agentVideo.srcObject = null;
+            if(chatMessages) chatMessages.innerHTML = '';
         });
+    }
+    
+    function sanitizeInput(str) {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    }
 
-        function connectToStaff() {
-            if(conn) { conn.close(); }
-            conn = peer.connect(STAFF_ID);
+    if (btnSendChat && chatInput) {
+        function sendUserMessage() {
+            const now = Date.now();
+            if (now - lastMsgTime < SPAM_DELAY) {
+                alert("Bạn đang thao tác quá nhanh!");
+                return;
+            }
 
-            conn.on('open', () => { addLog("Đã kết nối máy chủ! Đang chờ...", 'agent'); });
+            let text = chatInput.value.trim();
+            text = sanitizeInput(text); 
 
-            conn.on('data', (data) => {
-                if (data === 'BUSY_NOW') {
-                    addLog("⚠️ Staff đang bận. Vui lòng đợi...", 'agent');
-                    conn.close();
-                } else if (data === 'STAFF_END') {
-                    addLog("Staff đã kết thúc phiên hỗ trợ.", 'agent');
-                    agentVideo.srcObject = null;
-                    conn.close();
+            if (text !== "") {
+                lastMsgTime = now;
+                addLog(text, 'me'); 
+                if(conn && conn.open) {
+                    conn.send(text); 
                 } else {
-                    addLog(data, 'agent');
+                    addLog("(Chưa kết nối được Staff)", 'agent');
                 }
-            });
-            
-            conn.on('close', () => { console.log("Connection closed"); });
+                chatInput.value = "";
+            }
         }
-
-        // Đóng Widget
-        if (btnCloseVideo) {
-            btnCloseVideo.addEventListener('click', () => {
-                videoModal.style.display = 'none';
-                if(conn) { 
-                    conn.send("USER_DISCONNECT"); 
-                    setTimeout(() => conn.close(), 100);
-                }
-                agentVideo.srcObject = null;
-                chatMessages.innerHTML = '';
-            });
-        }
+        btnSendChat.addEventListener('click', sendUserMessage);
+        chatInput.addEventListener('keypress', (e) => { 
+            if (e.key === 'Enter') sendUserMessage(); 
+        });
     }
 
     // 10. Xử lý Gửi Form (Tích hợp FormSubmit.co)
@@ -676,7 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         }
-
+        
     // --- BẢO MẬT: CHỐNG SPAM CHAT & XSS ---
     let lastMsgTime = 0;
     const SPAM_DELAY = 1500; // 1.5 giây giữa các lần chat
@@ -717,3 +793,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
