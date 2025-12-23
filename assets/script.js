@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnSubmit.disabled = true;
 
                 // Thay EMAIL_CUA_BAN bằng email thực tế nhận tin
-                const EMAIL_NHAN_TIN = "chounguyen308@gmail.com"; 
+                const EMAIL_NHAN_TIN = "tuanhai@kbtech.vn"; 
                 const formData = new FormData(consultForm);
 
                 fetch(`https://formsubmit.co/ajax/${EMAIL_NHAN_TIN}`, {
