@@ -264,103 +264,178 @@ body {
 
 
 /* =========================================
-   4. HERO SECTION (FIX VỠ HÌNH & MỜ)
+   4. HERO SECTION (DIAMOND GLASS STYLE)
 ========================================= */
-.hero-section {
-    width: 100%;
-    background: var(--color-light);
-    /* Padding-top bằng chiều cao header để không bị che */
-    padding: 120px 0 0; 
-}
-
-.hero-slider {
-    /* Đổi 100vw thành 100% để không bị tràn màn hình */
-    width: 100%; 
-    
-    /* GIẢM CHIỀU CAO: 800px là quá cao, giảm xuống 600px - 700px là đẹp và nét */
-    height: 650px; 
-    
+/* --- CSS CHO DIAMOND SYNC --- */
+.hero-section.hero-diamond {
     position: relative;
-    overflow: hidden;
+    width: 100%;
+    display: flex; align-items: center; justify-content: center; 
+    /* THÊM PADDING-TOP ĐỂ ĐẨY KHUNG XUỐNG */
+    display: block; /* Đổi sang block để padding hoạt động dễ hơn */
+    padding-top: 180px; /* Cách lề trên 180px - Đảm bảo không bị che */
+    padding-bottom: 100px; /* Khoảng cách dưới */
     
-    /* Xóa các thuộc tính left/transform cũ gây lệch */
-    margin: 0 auto; 
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    min-height: 900px; /* Tăng chiều cao tối thiểu lên chút */
+    overflow: hidden; color: #fff;
+    background: #000;
 }
 
-/* Áp dụng chung cho cả ẢNH và VIDEO */
-.hero-slider img, 
-.hero-slider video {
-    position: absolute;
-    top: 0; left: 0; /* Fix cứng ở góc trái trên */
-    width: 100%; 
-    height: 100%;
-    
-    /* QUAN TRỌNG: Giúp ảnh không bị méo nhưng sẽ bị cắt bớt viền để lấp đầy khung */
-    object-fit: cover; 
-    
-    /* Căn giữa ảnh để không bị mất các chi tiết quan trọng ở giữa */
-    object-position: center center; 
-    
-    transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
-    opacity: 0; /* Mặc định ẩn */
+/* Cập nhật lại container để nó ra giữa theo chiều ngang */
+.hero-container-diamond {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 1300px;
+    padding: 0 20px;
+    margin: 0 auto; /* Thêm margin auto để canh giữa ngang */
+}
+
+/* LAYER VIDEO NỀN */
+.video-bg-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none; overflow: hidden;
+}
+
+#bgVideo {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: blur(3px) brightness(0.6); /* Làm mờ và tối để tôn nội dung */
+    transform: scale(1.1); /* Zoom nhẹ để che viền mờ */
+    transition: opacity 0.5s ease-in-out; /* Hiệu ứng chuyển cảnh mượt */
+    opacity: 1;
+}
+/* Class để tạo hiệu ứng chớp tắt khi đổi video */
+#bgVideo.fading { opacity: 0; }
+
+.video-overlay-dark {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, #000 90%);
     z-index: 1;
 }
 
-/* Class active: Hiện ảnh */
-.hero-slider img.active,
-.hero-slider video.active {
-    opacity: 1;
-    z-index: 2;
+.hero-container-diamond {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 1300px; padding: 0 20px;
 }
 
-/* --- XỬ LÝ RIÊNG CHO MÀN HÌNH LỚN (PC) --- */
-/* Nếu màn hình to > 1600px (Ultra wide), giới hạn chiều cao để không bị zoom quá đà */
-@media (min-width: 1600px) {
-    .hero-slider {
-        height: 750px; 
-        max-width: 1920px; /* Giới hạn chiều rộng tối đa */
-        margin: 0 auto;    /* Căn giữa slider */
-    }
+/* KHUNG KÍNH KIM CƯƠNG */
+.diamond-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.05);
+    padding: 0; overflow: visible;
 }
 
-/* --- XỬ LÝ RIÊNG CHO MOBILE --- */
-@media (max-width: 900px) {
-    .hero-slider {
-        /* Mobile chỉ cần cao tầm 400-500px là vừa đẹp */
-        height: 450px; 
-    }
-    
-    /* Trên mobile, ưu tiên hiển thị phần trung tâm */
-    .hero-slider img, 
-    .hero-slider video {
-        object-position: center;
-    }
+/* CỘT TRÁI */
+.diamond-content {
+    flex: 1; padding: 80px 0 80px 60px;
+    display: flex; flex-direction: column; justify-content: center;
+}
+.status-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.2);
+    padding: 6px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 700; color: #00ff88; margin-bottom: 25px; width: fit-content;
+}
+.blinking-dot {
+    width: 8px; height: 8px; background: #00ff88; border-radius: 50%;
+    box-shadow: 0 0 10px #00ff88; animation: blink 2s infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.diamond-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3.8rem; line-height: 1.1; font-weight: 800; margin-bottom: 25px;
+}
+.text-glow {
+    background: linear-gradient(90deg, #fff, #aaa);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(255,255,255,0.3);
+}
+.diamond-desc {
+    font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.6;
+    margin-bottom: 40px; max-width: 90%;
 }
 
-/* Nút bấm Slider (Giữ nguyên style cũ của bạn nhưng tinh chỉnh lại vị trí) */
+/* BUTTONS */
+.diamond-actions { display: flex; gap: 20px; margin-bottom: 50px; }
+.btn-shine-red {
+    position: relative; padding: 16px 45px;
+    background: #cc0000; color: #fff; font-weight: 700;
+    text-decoration: none; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 10px 20px rgba(204, 0, 0, 0.4); transition: 0.3s;
+}
+.btn-shine-red::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transition: 0.5s;
+}
+.btn-shine-red:hover::before { left: 100%; }
+.btn-shine-red:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(204,0,0,0.6); }
+
+.btn-glass-border {
+    padding: 16px 30px; border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-weight: 600; text-decoration: none; border-radius: 12px;
+    transition: 0.3s; display: flex; align-items: center; gap: 10px;
+}
+.btn-glass-border:hover { background: #fff; color: #000; }
+
+.trust-row {
+    display: flex; gap: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;
+}
+.trust-item strong { display: block; font-size: 22px; color: #fff; }
+.trust-item span { font-size: 13px; color: #888; text-transform: uppercase; }
+
+/* CỘT PHẢI */
+.diamond-video-col { flex: 1.2; position: relative; }
+.video-floater {
+    position: absolute; top: 50px; right: 50px; bottom: 50px; left: 50px;
+    border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    z-index: 5; transform: perspective(1000px) rotateY(-8deg);
+    transition: transform 0.5s ease; background: #000;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.diamond-card:hover .video-floater { transform: perspective(1000px) rotateY(0deg) scale(1.02); }
+
+.hero-slider { width: 100%; height: 100%; border-radius: 20px; overflow: hidden; position: relative; }
+.hero-slider video {
+    width: 100%; height: 100%; object-fit: cover;
+    position: absolute; top: 0; left: 0; opacity: 0; transition: opacity 0.6s ease;
+}
+.hero-slider video.active { opacity: 1; }
+
 .hero-arrow {
-    position: absolute; top: 50%;
-    transform: translateY(-50%);
-    width: 45px; height: 45px;
-    background: rgba(255,255,255,0.4); /* Mờ hơn cho sang */
-    backdrop-filter: blur(5px);
-    color: #a81c3a;
-    border: 1px solid rgba(255,255,255,0.6);
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 10;
-    transition: all 0.3s;
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 45px; height: 45px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2); color: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: 0.3s;
 }
-
-.hero-arrow:hover {
-    background: #fff;
-    box-shadow: 0 0 15px rgba(255,255,255,0.5);
-}
-
+.hero-arrow:hover { background: #cc0000; border-color: #cc0000; }
 .hero-arrow.left { left: 20px; }
 .hero-arrow.right { right: 20px; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .hero-section.hero-diamond { padding: 60px 0; height: auto; display: block; }
+    .diamond-card { flex-direction: column; overflow: hidden; }
+    .diamond-content { padding: 40px 20px; text-align: center; }
+    .status-badge { margin: 0 auto 20px auto; }
+    .diamond-actions, .trust-row { justify-content: center; }
+    .diamond-title { font-size: 2.5rem; }
+    
+    .diamond-video-col { height: 350px; width: 100%; }
+    .video-floater {
+        position: relative; top: 0; right: 0; bottom: 0; left: 0;
+        width: 100%; height: 100%; transform: none !important;
+        border-radius: 0; border: none;
+    }
+    .hero-slider { border-radius: 0; }
+}
 
 
 /* =========================================

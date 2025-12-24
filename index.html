@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta http-equiv="Content-Security-Policy" 
-    content="default-src 'self' https:; 
-    script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; 
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; 
-    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; 
-    img-src 'self' data: https:; 
-    media-src 'self' https:; 
-    connect-src 'self' https://*.peerjs.com wss://*.peerjs.com;">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://sp.zalo.me;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com;
+    font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+    img-src 'self' data: https: blob:;
+    media-src 'self' blob: data: https://www.w3schools.com; 
+    connect-src 'self' https://*.peerjs.com wss://*.peerjs.com https://formsubmit.co;
+    frame-src 'self' https://www.google.com https://sp.zalo.me;
+    object-src 'none';
+    base-uri 'self';
+">
     
     <style id="antiClickjack">body{display:none !important;}</style>
     <script type="text/javascript">
@@ -71,21 +75,65 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <div class="hero-slider">
-            <button class="hero-arrow left" aria-label="Trước"><i class="fas fa-chevron-left"></i></button>
+    <section class="hero-section hero-diamond">
+    
+    <div class="video-bg-layer">
+        <video id="bgVideo" src="thumb/AI.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+        <div class="video-overlay-dark"></div>
+    </div>
+
+    <div class="container hero-container-diamond">
+        
+        <div class="diamond-card" data-aos="fade-up" data-aos-duration="1200">
             
-            <video src="thumb/AI.mp4" autoplay muted loop playsinline webkit-playsinline class="active"></video>
-            <video src="thumb/demo2.mp4" autoplay muted loop playsinline webkit-playsinline></video>
-            <video src="thumb/demo3.mp4" autoplay muted loop playsinline webkit-playsinline></video>
-            <video src="thumb/demo4.mp4" autoplay muted loop playsinline webkit-playsinline></video>
-            <video src="thumb/demo5.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+            <div class="diamond-content">
+                <div class="status-badge">
+                    <span class="blinking-dot"></span> SYSTEM ONLINE
+                </div>
+                
+                <h1 class="diamond-title">
+                    CÔNG NGHỆ <br>
+                    <span class="text-glow">ĐỊNH HÌNH TƯƠNG LAI</span>
+                </h1>
+                
+                <p class="diamond-desc">
+                    Trải nghiệm sự khác biệt với hệ sinh thái IT toàn diện của KB . Chúng tôi biến công nghệ phức tạp thành lợi thế cạnh tranh đơn giản cho bạn.
+                </p>
 
+                <div class="diamond-actions">
+                    <a href="service.html" class="btn-shine-red">
+                        <span>KHÁM PHÁ NGAY</span>
+                    </a>
+                    <a href="https://zalo.me/0933129155" class="btn-glass-border">
+                        <i class="fas fa-comment-dots"></i> TƯ VẤN ZALO
+                    </a>
+                </div>
+                
+                <div class="trust-row">
+                    <div class="trust-item"><strong>3+</strong><span>Năm KN</span></div>
+                    <div class="trust-item"><strong>24/7</strong><span>Support</span></div>
+                    <div class="trust-item"><strong>Top 1</strong><span>Bảo Mật</span></div>
+                </div>
+            </div>
 
+            <div class="diamond-video-col">
+                <div class="video-floater">
+                    <div class="hero-slider" id="mainHeroSlider">
+                        <video src="thumb/AI.mp4" autoplay muted loop playsinline webkit-playsinline class="active"></video>
+                        <video src="thumb/demo2.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+                        <video src="thumb/demo3.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+                        <video src="thumb/demo4.mp4" autoplay muted loop playsinline webkit-playsinline></video>
+                        <video src="thumb/demo5.mp4" autoplay muted loop playsinline webkit-playsinline></video>
 
-            <button class="hero-arrow right" aria-label="Sau"><i class="fas fa-chevron-right"></i></button>
+                        <button class="hero-arrow left"><i class="fas fa-arrow-left"></i></button>
+                        <button class="hero-arrow right"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="projects">
         <div class="container">

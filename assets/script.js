@@ -136,12 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 3. HERO SECTION (SLIDER CHÍNH)
+    // 3. HERO SECTION (SYNC BACKGROUND LOGIC)
     // ====================================================
     const heroSlider = document.querySelector('.hero-slider');
+    const bgVideo = document.getElementById('bgVideo'); // Lấy video nền
+
     if (heroSlider) {
-        // Chọn tất cả các thẻ con trực tiếp (bao gồm cả img và video)
-        const heroImgs = heroSlider.querySelectorAll('img, video');
+        const heroImgs = heroSlider.querySelectorAll('video, img'); // Lấy danh sách slide
         const leftBtn = heroSlider.querySelector('.hero-arrow.left');
         const rightBtn = heroSlider.querySelector('.hero-arrow.right');
         
@@ -150,48 +151,90 @@ document.addEventListener('DOMContentLoaded', () => {
             let heroTimer = null;
             let isSliding = false;
 
-            const initialActive = heroSlider.querySelector('img.active');
+            // Tìm slide đang active ban đầu
+            const initialActive = heroSlider.querySelector('.active');
             if (initialActive) {
                 heroIdx = Array.from(heroImgs).indexOf(initialActive);
             } else {
                 heroImgs[0].classList.add('active');
                 heroIdx = 0;
             }
+            
+            // Hàm đồng bộ Background
+            function syncBackground(sourceElement) {
+                if (!bgVideo || !sourceElement) return;
+                
+                // Lấy đường dẫn src từ video slider hiện tại
+                const newSrc = sourceElement.getAttribute('src');
+                
+                // Nếu src giống nhau thì thôi không load lại
+                if (bgVideo.getAttribute('src') === newSrc) return;
 
-            function showSlide(newIdx, direction = 1) {
+                // 1. Làm mờ video nền đi
+                bgVideo.classList.add('fading');
+
+                // 2. Đợi 300ms cho mờ hẳn rồi đổi nguồn
+                setTimeout(() => {
+                    bgVideo.src = newSrc;
+                    bgVideo.play().catch(e => console.log("Auto-play prevented")); // Fix lỗi trình duyệt chặn autoplay
+                    
+                    // 3. Hiện lại video nền
+                    bgVideo.classList.remove('fading');
+                }, 300);
+            }
+
+            function showSlide(newIdx) {
                 if (isSliding || newIdx === heroIdx || !heroImgs[newIdx]) return;
                 isSliding = true;
 
-                const oldIdx = heroIdx;
-                const outClass = direction === 1 ? 'slide-out-left' : 'slide-out-right';
-                const inClass = direction === 1 ? 'slide-in-right' : 'slide-in-left';
-                const oldSlide = heroImgs[oldIdx];
-                const newSlide = heroImgs[newIdx];
+                // Xử lý Slider nhỏ (Foreground)
+                const currentSlide = heroImgs[heroIdx];
+                const nextSlide = heroImgs[newIdx];
 
-                newSlide.classList.add(inClass);
-                void newSlide.offsetWidth; // Force reflow
+                // Đổi class active (Sử dụng transition opacity trong CSS)
+                currentSlide.classList.remove('active');
+                nextSlide.classList.add('active');
+                
+                // Đảm bảo video nhỏ phát ngay lập tức
+                if(nextSlide.tagName === 'VIDEO') {
+                    nextSlide.currentTime = 0;
+                    nextSlide.play();
+                }
 
+                // GỌI HÀM ĐỒNG BỘ BACKGROUND
+                syncBackground(nextSlide);
+
+                heroIdx = newIdx;
+                
+                // Debounce click (Chống click liên tục)
                 setTimeout(() => {
-                    newSlide.classList.add('active');
-                    newSlide.classList.remove(inClass);
-                    oldSlide.classList.remove('active');
-                    oldSlide.classList.add(outClass);
-                }, 10);
-
-                setTimeout(() => {
-                    oldSlide.classList.remove(outClass);
-                    heroIdx = newIdx;
                     isSliding = false;
-                }, 700);
+                }, 600); // Khớp với thời gian transition CSS
             }
 
-            rightBtn.addEventListener('click', () => showSlide((heroIdx + 1) % heroImgs.length, 1));
-            leftBtn.addEventListener('click', () => showSlide((heroIdx - 1 + heroImgs.length) % heroImgs.length, 0));
+            // Gán sự kiện click
+            rightBtn.addEventListener('click', () => {
+                clearInterval(heroTimer); // Reset auto slide khi click
+                showSlide((heroIdx + 1) % heroImgs.length);
+                startAutoSlide();
+            });
 
-            function autoSlide() {
-                heroTimer = setInterval(() => showSlide((heroIdx + 1) % heroImgs.length, 1), 3500);
+            leftBtn.addEventListener('click', () => {
+                clearInterval(heroTimer);
+                showSlide((heroIdx - 1 + heroImgs.length) % heroImgs.length);
+                startAutoSlide();
+            });
+
+            function startAutoSlide() {
+                clearInterval(heroTimer);
+                heroTimer = setInterval(() => showSlide((heroIdx + 1) % heroImgs.length), 6000); // 6 giây đổi 1 lần
             }
-            autoSlide();
+            
+            // Bắt đầu chạy
+            startAutoSlide();
+            
+            // Đồng bộ ngay lần đầu tiên load trang
+            syncBackground(heroImgs[heroIdx]);
         }
     }
 
@@ -376,8 +419,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
                 btnSubmit.disabled = true;
 
-                // Thay EMAIL_CUA_BAN bằng email thực tế nhận tin
-                const EMAIL_NHAN_TIN = "tuanhai@kbtech.vn"; 
+                // --- [BẢO MẬT] LÀM RỐI EMAIL (Tránh bot quét) ---
+                const _u = "tuanhai";
+                const _d = "kbtech.vn";
+                const EMAIL_NHAN_TIN = `${_u}@${_d}`; 
+                
                 const formData = new FormData(consultForm);
 
                 fetch(`https://formsubmit.co/ajax/${EMAIL_NHAN_TIN}`, {
@@ -571,8 +617,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmNo = document.getElementById('btnConfirmNo');
     const closeConfirm = document.getElementById('closeConfirm');
     
-    // Cấu hình PeerJS
-    const STAFF_ID = "kbtech-hotline-vip-1"; 
+    // --- [BẢO MẬT] LÀM RỐI ID HOTLINE (Obfuscation) ---
+    const _prefix = "kbtech";
+    const _service = "hotline";
+    const _tier = "vip-1";
+    const STAFF_ID = `${_prefix}-${_service}-${_tier}`;
+    
     let peer = null;
     let conn = null; 
 
@@ -720,3 +770,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
+// Lời chào "bí mật" trong Console khi khách F12
+console.log(
+    "%c KB TECHNOLOGY %c Hệ thống bảo mật đã kích hoạt! ",
+    "background: #cc0000; color: #fff; font-size: 20px; font-weight: bold; padding: 10px;",
+    "background: #000; color: #00ff88; font-size: 18px; padding: 10px;"
+);
+console.log("Chào mừng bạn đến với bảng điều khiển của KB Tech. Mọi hành vi xâm nhập đều được giám sát.");
+
+
+/* ====================================================
+   10. SECURITY MODULE (VỆ SĨ BẢO MẬT KB TECH) - ADDED
+   ==================================================== */
+(function() {
+    "use strict";
+
+    // 1. ÉP BUỘC HTTPS (Chỉ chạy khi đã lên host, bỏ qua localhost)
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && !location.hostname.includes('127.0.0.1')) {
+        location.replace('https://' + location.hostname + location.pathname + location.search);
+    }
+
+    // 2. CHỐNG CLICKJACKING (Dự phòng cho HTML)
+    if (window.self !== window.top) {
+        window.top.location.href = window.self.location.href;
+    }
+
+    // 3. LÀM SẠCH DỮ LIỆU ĐẦU VÀO (Input Sanitization)
+    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
+    inputs.forEach(input => {
+        input.addEventListener('blur', function(e) {
+            const rawValue = e.target.value;
+            const cleanValue = rawValue.replace(/<[^>]*>?/gm, ''); // Xóa thẻ HTML
+            if (rawValue !== cleanValue) {
+                console.warn("Phát hiện ký tự không hợp lệ, đã tự động loại bỏ.");
+                e.target.value = cleanValue;
+            }
+        });
+    });
+
+    // 4. THÔNG BÁO BẢO MẬT "NGẦU"
+    console.log(
+        "%c 🛡️ KB TECH SECURITY SYSTEM %c \nĐang giám sát phiên truy cập này.",
+        "color: #fff; background: #cc0000; font-size: 16px; padding: 8px; border-radius: 4px 0 0 4px; font-weight: bold;",
+        "color: #000; background: #00ff88; font-size: 16px; padding: 8px; border-radius: 0 4px 4px 0;"
+    );
+    console.log("%c⚠️ CẢNH BÁO: Việc cố gắng truy cập trái phép hoặc sao chép mã nguồn sẽ bị ghi lại IP.", "color: red; font-family: monospace; font-size: 14px;");
+})();
