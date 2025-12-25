@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Script đã tải thành công!");
+    console.log("Script đã tải thành công! (Phiên bản Smart Contact)");
 
     // ====================================================
     // 1. TOP BAR (DROPDOWN & TÌM KIẾM THÔNG MINH)
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('.top-bar-search input');
     const searchBtn = document.querySelector('.top-bar-search button');
 
-    // Dữ liệu tìm kiếm (Đã cập nhật PC)
+    // Dữ liệu tìm kiếm
     const searchData = [
         { keys: ["máy chủ", "server", "vps", "phần cứng", "ảo hóa"], link: "service.html#svc-server" },
         { keys: ["email", "mail", "thư điện tử", "outlook"], link: "service.html#svc-email" },
@@ -44,10 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { keys: ["nas", "lưu trữ", "backup", "dữ liệu", "synology"], link: "service.html#svc-nas" },
         { keys: ["helpdesk", "it", "hỗ trợ", "kỹ thuật", "sự cố"], link: "service.html#svc-helpdesk" },
         { keys: ["camera", "quan sát", "an ninh", "giám sát", "ai"], link: "service.html#svc-camera" },
-        
-        // --- ĐÃ CẬP NHẬT: TỪ KHÓA BUILD PC ---
-        { keys: ["build pc", "lắp ráp", "gaming", "đồ họa", "máy bàn", "case", "cấu hình", "máy tính"], link: "service.html#svc-pc" },
-        
+        { keys: ["web", "website", "thiết kế", "seo", "giao diện"], link: "service.html#svc-web" },
         { keys: ["liên hệ", "sđt", "điện thoại", "địa chỉ", "map", "văn phòng"], link: "#contactDock" },
         { keys: ["giới thiệu", "về kb", "tầm nhìn", "sứ mệnh"], link: "about.html" },
         { keys: ["khách hàng", "đối tác"], link: "clients.html" }
@@ -72,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (foundLink) {
             window.location.href = foundLink;
         } else {
-            alert("Không tìm thấy nội dung phù hợp! Bạn hãy thử từ khóa khác (ví dụ: server, camera, pc gaming...)");
+            alert("Không tìm thấy nội dung phù hợp! Bạn hãy thử từ khóa khác (ví dụ: server, camera, email...)");
         }
     }
 
@@ -139,13 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ====================================================
-    // 3. HERO SECTION (SYNC BACKGROUND LOGIC)
+    // 3. HERO SECTION (SLIDER CHÍNH)
     // ====================================================
     const heroSlider = document.querySelector('.hero-slider');
-    const bgVideo = document.getElementById('bgVideo'); // Lấy video nền
-
     if (heroSlider) {
-        const heroImgs = heroSlider.querySelectorAll('video, img'); // Lấy danh sách slide
+        const heroImgs = heroSlider.querySelectorAll('img, video');
         const leftBtn = heroSlider.querySelector('.hero-arrow.left');
         const rightBtn = heroSlider.querySelector('.hero-arrow.right');
         
@@ -154,304 +149,152 @@ document.addEventListener('DOMContentLoaded', () => {
             let heroTimer = null;
             let isSliding = false;
 
-            // Tìm slide đang active ban đầu
-            const initialActive = heroSlider.querySelector('.active');
+            const initialActive = heroSlider.querySelector('img.active');
             if (initialActive) {
                 heroIdx = Array.from(heroImgs).indexOf(initialActive);
             } else {
                 heroImgs[0].classList.add('active');
                 heroIdx = 0;
             }
-            
-            // Hàm đồng bộ Background
-            function syncBackground(sourceElement) {
-                if (!bgVideo || !sourceElement) return;
-                
-                // Lấy đường dẫn src từ video slider hiện tại
-                const newSrc = sourceElement.getAttribute('src');
-                
-                // Nếu src giống nhau thì thôi không load lại
-                if (bgVideo.getAttribute('src') === newSrc) return;
 
-                // 1. Làm mờ video nền đi
-                bgVideo.classList.add('fading');
-
-                // 2. Đợi 300ms cho mờ hẳn rồi đổi nguồn
-                setTimeout(() => {
-                    bgVideo.src = newSrc;
-                    bgVideo.play().catch(e => console.log("Auto-play prevented")); // Fix lỗi trình duyệt chặn autoplay
-                    
-                    // 3. Hiện lại video nền
-                    bgVideo.classList.remove('fading');
-                }, 300);
-            }
-
-            function showSlide(newIdx) {
+            function showSlide(newIdx, direction = 1) {
                 if (isSliding || newIdx === heroIdx || !heroImgs[newIdx]) return;
                 isSliding = true;
 
-                // Xử lý Slider nhỏ (Foreground)
-                const currentSlide = heroImgs[heroIdx];
-                const nextSlide = heroImgs[newIdx];
+                const oldIdx = heroIdx;
+                const outClass = direction === 1 ? 'slide-out-left' : 'slide-out-right';
+                const inClass = direction === 1 ? 'slide-in-right' : 'slide-in-left';
+                const oldSlide = heroImgs[oldIdx];
+                const newSlide = heroImgs[newIdx];
 
-                // Đổi class active (Sử dụng transition opacity trong CSS)
-                currentSlide.classList.remove('active');
-                nextSlide.classList.add('active');
-                
-                // Đảm bảo video nhỏ phát ngay lập tức
-                if(nextSlide.tagName === 'VIDEO') {
-                    nextSlide.currentTime = 0;
-                    nextSlide.play();
-                }
+                newSlide.classList.add(inClass);
+                void newSlide.offsetWidth; // Force reflow
 
-                // GỌI HÀM ĐỒNG BỘ BACKGROUND
-                syncBackground(nextSlide);
-
-                heroIdx = newIdx;
-                
-                // Debounce click (Chống click liên tục)
                 setTimeout(() => {
+                    newSlide.classList.add('active');
+                    newSlide.classList.remove(inClass);
+                    oldSlide.classList.remove('active');
+                    oldSlide.classList.add(outClass);
+                }, 10);
+
+                setTimeout(() => {
+                    oldSlide.classList.remove(outClass);
+                    heroIdx = newIdx;
                     isSliding = false;
-                }, 600); // Khớp với thời gian transition CSS
+                }, 700);
             }
 
-            // Gán sự kiện click
-            rightBtn.addEventListener('click', () => {
-                clearInterval(heroTimer); // Reset auto slide khi click
-                showSlide((heroIdx + 1) % heroImgs.length);
-                startAutoSlide();
-            });
+            rightBtn.addEventListener('click', () => showSlide((heroIdx + 1) % heroImgs.length, 1));
+            leftBtn.addEventListener('click', () => showSlide((heroIdx - 1 + heroImgs.length) % heroImgs.length, 0));
 
-            leftBtn.addEventListener('click', () => {
-                clearInterval(heroTimer);
-                showSlide((heroIdx - 1 + heroImgs.length) % heroImgs.length);
-                startAutoSlide();
-            });
-
-            function startAutoSlide() {
-                clearInterval(heroTimer);
-                heroTimer = setInterval(() => showSlide((heroIdx + 1) % heroImgs.length), 6000); // 6 giây đổi 1 lần
+            function autoSlide() {
+                heroTimer = setInterval(() => showSlide((heroIdx + 1) % heroImgs.length, 1), 3500);
             }
-            
-            // Bắt đầu chạy
-            startAutoSlide();
-            
-            // Đồng bộ ngay lần đầu tiên load trang
-            syncBackground(heroImgs[heroIdx]);
+            autoSlide();
         }
     }
 
 
     // ====================================================
-    // 4. SERVICES SECTION (DỊCH VỤ)
+    // 4. LOGIC MODAL TƯ VẤN (FIX LỖI GMAIL)
     // ====================================================
-
-    // --- 4.1. SLIDER ẢNH DỊCH VỤ (MARQUEE) ---
-    const marqueeTrack = document.querySelector('.marquee-track');
-    if (marqueeTrack) {
-        const images = Array.from(marqueeTrack.children);
-        images.forEach(img => {
-            const clone = img.cloneNode(true);
-            marqueeTrack.appendChild(clone);
-        });
-    }
-
-    // --- 4.2. MODAL TƯ VẤN SẢN PHẨM (FULL DỊCH VỤ) ---
     const consultModal = document.getElementById('consultModal');
     const closeConsultBtn = document.getElementById('closeConsult');
-    const consultForm = document.getElementById('consultForm');
     
-    // Nút mở modal (Lấy tất cả nút có class .btn-consult)
-    const consultBtns = document.querySelectorAll('.btn-consult');
+    // Các trường Input
+    const elService = document.getElementById('serviceType');
+    const elOption = document.getElementById('needOption');
+    const elName = document.getElementById('custName');
+    const elPhone = document.getElementById('custPhone');
+    const elNote = document.getElementById('custNote');
+    const btnEmail = document.getElementById('btnSmartEmail');
 
-    // Dữ liệu chi tiết cho từng dịch vụ (Đã cập nhật PC)
+    // Data Dịch vụ
     const serviceData = {
-        'server': {
-            title: 'DỊCH VỤ MÁY CHỦ (SERVER)',
-            img: 'thumb/sever.jpg',
-            options: [
-                'Mua máy chủ vật lý (Dell/HP/Lenovo)',
-                'Thuê Cloud Server / VPS',
-                'Thuê chỗ đặt máy chủ (Colocation)',
-                'Cài đặt & Cấu hình hệ thống Server',
-                'Sửa chữa / Nâng cấp phần cứng Server',
-                'Khác'
-            ]
-        },
-        'email': {
-            title: 'EMAIL DOANH NGHIỆP',
-            img: 'thumb/email.jpg',
-            options: [
-                'Đăng ký Email theo tên miền riêng',
-                'Mua Google Workspace (Gmail doanh nghiệp)',
-                'Mua Microsoft 365 (Outlook)',
-                'Chuyển dữ liệu từ Email cũ sang mới',
-                'Gia hạn dịch vụ Email',
-                'Khác'
-            ]
-        },
-        'security': {
-            title: 'BẢO MẬT & AN NINH MẠNG',
-            img: 'thumb/security.jpg',
-            options: [
-                'Tư vấn Firewall (Tường lửa) phần cứng',
-                'Cài phần mềm diệt Virus/Ransomware bản quyền',
-                'Rà soát lỗ hổng bảo mật hệ thống',
-                'Cấu hình VPN cho nhân viên làm từ xa',
-                'Xử lý sự cố khi bị tấn công mạng',
-                'Khác'
-            ]
-        },
-        'repair': {
-            title: 'SỬA CHỮA MÁY TÍNH & LAPTOP',
-            img: 'thumb/sua may.jpg.jpg',
-            options: [
-                'Sửa chữa phần cứng PC/Laptop',
-                'Cài đặt Windows, Office, Phần mềm đồ họa',
-                'Nâng cấp SSD / RAM tăng tốc máy',
-                'Vệ sinh máy tính văn phòng',
-                'Máy tính bị treo / Màn hình xanh',
-                'Khác'
-            ]
-        },
-        'nas': {
-            title: 'LƯU TRỮ & BACKUP (NAS)',
-            img: 'thumb/nas.jpg',
-            options: [
-                'Tư vấn mua thiết bị NAS Synology',
-                'Cấu hình File Server (Phân quyền truy cập)',
-                'Cài đặt Backup dữ liệu tự động',
-                'Cứu dữ liệu ổ cứng / NAS bị lỗi',
-                'Nâng cấp dung lượng lưu trữ',
-                'Khác'
-            ]
-        },
-        'helpdesk': {
-            title: 'DỊCH VỤ IT HELPDESK',
-            img: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop',
-            options: [
-                'Thuê IT Support trọn gói (Theo tháng)',
-                'Hỗ trợ sự cố tính theo lượt (On-demand)',
-                'Bảo trì hệ thống máy tính định kỳ',
-                'Thi công mạng LAN / Wifi văn phòng',
-                'Setup hệ thống văn phòng mới',
-                'Khác'
-            ]
-        },
-        'camera': {
-            title: 'CAMERA AN NINH & AI',
-            img: 'thumb/camera AI.jpg',
-            options: [
-                'Lắp đặt Camera văn phòng / Nhà xưởng',
-                'Giải pháp Camera AI (Đếm người, nhận diện)',
-                'Lắp đặt Camera gia đình',
-                'Bảo trì / Sửa chữa hệ thống Camera cũ',
-                'Gia hạn tên miền / Cloud Camera',
-                'Khác'
-            ]
-        },
-        
-        // --- ĐÃ CẬP NHẬT: DỊCH VỤ PC BUILD ---
-        'pc_build': {
-            title: 'TƯ VẤN LẮP RÁP PC (MÁY TÍNH)',
-            img: 'thumb/sua may.jpg.jpg', 
-            options: [
-                'PC Gaming / Stream Game',
-                'PC Đồ họa (Render 3D, Edit Video, Photoshop)',
-                'PC Văn phòng / Học tập / Kế toán',
-                'Workstation / Server giả lập',
-                'Nâng cấp linh kiện (VGA, RAM, SSD)',
-                'Khác'
-            ]
-        }
+        'server':   { title: 'DỊCH VỤ MÁY CHỦ',       img: 'thumb/sever.jpg', options: ['Mua máy chủ vật lý', 'Thuê Cloud Server/VPS', 'Thuê chỗ đặt (Colocation)', 'Sửa chữa phần cứng', 'Khác'] },
+        'email':    { title: 'EMAIL DOANH NGHIỆP',    img: 'thumb/email.jpg', options: ['Email tên miền riêng', 'Google Workspace', 'Microsoft 365', 'Gia hạn Email', 'Khác'] },
+        'security': { title: 'BẢO MẬT MẠNG',          img: 'thumb/security.jpg', options: ['Tường lửa (Firewall)', 'Phần mềm diệt Virus', 'Rà soát lỗ hổng', 'Cấu hình VPN', 'Khác'] },
+        'repair':   { title: 'SỬA CHỮA MÁY TÍNH',     img: 'thumb/sua may.jpg.jpg', options: ['Sửa phần cứng PC/Laptop', 'Cài Win/Phần mềm', 'Nâng cấp SSD/RAM', 'Vệ sinh máy', 'Khác'] },
+        'nas':      { title: 'LƯU TRỮ NAS',           img: 'thumb/nas.jpg', options: ['Mua thiết bị NAS', 'Cấu hình File Server', 'Backup dữ liệu', 'Cứu dữ liệu', 'Khác'] },
+        'helpdesk': { title: 'IT HELPDESK',           img: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop', options: ['Thuê IT theo tháng', 'Hỗ trợ theo lượt', 'Thi công mạng LAN', 'Setup văn phòng mới', 'Khác'] },
+        'camera':   { title: 'CAMERA AN NINH',        img: 'thumb/camera AI.jpg', options: ['Lắp Camera văn phòng', 'Camera AI thông minh', 'Lắp Camera gia đình', 'Sửa chữa Camera', 'Khác'] },
+        'web':      { title: 'THIẾT KẾ WEB',          img: 'thumb/website.jpg', options: ['Web Doanh nghiệp', 'Web Bán hàng', 'SEO từ khóa', 'Chăm sóc Web', 'Khác'] }
     };
 
+    // --- HÀM TẠO NỘI DUNG GMAIL (SỬA LỖI MAILTO) ---
+    function updateEmailLink() {
+        const sv = elService.value || "Dịch vụ KB";
+        const op = elOption.value || "Chưa chọn";
+        const nm = elName.value.trim() || "Khách hàng";
+        const ph = elPhone.value.trim() || "Chưa nhập SĐT";
+        const nt = elNote.value.trim() || "Không";
+
+        const subject = `[YÊU CẦU TƯ VẤN] ${sv} - ${nm}`;
+        const body = 
+`Xin chào KB Tech,
+
+Tôi cần tư vấn dịch vụ với thông tin sau:
+--------------------------------
+🔧 Dịch vụ: ${sv}
+📌 Nhu cầu: ${op}
+👤 Họ tên: ${nm}
+📞 SĐT/Zalo: ${ph}
+📝 Ghi chú: ${nt}
+--------------------------------
+Vui lòng báo giá cho tôi sớm nhất. Xin cảm ơn!`;
+
+        // DÙNG LINK GMAIL TRỰC TIẾP (Bỏ mailto cũ đi)
+        // Cách này ép trình duyệt mở trang web Gmail, không bao giờ bị lỗi "chọn app"
+        const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=chounguyen308@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+        if(btnEmail) {
+            btnEmail.href = gmailLink;
+            btnEmail.target = "_blank"; // Bắt buộc mở tab mới
+        }
+    }
+
     if (consultModal) {
-        // 1. Click nút mở Modal
+        // 1. Mở Modal
         document.body.addEventListener('click', (e) => {
             if (e.target.closest('.btn-consult')) {
                 e.preventDefault();
                 const btn = e.target.closest('.btn-consult');
-                const type = btn.getAttribute('data-service');
-                const data = serviceData[type];
+                const key = btn.getAttribute('data-service');
+                const data = serviceData[key];
 
                 if (data) {
                     document.getElementById('modalTitle').innerText = data.title;
-                    const imgElem = document.getElementById('modalImg');
-                    if(imgElem) imgElem.src = data.img;
-                    
-                    const inputType = document.getElementById('serviceType');
-                    if(inputType) inputType.value = type;
+                    document.getElementById('modalImg').src = data.img;
+                    elService.value = data.title;
 
-                    const select = document.getElementById('needOption');
-                    if (select) {
-                        select.innerHTML = '';
-                        data.options.forEach(opt => {
-                            const option = document.createElement('option');
-                            option.value = opt;
-                            option.innerText = opt;
-                            select.appendChild(option);
-                        });
-                    }
+                    // Tạo Options
+                    elOption.innerHTML = '';
+                    data.options.forEach(opt => {
+                        let o = document.createElement('option');
+                        o.value = opt; o.innerText = opt;
+                        elOption.appendChild(o);
+                    });
+
+                    // Reset
+                    elName.value = ''; elPhone.value = ''; elNote.value = '';
+                    updateEmailLink(); // Cập nhật link ban đầu
                     consultModal.style.display = 'flex';
                 }
             }
         });
 
-        // 2. Đóng Modal
-        const closeModal = () => { consultModal.style.display = 'none'; };
-        if(closeConsultBtn) closeConsultBtn.addEventListener('click', closeModal);
-        consultModal.addEventListener('click', (e) => { if (e.target === consultModal) closeModal(); });
+        // 2. Lắng nghe gõ phím để cập nhật link
+        [elOption, elName, elPhone, elNote].forEach(el => {
+            if(el) {
+                el.addEventListener('input', updateEmailLink);
+                el.addEventListener('change', updateEmailLink);
+            }
+        });
 
-        // 3. Xử lý Gửi Form (Tích hợp FormSubmit.co + BẢO MẬT)
-        let isSubmitting = false;
-        if(consultForm) {
-            consultForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (isSubmitting) return; 
-                isSubmitting = true;
-
-                const btnSubmit = consultForm.querySelector('.btn-submit-consult');
-                const originalText = btnSubmit.innerHTML;
-                const phoneInput = consultForm.querySelector('input[type="tel"]');
-                
-                if(phoneInput.value.length < 10 || isNaN(phoneInput.value)) {
-                    alert("Vui lòng nhập số điện thoại hợp lệ!");
-                    isSubmitting = false;
-                    return;
-                }
-
-                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
-                btnSubmit.disabled = true;
-
-                // --- [BẢO MẬT] LÀM RỐI EMAIL (Tránh bot quét) ---
-                const _u = "chounguyen308";
-                const _d = "gmail.com";
-                const EMAIL_NHAN_TIN = `${_u}@${_d}`; 
-                
-                const formData = new FormData(consultForm);
-
-                fetch(`https://formsubmit.co/ajax/${EMAIL_NHAN_TIN}`, {
-                    method: "POST",
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert("✅ Đã gửi thành công!\nCảm ơn bạn, KB Tech sẽ liên hệ lại ngay.");
-                    consultForm.reset();
-                    closeModal();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("❌ Có lỗi xảy ra. Vui lòng gọi hotline trực tiếp!");
-                })
-                .finally(() => {
-                    btnSubmit.innerHTML = originalText;
-                    btnSubmit.disabled = false;
-                    isSubmitting = false; 
-                });
-            });
-        }
+        // 3. Đóng Modal
+        const close = () => consultModal.style.display = 'none';
+        if(closeConsultBtn) closeConsultBtn.addEventListener('click', close);
+        consultModal.addEventListener('click', (e) => { if(e.target === consultModal) close(); });
     }
 
 
@@ -598,8 +441,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { root: null, threshold: 0.1 });
 
         observer.observe(contactDock);
-    } else {
-        console.warn("Chưa thấy ID trong HTML footer.");
     }
 
 
@@ -622,12 +463,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnConfirmNo = document.getElementById('btnConfirmNo');
     const closeConfirm = document.getElementById('closeConfirm');
     
-    // --- [BẢO MẬT] LÀM RỐI ID HOTLINE (Obfuscation) ---
-    const _prefix = "kbtech";
-    const _service = "hotline";
-    const _tier = "vip-1";
-    const STAFF_ID = `${_prefix}-${_service}-${_tier}`;
-    
+    // Cấu hình PeerJS
+    const STAFF_ID = "kbtech-hotline-vip-1"; 
     let peer = null;
     let conn = null; 
 
@@ -775,41 +612,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
-
-// ====================================================
-// 10. SECURITY MODULE (VỆ SĨ BẢO MẬT KB TECH) - ADDED
-// ====================================================
-(function() {
-    "use strict";
-
-    // 1. ÉP BUỘC HTTPS (Chỉ chạy khi đã lên host, bỏ qua localhost)
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && !location.hostname.includes('127.0.0.1')) {
-        location.replace('https://' + location.hostname + location.pathname + location.search);
-    }
-
-    // 2. CHỐNG CLICKJACKING (Dự phòng cho HTML)
-    if (window.self !== window.top) {
-        window.top.location.href = window.self.location.href;
-    }
-
-    // 3. LÀM SẠCH DỮ LIỆU ĐẦU VÀO (Input Sanitization)
-    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], textarea');
-    inputs.forEach(input => {
-        input.addEventListener('blur', function(e) {
-            const rawValue = e.target.value;
-            const cleanValue = rawValue.replace(/<[^>]*>?/gm, ''); // Xóa thẻ HTML
-            if (rawValue !== cleanValue) {
-                console.warn("Phát hiện ký tự không hợp lệ, đã tự động loại bỏ.");
-                e.target.value = cleanValue;
-            }
-        });
-    });
-
-    // 4. THÔNG BÁO BẢO MẬT "NGẦU" CHO F12
-    console.log(
-        "%c 🛡️ KB TECH SECURITY SYSTEM %c \nĐang giám sát phiên truy cập này.",
-        "color: #fff; background: #cc0000; font-size: 16px; padding: 8px; border-radius: 4px 0 0 4px; font-weight: bold;",
-        "color: #000; background: #00ff88; font-size: 16px; padding: 8px; border-radius: 0 4px 4px 0;"
-    );
-    console.log("%c⚠️ CẢNH BÁO: Việc cố gắng truy cập trái phép hoặc sao chép mã nguồn sẽ bị ghi lại IP.", "color: red; font-family: monospace; font-size: 14px;");
-})();

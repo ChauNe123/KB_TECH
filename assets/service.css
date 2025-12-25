@@ -359,3 +359,146 @@ body {
     .consult-info-col h3 { font-size: 1.5rem; }
     .consult-form-col { padding: 25px; }
 }
+
+/* =========================================
+   CSS CHO PHẦN NÚT LIÊN HỆ MỚI (SMART CONTACT)
+   (Thay thế cho Form đăng ký cũ)
+========================================= */
+
+/* Khung chứa các nút */
+.contact-options-container {
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Dòng thông báo nhỏ ở trên */
+.contact-note p {
+    font-size: 14px;
+    color: #555;
+    background: #f0f8ff; /* Màu xanh nhạt dễ chịu */
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px dashed #007bff;
+    line-height: 1.5;
+}
+
+.contact-note i {
+    color: #007bff;
+    margin-right: 5px;
+}
+
+/* Danh sách các nút */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các nút */
+}
+
+/* Style chung cho nút to */
+.btn-action-big {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.btn-action-big:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* --- MÀU SẮC RIÊNG CHO TỪNG LOẠI --- */
+
+/* 1. Nút Zalo (Xanh dương) */
+.btn-zalo-big {
+    background: linear-gradient(135deg, #ffffff 0%, #e8f4ff 100%);
+    border-left: 6px solid #0068ff;
+}
+.btn-zalo-big .icon-box { color: #0068ff; background: rgba(0, 104, 255, 0.1); }
+.btn-zalo-big:hover { border-color: #0068ff; }
+
+/* 2. Nút Gọi (Đỏ) */
+.btn-call-big {
+    background: linear-gradient(135deg, #ffffff 0%, #fff0f0 100%);
+    border-left: 6px solid #ff4d4f;
+}
+.btn-call-big .icon-box { color: #ff4d4f; background: rgba(255, 77, 79, 0.1); }
+.btn-call-big:hover { border-color: #ff4d4f; }
+
+/* 3. Nút Email (Xanh lá) */
+.btn-mail-big {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%);
+    border-left: 6px solid #00b894;
+}
+.btn-mail-big .icon-box { color: #00b894; background: rgba(0, 184, 148, 0.1); }
+.btn-mail-big:hover { border-color: #00b894; }
+
+/* --- ICON VÀ TEXT BÊN TRONG --- */
+.icon-box {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 18px;
+    font-size: 22px;
+    flex-shrink: 0; /* Không bị méo khi màn hình nhỏ */
+}
+
+.icon-box img {
+    width: 30px;
+    height: auto;
+}
+
+.text-box {
+    text-align: left;
+    flex: 1;
+}
+
+.action-title {
+    display: block;
+    font-weight: 800;
+    font-size: 17px;
+    color: #333;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+}
+
+.action-sub {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Mũi tên chỉ sang phải */
+.arrow-icon {
+    color: #ccc;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.btn-action-big:hover .arrow-icon {
+    color: #333;
+    transform: translateX(5px);
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 480px) {
+    .btn-action-big { padding: 12px 15px; }
+    .icon-box { width: 40px; height: 40px; font-size: 18px; margin-right: 12px; }
+    .icon-box img { width: 24px; }
+    .action-title { font-size: 15px; }
+    .action-sub { font-size: 12px; }
+}

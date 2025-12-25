@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
-    style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com;
-    font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com;
-    img-src 'self' data: https: blob:;
-    media-src 'self' blob: data: https://www.w3schools.com;
-    connect-src 'self' https://*.peerjs.com wss://*.peerjs.com https://formsubmit.co; 
-    frame-src 'self' https://www.google.com;
-    object-src 'none';
-    base-uri 'self';
-    ">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ - KB | Giải Pháp Công Nghệ Toàn Diện</title>
@@ -30,6 +18,24 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/service.css">
+    
+    <style>
+        .contact-options-container { padding: 10px; text-align: center; }
+        .contact-note p { font-size: 14px; color: #555; background: #f0f8ff; padding: 10px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #007bff; }
+        .action-buttons { display: flex; flex-direction: column; gap: 15px; }
+        .btn-action-big { display: flex; align-items: center; padding: 12px 20px; border-radius: 12px; text-decoration: none; transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; overflow: hidden; background: white; }
+        .btn-action-big:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .btn-zalo-big { background: linear-gradient(135deg, #ffffff 0%, #e8f4ff 100%); border-left: 5px solid #0068ff; }
+        .btn-call-big { background: linear-gradient(135deg, #ffffff 0%, #fff0f0 100%); border-left: 5px solid #ff4d4f; }
+        .btn-mail-big { background: linear-gradient(135deg, #ffffff 0%, #f0fff4 100%); border-left: 5px solid #00b894; }
+        .icon-box { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; background: white; border-radius: 50%; margin-right: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); font-size: 20px; }
+        .btn-zalo-big .icon-box { color: #0068ff; } .btn-call-big .icon-box { color: #ff4d4f; } .btn-mail-big .icon-box { color: #00b894; }
+        .text-box { text-align: left; flex: 1; }
+        .action-title { display: block; font-weight: 700; font-size: 16px; color: #333; }
+        .action-sub { display: block; font-size: 13px; color: #666; margin-top: 2px; }
+        .arrow-icon { color: #ccc; transition: 0.3s; }
+        .btn-action-big:hover .arrow-icon { color: #333; transform: translateX(5px); }
+    </style>
 </head>
 <body>
 
@@ -271,38 +277,38 @@
                     </div>
                 </div>
                 <div class="svc-nav-btn">
-                    <a href="#svc-pc" title="Xem tiếp: Tư Vấn Build Pc - Máy Tính"><i class="fas fa-chevron-down"></i></a>
+                    <a href="#svc-web" title="Xem tiếp: Thiết kế Website"><i class="fas fa-chevron-down"></i></a>
                 </div>
             </div>
         </section>
 
-        <section class="svc-block reverse" id="svc-pc">
-    <div class="container">
-        <div class="svc-row">
-            <div class="svc-img-col" data-aos="fade-left" data-aos-duration="1000">
-                <div class="img-3d-box">
-                    <img src="thumb/build pc.jpg" alt="Build PC Gaming" loading="lazy">
-                    <div class="floating-badge badge-orange"><i class="fas fa-desktop"></i></div>
+        <section class="svc-block reverse" id="svc-web">
+            <div class="container">
+                <div class="svc-row">
+                    <div class="svc-img-col" data-aos="fade-left" data-aos-duration="1000">
+                        <div class="img-3d-box">
+                            <img src="thumb/website.jpg" alt="Web Design" loading="lazy">
+                            <div class="floating-badge badge-orange"><i class="fas fa-code"></i></div>
+                        </div>
+                    </div>
+                    <div class="svc-text-col" data-aos="fade-right" data-aos-duration="1000">
+                        <h3 class="svc-num">08</h3>
+                        <h2>THIẾT KẾ WEBSITE</h2>
+                        <p class="svc-desc">Xây dựng Website chuyên nghiệp, chuẩn SEO, tối ưu tốc độ và tương thích mọi thiết bị di động.</p>
+                        <ul class="svc-features">
+                            <li><i class="fas fa-check"></i> Thiết kế giao diện độc quyền, hiện đại.</li>
+                            <li><i class="fas fa-check"></i> Code chuẩn SEO, dễ dàng lên Top Google.</li>
+                            <li><i class="fas fa-check"></i> Tốc độ tải trang siêu nhanh.</li>
+                            <li><i class="fas fa-check"></i> Bảo hành, bảo trì trọn đời.</li>
+                        </ul>
+                        <a href="#" class="btn-svc-detail btn-consult" data-service="web">Tư vấn Website</a>
+                    </div>
+                </div>
+                <div class="svc-nav-btn up-top">
+                    <a href="#" title="Lên đầu trang"><i class="fas fa-chevron-up"></i></a>
                 </div>
             </div>
-            <div class="svc-text-col" data-aos="fade-right" data-aos-duration="1000">
-                <h3 class="svc-num">08</h3>
-                <h2>TƯ VẤN BUILD PC - MÁY TÍNH</h2>
-                <p class="svc-desc">Giải pháp lắp ráp máy tính tối ưu hiệu năng/giá thành. Đáp ứng mọi nhu cầu từ Văn phòng, Gaming, Stream đến Đồ họa chuyên nghiệp.</p>
-                <ul class="svc-features">
-                    <li><i class="fas fa-check"></i> Tư vấn cấu hình tối ưu theo ngân sách.</li>
-                    <li><i class="fas fa-check"></i> Linh kiện chính hãng, bảo hành dài hạn.</li>
-                    <li><i class="fas fa-check"></i> Hỗ trợ cài Windows & Phần mềm miễn phí.</li>
-                    <li><i class="fas fa-check"></i> Giao hàng & Lắp đặt tận nơi.</li>
-                </ul>
-                <a href="#" class="btn-svc-detail btn-consult" data-service="pc_build">Tư vấn Cấu hình</a>
-            </div>
-        </div>
-        <div class="svc-nav-btn up-top">
-            <a href="#" title="Lên đầu trang"><i class="fas fa-chevron-up"></i></a>
-        </div>
-    </div>
-</section>
+        </section>
         
     </div>
 
@@ -449,51 +455,69 @@
                     </div>
                 </div>
 
-                <div class="consult-form-col">
-                    <div class="form-header">
-                        <h4>ĐĂNG KÝ TƯ VẤN</h4>
-                        <p>Điền thông tin bên dưới</p>
+    <div class="consult-form-col">
+        <div class="form-header">
+            <h4>ĐĂNG KÝ TƯ VẤN</h4>
+            <p>Vui lòng chọn nhu cầu để chúng tôi chuẩn bị giải pháp trước khi trao đổi.</p>
+    </div>
+    
+    <div id="hybridForm">
+        <input type="hidden" id="serviceType">
+
+        <div class="form-group">
+            <label>Bạn đang quan tâm điều gì? *</label>
+            <select id="needOption" class="form-control"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Họ và tên *</label>
+            <input type="text" id="custName" class="form-control" placeholder="Ví dụ: Nguyễn Văn A">
+        </div>
+
+        <div class="form-group">
+            <label>Số điện thoại (Zalo) *</label>
+            <input type="text" id="custPhone" class="form-control" placeholder="Nhập SĐT để chúng tôi gọi lại...">
+        </div>
+
+        <div class="form-group">
+            <label>Ghi chú thêm</label>
+            <textarea id="custNote" class="form-control" rows="2" placeholder="Ví dụ: Cần báo giá gấp, cần VAT..."></textarea>
+        </div>
+
+        <div class="action-buttons" style="margin-top: 20px;">
+            
+            <a href="#" id="btnSmartEmail" class="btn-action-big btn-mail-big">
+                <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                <div class="text-box">
+                    <span class="action-title">Gửi Yêu Cầu Qua Email</span>
+                    <span class="action-sub">Soạn sẵn nội dung, bấm là gửi</span>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="https://zalo.me/0933129155" target="_blank" class="btn-action-big btn-zalo-big">
+                <div class="icon-box"><img src="icon/Icon_of_Zalo.svg.webp" alt="Zalo" width="30"></div>
+                <div class="text-box">
+                    <span class="action-title">Chat Nhanh Qua Zalo</span>
+                    <span class="action-sub">Tư vấn trực tiếp 1:1</span>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+            </a>
+
+            <a href="tel:0933129155" class="btn-action-big btn-call-big">
+                <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+                <div class="text-box">
+                    <span class="action-title">Gọi Hotline: 0933 129 155</span>
+                    <span class="action-sub">Hỗ trợ khẩn cấp</span>
+                </div>
+                <i class="fas fa-arrow-right arrow-icon"></i>
+                        </a>
                     </div>
-                    
-                    <form id="consultForm">
-                        <input type="hidden" name="_subject" value="🔔 KHÁCH HÀNG MỚI TỪ WEBSITE KB">
-                        <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_template" value="table">
-                        <input type="hidden" id="serviceType" name="service_type">
-
-                        <div class="form-group">
-                            <label>Nhu cầu của bạn *</label>
-                            <select id="needOption" name="option" class="form-control"></select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Họ và tên *</label>
-                            <input type="text" name="fullname" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Số điện thoại (Zalo) *</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="Nhập SĐT của bạn..." required pattern="[0-9]{10}">
-                        </div>
-
-                        <div class="form-group">
-                            <label>Ghi chú thêm (Không bắt buộc)</label>
-                            <textarea name="message" class="form-control" rows="2" placeholder="VD: Tôi cần server cho 50 nhân viên..."></textarea>
-                        </div>
-
-                        <div class="form-group" style="margin-top: 5px;">
-                            <input type="checkbox" id="privacyConsent" required style="margin-right: 8px;">
-                            <label for="privacyConsent" style="font-size: 13px; font-weight: 400; display: inline; color: #555;">
-                                Tôi đã đọc và đồng ý với <a href="privacy-policy.html" target="_blank" style="color: #cc0000; text-decoration: none; font-weight: 600;">Chính sách Quyền riêng tư</a>.
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn-submit-consult">GỬI YÊU CẦU <i class="fas fa-paper-plane"></i></button>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
