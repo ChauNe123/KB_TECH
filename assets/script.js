@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('.top-bar-search input');
     const searchBtn = document.querySelector('.top-bar-search button');
 
-    // Dữ liệu tìm kiếm
+    // Dữ liệu tìm kiếm (Đã cập nhật PC)
     const searchData = [
         { keys: ["máy chủ", "server", "vps", "phần cứng", "ảo hóa"], link: "service.html#svc-server" },
         { keys: ["email", "mail", "thư điện tử", "outlook"], link: "service.html#svc-email" },
@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         { keys: ["nas", "lưu trữ", "backup", "dữ liệu", "synology"], link: "service.html#svc-nas" },
         { keys: ["helpdesk", "it", "hỗ trợ", "kỹ thuật", "sự cố"], link: "service.html#svc-helpdesk" },
         { keys: ["camera", "quan sát", "an ninh", "giám sát", "ai"], link: "service.html#svc-camera" },
-        { keys: ["web", "website", "thiết kế", "seo", "giao diện"], link: "service.html#svc-web" },
+        
+        // --- ĐÃ CẬP NHẬT: TỪ KHÓA BUILD PC ---
+        { keys: ["build pc", "lắp ráp", "gaming", "đồ họa", "máy bàn", "case", "cấu hình", "máy tính"], link: "service.html#svc-pc" },
+        
         { keys: ["liên hệ", "sđt", "điện thoại", "địa chỉ", "map", "văn phòng"], link: "#contactDock" },
         { keys: ["giới thiệu", "về kb", "tầm nhìn", "sứ mệnh"], link: "about.html" },
         { keys: ["khách hàng", "đối tác"], link: "clients.html" }
@@ -69,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (foundLink) {
             window.location.href = foundLink;
         } else {
-            alert("Không tìm thấy nội dung phù hợp! Bạn hãy thử từ khóa khác (ví dụ: server, camera, email...)");
+            alert("Không tìm thấy nội dung phù hợp! Bạn hãy thử từ khóa khác (ví dụ: server, camera, pc gaming...)");
         }
     }
 
@@ -253,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 4.2. MODAL TƯ VẤN SẢN PHẨM (FULL 8 DỊCH VỤ) ---
+    // --- 4.2. MODAL TƯ VẤN SẢN PHẨM (FULL DỊCH VỤ) ---
     const consultModal = document.getElementById('consultModal');
     const closeConsultBtn = document.getElementById('closeConsult');
     const consultForm = document.getElementById('consultForm');
@@ -261,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Nút mở modal (Lấy tất cả nút có class .btn-consult)
     const consultBtns = document.querySelectorAll('.btn-consult');
 
-    // Dữ liệu chi tiết cho từng dịch vụ
+    // Dữ liệu chi tiết cho từng dịch vụ (Đã cập nhật PC)
     const serviceData = {
         'server': {
             title: 'DỊCH VỤ MÁY CHỦ (SERVER)',
@@ -347,15 +350,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Khác'
             ]
         },
-        'web': {
-            title: 'THIẾT KẾ WEBSITE & APP',
-            img: 'thumb/website.jpg',
+        
+        // --- ĐÃ CẬP NHẬT: DỊCH VỤ PC BUILD ---
+        'pc_build': {
+            title: 'TƯ VẤN LẮP RÁP PC (MÁY TÍNH)',
+            img: 'thumb/sua may.jpg.jpg', 
             options: [
-                'Thiết kế Website Doanh nghiệp',
-                'Thiết kế Web Bán hàng (E-commerce)',
-                'SEO từ khóa lên Top Google',
-                'Chăm sóc / Quản trị nội dung Website',
-                'Nâng cấp / Chỉnh sửa Web cũ',
+                'PC Gaming / Stream Game',
+                'PC Đồ họa (Render 3D, Edit Video, Photoshop)',
+                'PC Văn phòng / Học tập / Kế toán',
+                'Workstation / Server giả lập',
+                'Nâng cấp linh kiện (VGA, RAM, SSD)',
                 'Khác'
             ]
         }
@@ -398,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(closeConsultBtn) closeConsultBtn.addEventListener('click', closeModal);
         consultModal.addEventListener('click', (e) => { if (e.target === consultModal) closeModal(); });
 
-        // 3. Xử lý Gửi Form (Tích hợp FormSubmit.co)
+        // 3. Xử lý Gửi Form (Tích hợp FormSubmit.co + BẢO MẬT)
         let isSubmitting = false;
         if(consultForm) {
             consultForm.addEventListener('submit', (e) => {
@@ -420,8 +425,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnSubmit.disabled = true;
 
                 // --- [BẢO MẬT] LÀM RỐI EMAIL (Tránh bot quét) ---
-                const _u = "tuanhai";
-                const _d = "kbtech.vn";
+                const _u = "chounguyen308";
+                const _d = "gmail.com";
                 const EMAIL_NHAN_TIN = `${_u}@${_d}`; 
                 
                 const formData = new FormData(consultForm);
@@ -771,18 +776,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// Lời chào "bí mật" trong Console khi khách F12
-console.log(
-    "%c KB TECHNOLOGY %c Hệ thống bảo mật đã kích hoạt! ",
-    "background: #cc0000; color: #fff; font-size: 20px; font-weight: bold; padding: 10px;",
-    "background: #000; color: #00ff88; font-size: 18px; padding: 10px;"
-);
-console.log("Chào mừng bạn đến với bảng điều khiển của KB Tech. Mọi hành vi xâm nhập đều được giám sát.");
-
-
-/* ====================================================
-   10. SECURITY MODULE (VỆ SĨ BẢO MẬT KB TECH) - ADDED
-   ==================================================== */
+// ====================================================
+// 10. SECURITY MODULE (VỆ SĨ BẢO MẬT KB TECH) - ADDED
+// ====================================================
 (function() {
     "use strict";
 
@@ -809,7 +805,7 @@ console.log("Chào mừng bạn đến với bảng điều khiển của KB Tec
         });
     });
 
-    // 4. THÔNG BÁO BẢO MẬT "NGẦU"
+    // 4. THÔNG BÁO BẢO MẬT "NGẦU" CHO F12
     console.log(
         "%c 🛡️ KB TECH SECURITY SYSTEM %c \nĐang giám sát phiên truy cập này.",
         "color: #fff; background: #cc0000; font-size: 16px; padding: 8px; border-radius: 4px 0 0 4px; font-weight: bold;",
