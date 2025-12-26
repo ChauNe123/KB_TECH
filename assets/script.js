@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { keys: ["nas", "lưu trữ", "backup", "dữ liệu", "synology"], link: "service.html#svc-nas" },
         { keys: ["helpdesk", "it", "hỗ trợ", "kỹ thuật", "sự cố"], link: "service.html#svc-helpdesk" },
         { keys: ["camera", "quan sát", "an ninh", "giám sát", "ai"], link: "service.html#svc-camera" },
-        { keys: ["web", "website", "thiết kế", "seo", "giao diện"], link: "service.html#svc-web" },
+        { keys: ["pc", "build pc", "máy tính bàn", "gaming", "đồ họa", "workstation", "render"], link: "service.html#svc-buildpc" },
         { keys: ["liên hệ", "sđt", "điện thoại", "địa chỉ", "map", "văn phòng"], link: "#contactDock" },
         { keys: ["giới thiệu", "về kb", "tầm nhìn", "sứ mệnh"], link: "about.html" },
         { keys: ["khách hàng", "đối tác"], link: "clients.html" }
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'nas':      { title: 'LƯU TRỮ NAS',           img: 'thumb/nas.jpg', options: ['Mua thiết bị NAS', 'Cấu hình File Server', 'Backup dữ liệu', 'Cứu dữ liệu', 'Khác'] },
         'helpdesk': { title: 'IT HELPDESK',           img: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop', options: ['Thuê IT theo tháng', 'Hỗ trợ theo lượt', 'Thi công mạng LAN', 'Setup văn phòng mới', 'Khác'] },
         'camera':   { title: 'CAMERA AN NINH',        img: 'thumb/camera AI.jpg', options: ['Lắp Camera văn phòng', 'Camera AI thông minh', 'Lắp Camera gia đình', 'Sửa chữa Camera', 'Khác'] },
-        'web':      { title: 'THIẾT KẾ WEB',          img: 'thumb/website.jpg', options: ['Web Doanh nghiệp', 'Web Bán hàng', 'SEO từ khóa', 'Chăm sóc Web', 'Khác'] }
+        'buildpc':  { title: 'BUILD PC GAMING & WORKSTATION',img: 'thumb/build pc.jpg', options: ['PC Gaming giá rẻ', 'PC Đồ họa / Render', 'PC Văn phòng', 'Nâng cấp linh kiện', 'Khác'] },
     };
 
     // --- HÀM TẠO NỘI DUNG GMAIL (SỬA LỖI MAILTO) ---
